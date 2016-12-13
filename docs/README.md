@@ -27,7 +27,25 @@ A field takes a list of a validator. It basically just calls the super simple `a
 
 Validators are run in sequence and stopped if an error occurs. This means that we get well defined error messages from an validation run.
 
-Why? Because
+Also this means you get to chain validations quite easily e.g. `second` never gets called if `first` fails.
+
+```ts
+validators:[first, second]
+```
+
+You can even easily compose validators that run multiple validators in parallel if you want e.g.
+
+```ts
+validators:[(value)=>{
+  return Promise.all([first(value), second(value)])
+    .then(([fst,snd]) => {
+      if (fst && snd) return 'Both first and second failed';
+      if (fst) return 'First failed';
+      if (snd) return 'Second failed';
+      return '';
+    });
+}]
+```
 
 ### Why you need to handle empty values
 We could isolate the validators from handling such cases by not calling a validator if the empty is value, but its a decision we don't want to make for *your validation requirements*. You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
