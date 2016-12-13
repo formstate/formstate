@@ -19,8 +19,7 @@ Because its just a function:
 
 # Validation run
 
-A field takes a list of a validator. It basically just calls the super simple `applyValidators` function which applies a value through a list of validators and aborts if any validator returns an error.
-
+A field takes a list of a validator. It basically just calls the super simple `applyValidators` function which applies a value through a list of validators. It aborts execution and returns an error if any validator returns an error.
 
 # Concept: Sequential running
 
