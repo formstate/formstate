@@ -1,6 +1,8 @@
 # FormState
 
-A general purpose and simple formstate.
+> Making form management simple
+
+[Powered by your github ⭐s](https://github.com/basarat/formstate/stargazers).
 
 ## Validator
 
