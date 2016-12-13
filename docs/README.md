@@ -33,7 +33,7 @@ Why? Because
 We could isolate the validators from handling such cases by not calling a validator if the empty is value, but its a decision we don't want to make for *your validation requirements*. You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
 
 ```ts
-function wrapValidator(validator:Validator<TValue>):Validator<TValue>{
+function ifValue(validator:Validator<TValue>):Validator<TValue>{
   return function(value: TValue) {
     if (!value) return '';
     return validator(value);
@@ -41,8 +41,9 @@ function wrapValidator(validator:Validator<TValue>):Validator<TValue>{
 }
 
 // Usage
-// validators: [wrapValidator(mySimplerValidator)]
+// validators: [ifValue(mySimplerValidator)]
 ```
 
 * TODO: add `debounce` function to validation.
 * TODO: document `debounce` function to validation.
+* TODO: consider `validation.ifValue` as a part of core.
