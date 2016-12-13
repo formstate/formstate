@@ -53,7 +53,7 @@ We could isolate the validators from handling such cases by not calling a valida
 ```ts
 function ifValue(validator:Validator<TValue>):Validator<TValue>{
   return function(value: TValue) {
-    if (!value) return '';
+    if (!value || value == null) return '';
     return validator(value);
   };
 }
