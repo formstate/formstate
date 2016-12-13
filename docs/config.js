@@ -1,5 +1,5 @@
 self.$config = {
-  title: 'A general purpose FormState for MobX',
+  title: 'FormState',
   repo: 'basarat/formstate',
   twitter: 'basarat',
   'edit-link': 'https://github.com/basarat/formstate/blob/master/docs',
