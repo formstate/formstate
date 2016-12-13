@@ -12,11 +12,11 @@ interface Validator<TValue> {
 }
 ```
 
-Notice that a validator is *completely* independent of any framework cruft. Its a simple function that just takes a value and returns an error or a Promise to an error message. If there is no error it should return an empty string.
+Notice that a validator is *completely* independent of any framework cruft. Its a simple function that just takes a value and returns an error message or a Promise to an error message. If there is no error it should return an empty string.
 
 Because its just a function:
-* you can easily wrap any validation library quite easily if you need to.
 * you can easily test it in nodejs.
+* you can easily wrap any validation library quite easily if you need to.
 * handles server validation just as easily as local one (you just return a promise).
 
 ### Validation run
@@ -44,5 +44,5 @@ function wrapValidator(validator:Validator<TValue>):Validator<TValue>{
 // validators: [wrapValidator(mySimplerValidator)]
 ```
 
-TODO: add `debounce` function to validation.
-TODO: document `debounce` function to validation.
+* TODO: add `debounce` function to validation.
+* TODO: document `debounce` function to validation.
