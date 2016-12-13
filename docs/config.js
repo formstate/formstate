@@ -6,7 +6,5 @@ self.$config = {
   nav: [
     // homepage
     {title: 'Home', path: '/'},
-    // chinese doc
-    {title: 'Validation', path: '/validation'}
   ]
 }
