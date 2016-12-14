@@ -124,6 +124,7 @@ FieldState is a super simple class that simple manages two values:
 Essentially your `Field` components looks like the following:....TBD
 
 WIP:
+* init config: `hotValue`
 * setValue -> setHotValue
 * value -> {validated:TValue}
 
