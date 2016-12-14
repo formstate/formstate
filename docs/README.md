@@ -4,6 +4,16 @@
 
 [Powered by your github ⭐s](https://github.com/basarat/formstate/stargazers).
 
+Note that the API is quite simple and consists of `Validator`, `FieldState` and `FormState`. It is written in TypeScript and designed for TypeSafety.
+
+We could explain the API, but we feel that helping people understand how truly simple it is by explaining all the rational is even better 🌹.
+
+## Mobx
+
+This project depends upon [mobx][mobx]. Long story short, mobx allows you to write semantic JavaScript / TypeScript code and offload the UI data binding / updating for you. We encourage you to check them out if you are not familiar with [mobx][mobx].
+
+We provide two simple *state* classes `FieldState<TValue>` and `FormState`. These are UI framework independent (e.g. do not depend on ReactJs or AngularJS etc) as that binding is taken care of by mobx. We just manage the state for a Field (`FieldState`) or any number of Fields (`FormState`). Both of these have very simple semantics and can easily be powered by any number of UI inputs. More on this later.
+
 ## Validator
 
 We believe that validation should have simple semantics. Validation is provided by a validator. The following is the signature for a validator.
@@ -24,7 +34,7 @@ Because its just a function:
 
 ### Validation run
 
-A field takes a list of validators. It basically just calls the super simple `applyValidators` function 
+A FieldState takes a list of validators. It basically just calls the super simple `applyValidators` function
 
 ```
 function applyValidators<TValue>(value: TValue, validators: Validator<TValue>[]): Promise<string>
@@ -32,7 +42,7 @@ function applyValidators<TValue>(value: TValue, validators: Validator<TValue>[])
 
 This function applies a value through a list of validators. It aborts execution and returns an error as soon as any validator returns an error.
 
-That's it. Now you have complete mastery of Validators. That said we understand that providing guidance around common patterns helps beginners and experts write simple code. So we cover a vew validator tips next.
+That's it. Now you have complete mastery of Validators. That said we understand that providing guidance around common patterns helps beginners and experts write simple code. So we cover a few validator tips next.
 
 ### TIP: Sequential running
 
@@ -77,3 +87,33 @@ function ifValue(validator:Validator<TValue>):Validator<TValue>{
 * TODO: add `debounce` function to validation.
 * TODO: document `debounce` function to validation.
 * TODO: consider `validation.ifValue` as a part of core.
+
+## FieldState
+
+To keep your mental model (and life) simple, you want finely determined *truths* about your components.
+
+* Truth: An input should bind to a `value` and should always show the value.
+
+If an input needs its value changed (e.g. a use key press), it should call a passed in `onChange` *to request* a change to the said `value`.
+
+The *page* (or whatever passed in the value), is what should *change the value* and pass in the new value to the component.
+
+A simple diagram that shows what an input should accept:
+
+![](./images/inputSimple.png)
+
+It can be made simpler by composing the `{value, onChange}` pair into a single object (lets call it `FieldState`) that we *can* pass to the input. We can even easily create a `Field` component that selects such a pair and passes the *right things* to the input so you don't need to rewrite your *inputs* to support FieldState.
+
+![](./images/inputFieldSimple.png)
+
+That's better, note that creating your own `Field` component gives you the opportunity to style it for *your business* and add additions properties e.g. `{label:string}` that make sense for your project:
+
+![](./images/inputFieldLabel.png)
+
+FieldState is a super simple class that simple manages two values:
+
+* `value`: This is the value that you set through code e.g. during FieldState initialisation.
+* `hotValue`: This is the value you
+
+
+[mobx]:https://github.com/mobxjs/mobx
