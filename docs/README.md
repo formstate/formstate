@@ -124,9 +124,123 @@ FieldState is a super simple class that simple manages two values:
 Essentially your `Field` components looks like the following:....TBD
 
 WIP:
-* init config: `hotValue`
-* setValue -> setHotValue
-* value -> {validated:TValue}
+```ts
+/**
+ * Helps maintain the value + error information about a field
+ *
+ * This is the glue between the *page* and *field* in the presence of invalid states.
+ */
+export class FieldState<TValue> {
+  /**
+   * The value is stored in the field. May or may not be *valid*.
+   */
+  @observable hotValue: TValue;
 
+  /**
+   * The last validated value
+   * This is the value that can be used in other UI not related to this field
+   */
+  @observable validated?: { valid: false } | { valid: true, value: TValue };
 
+  /** If there is any error on the field */
+  @observable error?: string;
+
+  constructor(public config: {
+    hotValue: TValue,
+    onUpdate?: (state: FieldState<TValue>) => any,
+    validators?: validation.Validator<TValue>[],
+  }) {
+    this.validated = { valid: false };
+    this.hotValue = config.hotValue;
+  }
+
+  /** On change on the component side */
+  @action onHotChange = (value: TValue) => {
+    // Immediately set for local ui binding
+    this.hotValue = value;
+    this.onUpdate();
+    this.refreshError();
+  }
+
+  /** On change on the page side */
+  @action setHotValue = (hotValue: TValue) => {
+    // This value vetos all previous values
+    this.validated = {valid: false};
+    this.error = undefined;
+    this.hotValue = hotValue;
+    this.onUpdate();
+  }
+
+  get hasError() {
+    return !!this.error;
+  }
+
+  /**
+   * Runs validation on the current value immediately
+   */
+  @observable lastValidationRequest: number = 0;
+  @action validate = () => {
+    this.lastValidationRequest++;
+    const lastValidationRequest = this.lastValidationRequest;
+    const value = this.hotValue;
+    return validation.applyValidators(this.hotValue, this.config.validators || [])
+      .then(fieldError => {
+        if (this.lastValidationRequest !== lastValidationRequest) return;
+
+        /** If no field error update the value immediately */
+        if (!fieldError) {
+          this.validated = { valid: true, value };
+          this.onUpdate();
+        }
+        /** For any change in field error, update our error */
+        if (fieldError != this.error) {
+          this.error = fieldError;
+          this.onUpdate();
+        }
+      });
+  }
+
+  /**
+   * Runs validation with debouncing to keep the UI super smoothly responsive
+   */
+  @action refreshError = debounce(this.validate, 200);
+
+  @action onUpdate = () => {
+    this.config.onUpdate && this.config.onUpdate(this);
+  }
+}
+
+/**
+ * Just a wrapper around the helpers for a set of FieldStates
+ */
+export class FormState {
+  constructor(
+    /**
+     * It is a function: To allow you to dynamically and / remove fields as needed in your form
+     */
+    @action private getFields: () => FieldState<any>[]
+  ) { }
+
+  @observable validating = false;
+
+  /**
+   * - Re-runs validation on all fields
+   * - returns `hasError`
+   */
+  @action validate() {
+    this.validating = true;
+    return Promise.all(this.getFields().map(f => f.validate())).then((res) => {
+      this.validating = false;
+      return { hasError: this.hasError };
+    })
+  }
+
+  /**
+   * Does any field have an error
+   */
+  @computed get hasError() {
+    return this.getFields().some(f => f.hasError);
+  }
+}
+```
 [mobx]:https://github.com/mobxjs/mobx
