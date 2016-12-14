@@ -43,8 +43,8 @@ validators:[(value)=>{
   return Promise.all([first(value), second(value)])
     .then(([fst,snd]) => {
       if (fst && snd) return 'Both first and second failed';
-      if (fst) return 'First failed';
-      if (snd) return 'Second failed';
+      if (fst) return 'Only first failed';
+      if (snd) return 'Only second failed';
       return '';
     });
 }]
