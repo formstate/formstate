@@ -9,8 +9,9 @@
 We believe that validation should have simple semantics. Validation is provided by a validator. The following is the signature for a validator.
 
 ```ts
-interface Validator<TValue> {
-  (value:TValue) => string | Promise<string>
+export interface Validator<TValue> {
+  /** If a string is returned it represents a validation error */
+  (value: TValue): string | Promise<string>;
 }
 ```
 
