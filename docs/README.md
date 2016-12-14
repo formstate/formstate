@@ -90,6 +90,7 @@ function ifValue(validator:Validator<TValue>):Validator<TValue>{
 
 ## FieldState
 
+### Concept: Page / Field / Input
 To keep your mental model (and life) simple, you want finely determined *truths* about your components.
 
 * Truth: An input should bind to a `value` and should always show the value.
@@ -110,10 +111,19 @@ That's better, note that creating your own `Field` component gives you the oppor
 
 ![](./images/inputFieldLabel.png)
 
+### Concept: Validation
+
+Now to add validation, you need to have the concept of a *validated value* and a *hot value*.
+
 FieldState is a super simple class that simple manages two values:
 
-* `value`: This is the value that you set through code e.g. during FieldState initialisation.
-* `hotValue`: This is the value you
+* `hotValue`: This is the value you bind to the input. It is updated as soon as `onHotChange` is called.
+* `validatedValue`: This is the validated value. Gets determined once `hotValue` has passed validation without errors.
+
+
+Essentially your `Field` components looks like the following:....TBD
+
+
 
 
 [mobx]:https://github.com/mobxjs/mobx
