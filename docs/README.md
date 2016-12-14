@@ -26,7 +26,9 @@ Because its just a function:
 
 A field takes a list of a validator. It basically just calls the super simple `applyValidators` function which applies a value through a list of validators. It aborts execution and returns an error if any validator returns an error.
 
-### Concept: Sequential running
+That's it. Now you have complete mastery of Validators. That said we understand that not providing guidance around common patterns helps beginners and experts write simple code. So we cover tips next.
+
+### TIP: Sequential running
 
 Validators are run in sequence and stopped if an error occurs. This means that we get well defined error messages from an validation run.
 
@@ -50,7 +52,8 @@ validators:[(value)=>{
 }]
 ```
 
-### Why you need to handle empty values
+### TIP: Empty values
+
 We could isolate the validators from handling such cases by not calling a validator if the empty is value, but its a decision we don't want to make for *your validation requirements*. You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
 
 ```ts
