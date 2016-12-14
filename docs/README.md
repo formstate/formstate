@@ -123,7 +123,9 @@ FieldState is a super simple class that simple manages two values:
 
 Essentially your `Field` components looks like the following:....TBD
 
-
+WIP:
+* setValue -> setHotValue
+* value -> {validated:TValue}
 
 
 [mobx]:https://github.com/mobxjs/mobx
