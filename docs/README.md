@@ -24,9 +24,15 @@ Because its just a function:
 
 ### Validation run
 
-A field takes a list of a validator. It basically just calls the super simple `applyValidators` function which applies a value through a list of validators. It aborts execution and returns an error if any validator returns an error.
+A field takes a list of validators. It basically just calls the super simple `applyValidators` function 
 
-That's it. Now you have complete mastery of Validators. That said we understand that not providing guidance around common patterns helps beginners and experts write simple code. So we cover tips next.
+```
+function applyValidators<TValue>(value: TValue, validators: Validator<TValue>[]): Promise<string>
+```
+
+This function applies a value through a list of validators. It aborts execution and returns an error as soon as any validator returns an error.
+
+That's it. Now you have complete mastery of Validators. That said we understand that providing guidance around common patterns helps beginners and experts write simple code. So we cover a vew validator tips next.
 
 ### TIP: Sequential running
 
