@@ -1,5 +1,5 @@
 # FormState
 
-NOTE: This project is not ready or useable in any way. Neverthless we've started to write the design docs.
+NOTE: I'm working on this project integrated in a *large* private repo. Neverthless I've started to write the design docs.
 
-So, [jump straight to the docs 🌹](http://basarat.com/formstate/) and [don't forget to star ⭐](https://github.com/basarat/formstate/stargazers).
+[don't forget to star ⭐](https://github.com/basarat/formstate/stargazers) and if you want [jump to the docs for a very early preview 🌹](http://basarat.com/formstate/) and
