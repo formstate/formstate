@@ -123,10 +123,7 @@ It would be great if `FieldState` had just `value` and `onChange`. However to su
 
 > Calling it `hotValue` helps developers know that this value is not validated. 
 
-Some notes on why `safeValue` instead of `validatedValue` primarily because, a validated value *may or may not be present* if validation hasn't run: 
-* Something like `validated: {valid:false} | {valid:true, value: TValue}` was unweildy for devs (`if (validated.valid) {validated.value}`). 
-* If things may or may not be present it makes creating a composible system harder. With `safeValue` (always present as you must initilize a `FieldState` with an initial value) we can compose multiple fields more easily.
-* Haven't had people mess up the following pattern:
+The following pattern examplains usage of `safeValue`
 
 ```ts
 const res = await someField.validate(); 
@@ -134,8 +131,23 @@ if (res.hasError) return;
 sendToServer(someField.safeValue); // Example
 ```
 
+Note that `hotValue` might have changed since you called `validate` if your UI is still enabled when validating. 
+e.g. if you are doing server validation and its taking too long, `hotValue` can be changed by UI / User.
+
+> TIP: FieldState has `validating` boolean, that you can use to explicitly move field / input to `readonly`.
+
 ## Field
 Essentially your `Field` components looks like the following:....TBD
+
+## Design Notes
+
+Some design notes.
+
+### Why `safeValue`
+
+Something like `validated: {valid:false} | {valid:true, value: TValue}` although typesafe was unweildy for devs (`if (validated.valid) {validated.value}`).
+
+Also a validated value *may or may not be present* if validation hasn't run. This makes creating a composible system harder. With `safeValue` (always present as you must initilize a `FieldState` with an initial value) we can compose multiple fields more easily, and as soon as you call `validate` at a top level it can easily cacade down and you can ready any `safeValue` you want.
 
 
 [mobx]:https://github.com/mobxjs/mobx
