@@ -3,6 +3,9 @@ src/tests
 lib/tests
 lib.es2015/tests
 
+# docs
+docs
+
 # build tools
 .travis.yml
 
