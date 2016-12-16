@@ -10,6 +10,8 @@ Note that the API is quite simple and consists of `Validator`, `FieldState` and 
 
 We could explain the *just the API*, but we think its better to help people understand how truly simple it is by explaining all the rational 🌹.
 
+> TIP I assume you are familiar with [async/await](https://basarat.gitbooks.io/typescript/content/docs/async-await.html).
+
 ## Mobx
 
 This project depends upon [mobx][mobx]. Long story short, mobx allows you to write semantic JavaScript / TypeScript code and offload the UI data binding / updating for you. We encourage you to check them out if you are not familiar with [mobx][mobx].
