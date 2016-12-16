@@ -80,12 +80,16 @@ export class FieldState<TValue> implements Validatable<TValue> {
   /** If there is any error on the field on last validation attempt */
   @observable error?: string;
 
+  /** Whatever the last validated value is if any */
+  @observable validated?: { valid: false } | { valid: true, value: TValue };
+
   constructor(public config: {
     value: TValue,
     onUpdate?: (state: FieldState<TValue>) => any,
     validators?: Validator<TValue>[],
   }) {
     this.value = config.value;
+    this.validated = { valid: false };
   }
 
   /** On change on the component side */
@@ -101,6 +105,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
     // This value vetos all previous values
     this.value = value;
     this.error = undefined;
+    this.validated = { valid: false };
     this.onUpdate();
   }
 
@@ -136,6 +141,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
           return { hasError };
         }
         else {
+          this.validated = { valid: true, value };
           return {
             hasError,
             value

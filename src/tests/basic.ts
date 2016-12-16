@@ -24,4 +24,21 @@ describe("initial test", () => {
     name.setValue('world')
     assert.equal(name.value, 'world');
   });
+
+  it("validated should not be available till validation completes", () => {
+    const name = new FieldState<string>({
+      value: 'hello',
+    })
+    name.setValue('world');
+    assert.equal(name.validated.valid, false);
+  });
+
+  it("validated should become available after validation", async () => {
+    const name = new FieldState<string>({
+      value: 'hello',
+    })
+    name.setValue('world');
+    const res = await name.validate();
+    assert.equal(name.validated.valid && name.validated.value, 'world');
+  });
 });
