@@ -10,19 +10,19 @@ describe("initial test", () => {
     assert.equal(name.value, 'hello');
   });
 
-  it("setValue should change the value immediately", () => {
+  it("reinitValue should change the value immediately", () => {
     const name = new FieldState<string>({
       value: 'hello',
     })
-    name.setValue('world')
+    name.reinitValue('world')
     assert.equal(name.value, 'world');
   });
 
-  it("setValue should change the value immediately", () => {
+  it("reninitValue should change the value immediately", () => {
     const name = new FieldState<string>({
       value: 'hello',
     })
-    name.setValue('world')
+    name.reinitValue('world')
     assert.equal(name.value, 'world');
   });
 
@@ -30,7 +30,6 @@ describe("initial test", () => {
     const name = new FieldState<string>({
       value: 'hello',
     })
-    name.setValue('world');
     assert.equal(name.validated.valid, false);
   });
 
@@ -38,8 +37,7 @@ describe("initial test", () => {
     const name = new FieldState<string>({
       value: 'hello',
     })
-    name.setValue('world');
     const res = await name.validate();
-    assert.equal(name.validated.valid && name.validated.value, 'world');
+    assert.equal(name.validated.valid && name.validated.value, 'hello');
   });
 });

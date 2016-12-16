@@ -120,8 +120,11 @@ export class FieldState<TValue> implements Validatable<TValue> {
     }
   }
 
-  /** On change on the page side */
-  @action setValue = (value: TValue) => {
+  /**
+   * If the page wants to reinitialize the field with a new value,
+   * it should call this function
+   */
+  @action reinitValue = (value: TValue) => {
     // This value vetos all previous values
     this.value = value;
     this.error = undefined;
