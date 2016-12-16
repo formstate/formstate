@@ -11,7 +11,7 @@
     "preversion": "npm run build",
     "postversion": "git push --follow-tags && npm publish",
     "start": "npm run build -- -w & npm run unittest -- --watch & docute ./docs",
-    "publishdocs": "ts-node ./scripts/publish.ts"
+    "publishdocs": "ts-node ./scripts/publishdocs.ts"
   },
   "repository": {
     "type": "git",
