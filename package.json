@@ -1,6 +1,6 @@
 {
   "name": "formstate",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Painless and simple MobX form management",
   "main": "./lib/index.js",
   "typings": "./lib/index",
@@ -26,8 +26,7 @@
   "peerDependencies": {
     "mobx": ">=2.0.0"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.45",
