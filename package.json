@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "typings": "./lib/index",
   "scripts": {
-    "build": "tsc -p . && tsc -p tsconfig.es2015.json",
+    "build": "tsc -p .",
     "unittest": "mocha ./lib/tests/**/*.js",
     "test": "npm run build && npm run unittest",
     "preversion": "npm run build",
