@@ -4,7 +4,7 @@ const ghpages = require('gh-pages');
 const path = require('path');
 const date = new Date();
 
-ghpages.publish(path.resolve(__dirname + '/../public'), {
+ghpages.publish(path.resolve(__dirname + '/../docs'), {
   message: `[ci skip] deployment (${date.getUTCFullYear()}-${date.getUTCMonth()+1}-${date.getUTCDate()}-${date.getUTCHours()}-${date.getUTCMinutes()})`,
 
   /** Branch */
