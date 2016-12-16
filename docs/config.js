@@ -1,8 +1,8 @@
 self.$config = {
   title: 'FormState',
-  repo: 'basarat/formstate',
+  repo: 'formstate/formstate',
   twitter: 'basarat',
-  'edit-link': 'https://github.com/basarat/formstate/blob/master/docs',
+  'edit-link': 'https://github.com/formstate/formstate/blob/master/docs',
   nav: [
     // homepage
     {title: 'Home', path: '/'},
