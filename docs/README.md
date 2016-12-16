@@ -10,7 +10,7 @@ Note that the API is quite simple and consists of `Validator`, `FieldState` and 
 
 We could explain the *just the API*, but we think its better to help people understand how truly simple it is by explaining all the rational 🌹.
 
-> TIP I assume you are familiar with [async/await](https://basarat.gitbooks.io/typescript/content/docs/async-await.html).
+> TIP I assume you are familiar with [promises](https://basarat.gitbooks.io/typescript/content/docs/promise.html) and [async/await](https://basarat.gitbooks.io/typescript/content/docs/async-await.html).
 
 ## Mobx
 
