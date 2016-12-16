@@ -11,8 +11,7 @@
 
 We've been working on this project integrated in a *large* private repo. We are in the process of
 
-- doing API reviews to increase intuition
-- adding tests
+- doing API reviews to increase intuition as well as expressiveness.
 - [adding docs to explain all the ideas 🌹](http://formstate.github.io/formstate/)
 
 [gitter-image]:https://badges.gitter.im/Join%20Chat.svg
