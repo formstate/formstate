@@ -126,6 +126,13 @@ It would be great if `FieldState` had just `value` and `onChange`. However to su
 Some notes on why `safeValue` instead of `validatedValue` primarily because, a validated value *may or may not be present* if validation hasn't run: 
 * Something like `validated: {valid:false} | {valid:true, value: TValue}` was unweildy for devs (`if (validated.valid) {validated.value}`). 
 * If things may or may not be present it makes creating a composible system harder. With `safeValue` (always present as you must initilize a `FieldState` with an initial value) we can compose multiple fields more easily.
+* Haven't had people mess up the following pattern:
+
+```ts
+const res = await someField.validate(); 
+if (res.hasError) return;
+sendToServer(someField.safeValue); // Example
+```
 
 ## Field
 Essentially your `Field` components looks like the following:....TBD
