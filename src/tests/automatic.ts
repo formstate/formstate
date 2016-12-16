@@ -36,6 +36,17 @@ describe('automatic validation delay', () => {
 });
 
 describe('automatic validation toggling', () => {
+  it("by default its enabled", async () => {
+    const name = new FieldState<string>({
+      value: 'hello',
+      autoValidationDebounceMs: 100,
+    });
+    name.onChange('world');
+    assert.equal(name.validated.valid, false);
+    await delay(200);
+    assert.equal(name.validated.valid && name.validated.value, 'world');
+  });
+
   it("disabled auto validation should disable", async () => {
     const name = new FieldState<string>({
       value: 'hello',
@@ -48,7 +59,7 @@ describe('automatic validation toggling', () => {
     assert.equal(name.validated.valid, false);
   });
 
-  it("disabled auto validation should disable", async () => {
+  it("enabled auto validation should disable", async () => {
     const name = new FieldState<string>({
       value: 'hello',
       autoValidationDebounceMs: 100,
