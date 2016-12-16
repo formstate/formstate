@@ -12,7 +12,7 @@
 We've been working on this project integrated in a *large* private repo. We are in the process of
 
 - doing API reviews to increase intuition as well as expressiveness.
-- [adding docs to explain all the ideas 🌹](http://formstate.github.io/formstate/)
+- [adding docs to explain all the ideas 🌹](https://formstate.github.io/)
 
 [gitter-image]:https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]:https://gitter.im/formstate/general
