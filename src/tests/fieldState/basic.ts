@@ -1,6 +1,6 @@
-import { FieldState, FormState } from '../index';
+import { FieldState, FormState } from '../../index';
 import * as assert from 'assert';
-import { delay } from './utils';
+import { delay } from '../utils';
 
 describe("initial test", () => {
   it("should pass", () => {
@@ -18,7 +18,7 @@ describe("initial test", () => {
     assert.equal(name.value, 'world');
   });
 
-  it("reninitValue should change the value immediately", () => {
+  it("reinitValue should change the value immediately", () => {
     const name = new FieldState<string>({
       value: 'hello',
     })
