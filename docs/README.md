@@ -112,18 +112,23 @@ That's better, note that creating your own `Field` component gives you the oppor
 
 ![](./images/inputFieldLabel.png)
 
+Also as a component library author you do not need to depend on this project *or* mobx. You write it as a simple `value`, `onChange`. And then the application author (which can still be just you) makes the `Field` that uses this library, *mobx* and *mobx-react* (specifically wrapping `@observer class Field extends React.Component` etc) and it all just works out. More on creating your `Field` later.
+
 ### Concept: Validation
 
-Now to add validation, you need to have the concept of a *validated value* and a *hot value*.
-
-FieldState is a super simple class that simple manages two values:
+It would be great if `FieldState` had just `value` and `onChange`. However to support validation and make it a painless experiece, we have the concept of a *hotValue* and a *safeValue*.
 
 * `hotValue`: This is the value you bind to the input. It is updated as soon as `onHotChange` is called.
-* `validatedValue`: This is the validated value. Gets determined once `hotValue` has passed validation without errors.
+* `safeValue`: This is the value *you set using code* OR is a `hotValue` that has passed validation.
 
+> Calling it `hotValue` helps developers know that this value is not validated. 
 
+Some notes on why `safeValue` instead of `validatedValue` primarily because, a validated value *may or may not be present* if validation hasn't run: 
+* Something like `validated: {valid:false} | {valid:true, value: TValue}` was unweildy for devs (`if (validated.valid) {validated.value}`). 
+* If things may or may not be present it makes creating a composible system harder. With `safeValue` (always present as you must initilize a `FieldState` with an initial value) we can compose multiple fields more easily.
+
+## Field
 Essentially your `Field` components looks like the following:....TBD
 
-* TODO: mention that as a component library author you do not need to depend on this project *or* mobx. You write it as a simple `value`, `onChange`. And then the application author (which can still be juts you) makes the `Field` that uses this library, *mobx* and *mobx-react* (specifically wrapping `Field` in `observer`) it all just works out.
 
 [mobx]:https://github.com/mobxjs/mobx
