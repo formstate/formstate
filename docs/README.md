@@ -131,10 +131,9 @@ if (res.hasError) return;
 sendToServer(someField.safeValue); // Example
 ```
 
-Note that `hotValue` might have changed since you called `validate` if your UI is still enabled when validating. 
-e.g. if you are doing server validation and its taking too long, `hotValue` can be changed by UI / User.
+Note that `hotValue` can be changed by UI / User between the time you call `validate` and read its result. For example, if your UI is still enabled when validating and a server validation is taking too long.
 
-> TIP: FieldState has `validating` boolean, that you can use to explicitly move field / input to `readonly`.
+> TIP: FieldState has `validating` boolean, that you can use to explicitly move field / input to `readonly` but it results in horrible UX especially if doing *automatic* live validation.
 
 ## Field
 Essentially your `Field` components looks like the following:....TBD
