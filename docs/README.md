@@ -20,7 +20,6 @@ We believe that validation should have simple semantics. Validation is provided 
 
 ```ts
 export interface Validator<TValue> {
-  /** If a string is returned it represents a validation error */
   (value: TValue): string | Promise<string>;
 }
 ```
