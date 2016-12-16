@@ -6,7 +6,7 @@
 
 Note that the API is quite simple and consists of `Validator`, `FieldState` and `FormState`. It is written in TypeScript and designed for TypeSafety.
 
-We could explain the *just the API*, but we think its better to help people understand how truly simple it is by explaining all the rational is even better 🌹.
+We could explain the *just the API*, but we think its better to help people understand how truly simple it is by explaining all the rational 🌹.
 
 ## Mobx
 
