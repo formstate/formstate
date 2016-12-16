@@ -10,7 +10,8 @@
     "test": "npm run build && npm run unittest",
     "preversion": "npm run build",
     "postversion": "git push --follow-tags && npm publish",
-    "start": "npm run build -- -w & npm run unittest -- --watch & docute ./docs"
+    "start": "npm run build -- -w & npm run unittest -- --watch & docute ./docs",
+    "publishdocs": "ts-node ./scripts/publish.ts"
   },
   "repository": {
     "type": "git",
