@@ -2,7 +2,7 @@
 
 [![Join the chat at  gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/formstate/general)
 
-> Making CSS type safe.
+> Making form state simple
 
 [![Build Status][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
