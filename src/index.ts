@@ -83,13 +83,31 @@ export class FieldState<TValue> implements Validatable<TValue> {
   /** Whatever the last validated value is if any */
   @observable validated?: { valid: false } | { valid: true, value: TValue };
 
-  constructor(public config: {
+  @observable private autoValidationEnabled = true;
+  @action public enableAutoValidationAndValidate = () => {
+    this.autoValidationEnabled = true;
+    this.validate();
+  }
+  @action public disableAutoValidation = () => {
+    this.autoValidationEnabled = false;
+  }
+
+  constructor(private config: {
     value: TValue,
     onUpdate?: (state: FieldState<TValue>) => any,
     validators?: Validator<TValue>[],
+
+    autoValidationEnabled?: boolean,
+    autoValidationDebounceMs?: number,
   }) {
     this.value = config.value;
     this.validated = { valid: false };
+
+    /**
+     * Automatic validation configuration
+     */
+    this.queueValidation = utils.debounce(this.validate, config.autoValidationDebounceMs || 200);
+    this.autoValidationEnabled = config.autoValidationEnabled == undefined ? true : config.autoValidationEnabled;
   }
 
   /** On change on the component side */
@@ -97,7 +115,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
     // Immediately set for local ui binding
     this.value = value;
     this.onUpdate();
-    this.refreshError();
+    if (this.autoValidationEnabled) {
+      this.queueValidation();
+    }
   }
 
   /** On change on the page side */
@@ -153,9 +173,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
   /**
    * Runs validation with debouncing to keep the UI super smoothly responsive
    */
-  @action refreshError = utils.debounce(this.validate, 200);
+  @action private queueValidation = utils.debounce(this.validate, 200);
 
-  @action onUpdate = () => {
+  @action private onUpdate = () => {
     this.config.onUpdate && this.config.onUpdate(this);
   }
 }

@@ -1,5 +1,6 @@
 import { FieldState, FormState } from '../index';
 import * as assert from 'assert';
+import { delay } from './utils';
 
 describe("initial test", () => {
   it("should pass", () => {

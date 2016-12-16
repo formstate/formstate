@@ -122,4 +122,6 @@ FieldState is a super simple class that simple manages two values:
 
 Essentially your `Field` components looks like the following:....TBD
 
+* TODO: mention that as a component author you do not need to depend on this project *or* mobx. You write it as a simple `value`, `onChange`. And then the project author makes the `Field` that uses this library, *mobx* and *mobx-react* (specifically wrapping `Field` in `observer`) it all just works out.
+
 [mobx]:https://github.com/mobxjs/mobx
