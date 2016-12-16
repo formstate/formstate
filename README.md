@@ -7,7 +7,9 @@
 [![Build Status][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
 
-> [This project is being powered by github ⭐, so don't forget to add yours](https://github.com/formstate/formstate/stargazers)
+> [Powered by github ⭐s](https://github.com/formstate/formstate/stargazers)
+
+<iframe src="https://ghbtns.com/github-btn.html?user=formstate&repo=formstate&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
 
 We've been working on this project integrated in a *large* private repo. We are in the process of
 
