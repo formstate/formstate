@@ -72,9 +72,8 @@ export interface Validatable<TValue> {
 }
 
 /** Each key of the object is a validatable */
-export type ValidatableMap<T> =
-  {[K in keyof T]: Validatable<T[K]>}
-  & { [key: string]: Validatable<any> }
+export type ValidatableMap =
+  { [key: string]: Validatable<any> }
 
 /**
  * Helps maintain the value + error information about a field
@@ -197,28 +196,16 @@ export class FieldState<TValue> implements Validatable<TValue> {
 /**
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
  */
-export class FormState<TValue> implements Validatable<TValue> {
+export class FormState<TValue extends ValidatableMap> implements Validatable<TValue> {
   constructor(
     /**
      * SubItems can be any Validatable
      */
-    public items: ValidatableMap<TValue>
+    public safeValue: TValue
   ) {
-    this.copySafeValues();
   }
 
   @observable validating = false;
-
-  @observable safeValue: TValue;
-  @action private copySafeValues() {
-    const keys = Object.keys(this.items);
-    const value: TValue = {} as any;
-    keys.forEach((key, i) => {
-      const item = this.items[key];
-      value[key] = item.safeValue;
-    });
-    this.safeValue = value;
-  }
 
   /**
    * - Re-runs validation on all fields
@@ -227,15 +214,14 @@ export class FormState<TValue> implements Validatable<TValue> {
    */
   @action validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
-    const keys = Object.keys(this.items);
-    return Promise.all(keys.map((key) => this.items[key].validate())).then((res) => {
+    const keys = Object.keys(this.safeValue);
+    return Promise.all(keys.map((key) => this.safeValue[key].validate())).then((res) => {
       this.validating = false;
       const hasError = this.hasError;
       if (hasError) {
         return { hasError };
       }
       else {
-        this.copySafeValues();
         return { hasError, value: this.safeValue };
       }
     })
@@ -245,14 +231,14 @@ export class FormState<TValue> implements Validatable<TValue> {
    * Does any field have an error
    */
   @computed get hasError() {
-    return Object.keys(this.items).map((key) => this.items[key]).some(f => f.hasError);
+    return Object.keys(this.safeValue).map((key) => this.safeValue[key]).some(f => f.hasError);
   }
 
   /**
    * The first error from any sub if any
    */
   @computed get error() {
-    const subItemWithError = Object.keys(this.items).map((key) => this.items[key]).find(f => !!f.hasError);
+    const subItemWithError = Object.keys(this.safeValue).map((key) => this.safeValue[key]).find(f => !!f.hasError);
     return subItemWithError.error;
   }
 }
