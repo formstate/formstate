@@ -1,10 +1,9 @@
-function demo() {
+async function demo() {
   const username = new FieldState({ value: '' });
-  const foo: number = username.safeValue; // TS Error: cannot assign string to number
+  const foo: number = username.value; // TS Error: cannot assign string to number
 
   const form = new FormState({
     username
   });
-  const bar: number = form.safeValue.username; // TS Error: cannot assign string to number
+  const bar: number = form.value.username.value; // TS Error: cannot assign string to number
 }
-

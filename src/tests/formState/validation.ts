@@ -66,4 +66,3 @@ describe("FormState validation", () => {
     assert.equal(form.value.name.value.name.value, '');
   });
 });
-
