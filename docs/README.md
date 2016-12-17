@@ -1,8 +1,12 @@
+> Form state so simple that you will fall in love ❤️
+
 <iframe src="https://ghbtns.com/github-btn.html?user=formstate&repo=formstate&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
 
 > [Powered by your github ⭐s](https://github.com/formstate/formstate/stargazers).
 
 Note that the API is quite simple and consists of `Validator`, `FieldState` and `FormState`. It is written in TypeScript and designed for TypeSafety.
+
+![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/autocomplete.gif)
 
 
 ### Quick Example
@@ -58,10 +62,6 @@ export class Demo extends React.Component<{},{}> {
   }
 }
 ```
-
-> Form state so simple that you will fall in love ❤️
-
-![](https://raw.githubusercontent.com/formstate/formstate/master/docs/logo/logo.png)
 
 We could explain the *just the API*, but to help people understand how truly simple it is we will even go ahead and explain all the rational 🌹.
 
