@@ -11,6 +11,12 @@
 
 <iframe src="https://ghbtns.com/github-btn.html?user=formstate&repo=formstate&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
 
+This project is big on type safety for compile time error analysis and autocomplete so your code reviews + code authoring is super streamlined.
+
+![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/typeSafety.png)
+
+# Progress
+
 We've been working on this project integrated in a *large* private repo. We are in the process of
 
 - doing API reviews to increase intuition as well as expressiveness.

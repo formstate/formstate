@@ -59,6 +59,7 @@ export interface Validatable<TValue> {
   validating: boolean;
   validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }>;
   hasError: boolean;
+  safeValue: TValue;
 }
 
 /** Each key of the object is a validatable */
@@ -81,7 +82,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
   @observable error?: string;
 
   /** The value set from code or a hot value that's been validated */
-  @observable safeValue?: TValue;
+  @observable safeValue: TValue;
 
   @observable private autoValidationEnabled = true;
   @action public enableAutoValidationAndValidate = () => {
@@ -193,9 +194,21 @@ export class FormState<TValue> implements Validatable<TValue> {
      * SubItems can be any Validatable
      */
     @action private subItems: ValidatableMap<TValue>
-  ) { }
+  ) {
+    this.copySafeValues();
+  }
 
   @observable validating = false;
+
+  @observable safeValue: TValue;
+  @action copySafeValues() {
+    const keys = Object.keys(this.subItems);
+    const value: TValue = {} as any;
+    keys.forEach((key, i) => {
+      const item = this.subItems[key];
+      value[key] = item.safeValue;
+    });
+  }
 
   /**
    * - Re-runs validation on all fields
@@ -212,14 +225,8 @@ export class FormState<TValue> implements Validatable<TValue> {
         return { hasError };
       }
       else {
-        const value: TValue = {} as any;
-        keys.forEach((key, i) => {
-          const item = res[i];
-          // Will not happen. Just to tell the type checker that value access is safe
-          if (item.hasError == true) return;
-          value[key] = item.value;
-        });
-        return { hasError, value: value };
+        this.copySafeValues();
+        return { hasError, value: this.safeValue };
       }
     })
   }
