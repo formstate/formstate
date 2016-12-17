@@ -3,6 +3,18 @@ import * as assert from 'assert';
 import { delay } from '../utils';
 
 describe("FormState validation", () => {
+  it("should validate a nested FieldState and pass if valid", async () => {
+    const name = new FieldState({
+      value: '',
+    });
+    const form = new FormState({
+      name,
+    });
+    const res = await form.validate();
+    assert.equal(res.hasError, false);
+    assert.equal(form.hasError, false);
+  });
+
   it("should validate a nested FieldState and fail if invalid", async () => {
     const name = new FieldState({
       value: '',
