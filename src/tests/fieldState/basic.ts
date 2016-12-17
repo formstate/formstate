@@ -4,7 +4,7 @@ import { delay } from '../utils';
 
 describe("basic tests", () => {
   it("hotValue and safeValue is set to initial value", () => {
-    const name = new FieldState<string>({
+    const name = new FieldState({
       value: 'hello',
     })
     assert.equal(name.hotValue, 'hello');
@@ -12,7 +12,7 @@ describe("basic tests", () => {
   });
 
   it("reinitValue should change the value immediately", () => {
-    const name = new FieldState<string>({
+    const name = new FieldState({
       value: 'hello',
     })
     name.reinitValue('world')

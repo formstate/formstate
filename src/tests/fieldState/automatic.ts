@@ -4,7 +4,7 @@ import { delay } from '../utils';
 
 describe('automatic validation delay', () => {
   it("If delay is low it should autovalidate fast", async () => {
-    const name = new FieldState<string>({
+    const name = new FieldState({
       value: 'hello',
       autoValidationDebounceMs: 100
     });
@@ -14,7 +14,7 @@ describe('automatic validation delay', () => {
   });
 
   it("if delay is big it should autovalidate fast", async () => {
-    const name = new FieldState<string>({
+    const name = new FieldState({
       value: 'hello',
       autoValidationDebounceMs: 200
     });
@@ -24,7 +24,7 @@ describe('automatic validation delay', () => {
   });
 
   it("default delay value should also work", async () => {
-    const name = new FieldState<string>({
+    const name = new FieldState({
       value: 'hello',
     });
     name.onHotChange('world');
@@ -37,7 +37,7 @@ describe('automatic validation delay', () => {
 
 describe('automatic validation toggling', () => {
   it("by default its enabled", async () => {
-    const name = new FieldState<string>({
+    const name = new FieldState({
       value: 'hello',
       autoValidationDebounceMs: 100,
     });
@@ -48,7 +48,7 @@ describe('automatic validation toggling', () => {
   });
 
   it("disabled auto validation should disable", async () => {
-    const name = new FieldState<string>({
+    const name = new FieldState({
       value: 'hello',
       autoValidationDebounceMs: 100,
       autoValidationEnabled: false
@@ -60,7 +60,7 @@ describe('automatic validation toggling', () => {
   });
 
   it("enabled auto validation should enable", async () => {
-    const name = new FieldState<string>({
+    const name = new FieldState({
       value: 'hello',
       autoValidationDebounceMs: 100,
       autoValidationEnabled: true
