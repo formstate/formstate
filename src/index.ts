@@ -71,10 +71,6 @@ export interface Validatable<TValue> {
   safeValue: TValue;
 }
 
-/** Each key of the object is a validatable */
-export type ValidatableMap =
-  { [key: string]: Validatable<any> }
-
 /**
  * Helps maintain the value + error information about a field
  *
@@ -192,6 +188,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
   }
 }
 
+/** Each key of the object is a validatable */
+export type ValidatableMap =
+  { [key: string]: Validatable<any> }
 
 /**
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
