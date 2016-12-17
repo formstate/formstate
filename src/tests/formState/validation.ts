@@ -29,7 +29,7 @@ describe("FormState validation", () => {
     assert.equal(res.hasError, true);
     assert.equal(form.hasError, true);
     assert.equal(form.error, 'value required');
-    assert.equal(form.safeValue.name.error, 'value required');
+    assert.equal(form.value.name.error, 'value required');
   });
 
   it("should validate a nested - nested FieldState and pass if valid", async () => {
@@ -62,8 +62,8 @@ describe("FormState validation", () => {
     assert.equal(res.hasError, true);
     assert.equal(form.hasError, true);
     assert.equal(form.error, 'value required');
-    assert.equal(form.safeValue.name.error, 'value required');
-    assert.equal(form.safeValue.name.safeValue.name.safeValue, '');
+    assert.equal(form.value.name.error, 'value required');
+    assert.equal(form.value.name.value.name.value, '');
   });
 });
 

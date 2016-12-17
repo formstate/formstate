@@ -10,7 +10,7 @@ describe('automatic validation delay', () => {
     });
     name.onHotChange('world');
     await delay(200);
-    assert.equal(name.safeValue, 'world');
+    assert.equal(name.value, 'world');
   });
 
   it("if delay is big it should autovalidate fast", async () => {
@@ -20,7 +20,7 @@ describe('automatic validation delay', () => {
     });
     name.onHotChange('world');
     await delay(100);
-    assert.equal(name.safeValue, 'hello');
+    assert.equal(name.value, 'hello');
   });
 
   it("default delay value should also work", async () => {
@@ -29,9 +29,9 @@ describe('automatic validation delay', () => {
     });
     name.onHotChange('world');
     await delay(100);
-    assert.equal(name.safeValue, 'hello');
+    assert.equal(name.value, 'hello');
     await delay(200);
-    assert.equal(name.safeValue, 'world');
+    assert.equal(name.value, 'world');
   });
 });
 
@@ -42,9 +42,9 @@ describe('automatic validation toggling', () => {
       autoValidationDebounceMs: 100,
     });
     name.onHotChange('world');
-    assert.equal(name.safeValue, 'hello');
+    assert.equal(name.value, 'hello');
     await delay(200);
-    assert.equal(name.safeValue, 'world');
+    assert.equal(name.value, 'world');
   });
 
   it("disabled auto validation should disable", async () => {
@@ -54,9 +54,9 @@ describe('automatic validation toggling', () => {
       autoValidationEnabled: false
     });
     name.onHotChange('world');
-    assert.equal(name.safeValue, 'hello');
+    assert.equal(name.value, 'hello');
     await delay(200);
-    assert.equal(name.safeValue, 'hello');
+    assert.equal(name.value, 'hello');
   });
 
   it("enabled auto validation should enable", async () => {
@@ -66,8 +66,8 @@ describe('automatic validation toggling', () => {
       autoValidationEnabled: true
     });
     name.onHotChange('world');
-    assert.equal(name.safeValue, 'hello');
+    assert.equal(name.value, 'hello');
     await delay(200);
-    assert.equal(name.safeValue, 'world');
+    assert.equal(name.value, 'world');
   });
 });

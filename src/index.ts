@@ -68,7 +68,7 @@ export interface Validatable<TValue> {
   validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }>;
   hasError: boolean;
   error?: string;
-  safeValue: TValue;
+  value: TValue;
 }
 
 /**
@@ -86,7 +86,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
   @observable error?: string;
 
   /** The value set from code or a hot value that's been validated */
-  @observable safeValue: TValue;
+  @observable value: TValue;
 
   @observable private autoValidationEnabled = true;
   @action public enableAutoValidationAndValidate = () => {
@@ -106,7 +106,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
     autoValidationDebounceMs?: number,
   }) {
     this.hotValue = config.value;
-    this.safeValue = config.value;
+    this.value = config.value;
 
     /**
      * Automatic validation configuration
@@ -133,7 +133,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
     // This value vetos all previous values
     this.hotValue = value;
     this.error = undefined;
-    this.safeValue = value;
+    this.value = value;
     this.onUpdate();
   }
 
@@ -169,7 +169,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
           return { hasError };
         }
         else {
-          this.safeValue = value;
+          this.value = value;
           return {
             hasError,
             value
@@ -200,7 +200,7 @@ export class FormState<TValue extends ValidatableMap> implements Validatable<TVa
     /**
      * SubItems can be any Validatable
      */
-    public safeValue: TValue
+    public value: TValue
   ) {
   }
 
@@ -213,15 +213,15 @@ export class FormState<TValue extends ValidatableMap> implements Validatable<TVa
    */
   @action validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
-    const keys = Object.keys(this.safeValue);
-    return Promise.all(keys.map((key) => this.safeValue[key].validate())).then((res) => {
+    const keys = Object.keys(this.value);
+    return Promise.all(keys.map((key) => this.value[key].validate())).then((res) => {
       this.validating = false;
       const hasError = this.hasError;
       if (hasError) {
         return { hasError };
       }
       else {
-        return { hasError, value: this.safeValue };
+        return { hasError, value: this.value };
       }
     })
   }
@@ -230,14 +230,14 @@ export class FormState<TValue extends ValidatableMap> implements Validatable<TVa
    * Does any field have an error
    */
   @computed get hasError() {
-    return Object.keys(this.safeValue).map((key) => this.safeValue[key]).some(f => f.hasError);
+    return Object.keys(this.value).map((key) => this.value[key]).some(f => f.hasError);
   }
 
   /**
    * The first error from any sub if any
    */
   @computed get error() {
-    const subItemWithError = Object.keys(this.safeValue).map((key) => this.safeValue[key]).find(f => !!f.hasError);
+    const subItemWithError = Object.keys(this.value).map((key) => this.value[key]).find(f => !!f.hasError);
     return subItemWithError.error;
   }
 }
