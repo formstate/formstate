@@ -148,7 +148,7 @@ Some design notes.
 
 Something like `validated: {valid:false} | {valid:true, value: TValue}` although typesafe was unweildy for devs (`if (validated.valid) {validated.value}`).
 
-Also a validated value *may or may not be present* if validation hasn't run. This makes creating a composible system harder. With `safeValue` (always present as you must initilize a `FieldState` with an initial value) we can compose multiple fields more easily, and as soon as you call `validate` at a top level it can easily cacade down and you can ready any `safeValue` you want.
+Also a validated value *may or may not be present* if validation hasn't run. This makes creating a composible system harder. With `safeValue` (always present as you must initilize a `FieldState` with an initial value) we can compose multiple fields more easily, and as soon as you call `validate` at a top level it can easily cacade down and you can read any `safeValue` you want without being forced to do `validated.valid` checks.
 
 
 [mobx]:https://github.com/mobxjs/mobx
