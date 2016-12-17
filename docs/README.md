@@ -118,19 +118,19 @@ Also as a component library author you do not need to depend on this project *or
 
 ### Concept: Validation
 
-It would be great if `FieldState` had just `value` and `onChange`. However to support validation and make it a painless experiece, we have the concept of a *hotValue* and a *safeValue*.
+It would be great if `FieldState` had just `value` and `onChange`. However to support validation and make it a painless experiece, we have the concept of a *hotValue* and a *value*.
 
 * `hotValue`: This is the value you bind to the input. It is updated as soon as `onHotChange` is called.
-* `safeValue`: This is the value *you set using code* OR is a `hotValue` that has passed validation.
+* `value`: This is the value *you set using code* OR is a `hotValue` that has passed validation.
 
-> Calling it `hotValue` helps developers know that this value is not validated. 
+> Calling it `hotValue` helps developers know that this value is not validated.
 
-The following pattern examplains usage of `safeValue`
+The following pattern examplains usage of `value`
 
 ```ts
-const res = await someField.validate(); 
+const res = await someField.validate();
 if (res.hasError) return;
-sendToServer(someField.safeValue); // Example
+sendToServer(someField.value); // Bound to be validated and safe
 ```
 
 Note that `hotValue` can be changed by UI / User between the time you call `validate` and read its result. For example, if your UI is still enabled when validating and a server validation is taking too long.
@@ -139,16 +139,6 @@ Note that `hotValue` can be changed by UI / User between the time you call `vali
 
 ## Field
 Essentially your `Field` components looks like the following:....TBD
-
-## Design Notes
-
-Some design notes.
-
-### Why `safeValue`
-
-Something like `validated: {valid:false} | {valid:true, value: TValue}` although typesafe was unweildy for devs (`if (validated.valid) {validated.value}`).
-
-Also a validated value *may or may not be present* if validation hasn't run. This makes creating a composible system harder. With `safeValue` (always present as you must initilize a `FieldState` with an initial value) we can compose multiple fields more easily, and as soon as you call `validate` at a top level it can easily cacade down and you can read any `safeValue` you want without being forced to do `validated.valid` checks.
 
 
 [mobx]:https://github.com/mobxjs/mobx
