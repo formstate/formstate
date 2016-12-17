@@ -1,12 +1,20 @@
 import { observable, action, computed } from 'mobx';
 import * as utils from './internal/utils';
 
+
+/** A truthy string or falsy values */
+export type ValidationResponse =
+  string
+  | null
+  | undefined
+  | false
+
 /**
  * A validator simply takes a value and returns a string or Promise<string>
- * If a string is returned it represents a validation error
+ * If a truthy string is returned it represents a validation error
  **/
 export interface Validator<TValue> {
-  (value: TValue): string | Promise<string>;
+  (value: TValue): ValidationResponse | Promise<ValidationResponse>;
 }
 
 /**
@@ -59,6 +67,7 @@ export interface Validatable<TValue> {
   validating: boolean;
   validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }>;
   hasError: boolean;
+  error?: string;
   safeValue: TValue;
 }
 
@@ -193,7 +202,7 @@ export class FormState<TValue> implements Validatable<TValue> {
     /**
      * SubItems can be any Validatable
      */
-    @action private subItems: ValidatableMap<TValue>
+    public items: ValidatableMap<TValue>
   ) {
     this.copySafeValues();
   }
@@ -201,13 +210,14 @@ export class FormState<TValue> implements Validatable<TValue> {
   @observable validating = false;
 
   @observable safeValue: TValue;
-  @action copySafeValues() {
-    const keys = Object.keys(this.subItems);
+  @action private copySafeValues() {
+    const keys = Object.keys(this.items);
     const value: TValue = {} as any;
     keys.forEach((key, i) => {
-      const item = this.subItems[key];
+      const item = this.items[key];
       value[key] = item.safeValue;
     });
+    this.safeValue = value;
   }
 
   /**
@@ -217,8 +227,8 @@ export class FormState<TValue> implements Validatable<TValue> {
    */
   @action validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
-    const keys = Object.keys(this.subItems);
-    return Promise.all(keys.map((key) => this.subItems[key].validate())).then((res) => {
+    const keys = Object.keys(this.items);
+    return Promise.all(keys.map((key) => this.items[key].validate())).then((res) => {
       this.validating = false;
       const hasError = this.hasError;
       if (hasError) {
@@ -235,6 +245,14 @@ export class FormState<TValue> implements Validatable<TValue> {
    * Does any field have an error
    */
   @computed get hasError() {
-    return Object.keys(this.subItems).map((key) => this.subItems[key]).some(f => f.hasError);
+    return Object.keys(this.items).map((key) => this.items[key]).some(f => f.hasError);
+  }
+
+  /**
+   * The first error from any sub if any
+   */
+  @computed get error() {
+    const subItemWithError = Object.keys(this.items).map((key) => this.items[key]).find(f => !!f.hasError);
+    return subItemWithError.error;
   }
 }
