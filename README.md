@@ -2,7 +2,7 @@
 
 [![Join the chat at  gitter][gitter-image]][gitter-url]
 
-> Making form state simple
+> Form state so simple that you will fall in love ❤️
 
 [![Build Status][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
