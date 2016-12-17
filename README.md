@@ -11,16 +11,17 @@
 
 <iframe src="https://ghbtns.com/github-btn.html?user=formstate&repo=formstate&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
 
-This project is big on type safety for compile time error analysis and autocomplete so your code reviews + code authoring is super streamlined.
+This project is big on type safety for compile time error analysis
 
 ![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/typeSafety.png)
 
-# Progress
+and autocomplete so your code reviews + code authoring + refactoring is super __*smooooth*__.
 
-We've been working on this project integrated in a *large* private repo. We are in the process of
+# Docs
 
-- doing API reviews to increase intuition as well as expressiveness.
-- [adding docs to explain all the ideas 🌹](https://formstate.github.io/)
+We work hard on our docs, [so jump straight into them 🌹](https://formstate.github.io/)
+
+![](https://raw.githubusercontent.com/formstate/formstate/master/docs/logo/logo.png)
 
 [gitter-image]:https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]:https://gitter.im/formstate/general
