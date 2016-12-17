@@ -102,6 +102,8 @@ The FieldState takes an optional list of validators so you would use it as simpl
 const name = new FieldState({value:'', validators = [required]});
 ```
 
+> TIP: because the validator is so simple you can use the same function even on the server if you wanted to.
+
 ## FieldState
 
 ### Concept: Page / Field / Input
@@ -124,8 +126,6 @@ It can be made simpler by composing the `{value, onChange}` pair into a single o
 That's better, note that creating your own `Field` component gives you the opportunity to style it for *your business* and add additions properties e.g. `{label:string}` that make sense for your project:
 
 ![](./images/inputFieldLabel.png)
-
-Also as a component library author you do not need to depend on this project *or* mobx. You write it as a simple `value`, `onChange`. And then the application author (which can still be just you) makes the `Field` that uses this library, *mobx* and *mobx-react* (specifically wrapping `@observer class Field extends React.Component` etc) and it all just works out. More on creating your `Field` later.
 
 ### Concept: Validation
 
@@ -173,9 +173,19 @@ export class Field extends React.Component<FieldProps, {}>{
 }
 ```
 
+Here is a diagram for the visual thinkers:
+
+![](./images/inputFieldFull.png)
+
+
 ## TIPS
 
 The API is designed to be simple, but powerful enough to handle most use cases. We provide common design patterns next.
+
+### TIP: Creating reusable components
+Also as a component library author you do not need to depend on this project *or* mobx. You write it as a simple `value`, `onChange`.  Note that because of this *you can use any component library out there with this library* as every single one of those provides you with `value/onChange` 🌹.
+
+And then the application author (which can still be just you) makes the `Field` that uses this library, *mobx* and *mobx-react* (specifically wrapping `@observer class Field extends React.Component` etc) and it all just works out.
 
 ### TIP: Sequential validation
 
