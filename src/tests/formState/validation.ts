@@ -16,6 +16,7 @@ describe("FormState validation", () => {
     const res = await form.validate();
     assert.equal(res.hasError, true);
     assert.equal(form.hasError, true);
+    assert.equal(form.items.name.error, 'value required');
     assert.equal(form.error, 'value required');
   });
 });
