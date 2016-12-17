@@ -188,7 +188,7 @@ Note that `hotValue` can be changed by UI / User between the time you call `vali
 
 > TIP: FieldState has `validating` boolean, that you can use to explicitly move field / input to `readonly` but it results in horrible UX especially if doing *automatic* live validation.
 
-## Field
+### Demo: Field
 You create a `Field` component based on your design. But its actually not hard, essentially your `Field` components looks like the following:
 
 ```ts
