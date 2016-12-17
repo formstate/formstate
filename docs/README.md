@@ -83,63 +83,23 @@ export interface Validator<TValue> {
 }
 ```
 
-Notice that a validator is *completely* independent of any framework cruft. Its a simple function that just takes a value and returns an error message or a Promise to an error message. If there is no error it should return an empty string.
+Notice that a validator is *completely* independent of any framework cruft. Its a simple function that just takes a value and returns an error message or a Promise to an error message. If there is no error it should return an empty string or anything *falsy*.
 
 Because its just a function:
 * you can easily test it in nodejs.
 * you can easily wrap any validation library quite easily if you need to.
 * handles server validation just as easily as local one (you just return a promise).
 
-### Validation run
-
-A FieldState takes a list of validators. It basically just calls the super simple `applyValidators` function
-
-```
-function applyValidators<TValue>(value: TValue, validators: Validator<TValue>[]): Promise<string>
-```
-
-This function applies a value through a list of validators. It aborts execution and returns an error as soon as any validator returns an error.
-
-That's it. Now you have complete mastery of Validators. That said we understand that providing guidance around common patterns helps beginners and experts write simple code. So we cover a few validator tips next.
-
-### TIP: Sequential running
-
-Validators are run in sequence and stopped if an error occurs. This means that we get well defined error messages from an validation run.
-
-Also this means you get to chain validations quite easily e.g. `second` never gets called if `first` fails.
+Example validator:
 
 ```ts
-validators:[first, second]
+const required = (val:string) => !val && 'Value required';
 ```
 
-You can even easily compose validators that run multiple validators in parallel if you want e.g.
+The FieldState takes an optional list of validators so you would use it as simply as :
 
 ```ts
-validators:[(value)=>{
-  return Promise.all([first(value), second(value)])
-    .then(([fst,snd]) => {
-      if (fst && snd) return 'Both first and second failed';
-      if (fst) return 'Only first failed';
-      if (snd) return 'Only second failed';
-      return '';
-    });
-}]
-```
-
-### TIP: Empty values
-
-We could isolate the validators from handling such cases by not calling a validator if the empty is value, but its a decision we don't want to make for *your validation requirements*. You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
-
-```ts
-function ifValue(validator:Validator<TValue>):Validator<TValue>{
-  return function(value: TValue) {
-    if (!value || value == null) return '';
-    return validator(value);
-  };
-}
-
-// Usage
-// validators: [ifValue(mySimplerValidator)]
+const name = new FieldState({value:'', validators = [required]});
 ```
 
 ## FieldState
@@ -171,22 +131,18 @@ Also as a component library author you do not need to depend on this project *or
 
 It would be great if `FieldState` had just `value` and `onChange`. However to support validation and make it a painless experiece, we have the concept of a *hotValue* and a *value*.
 
-* `hotValue`: This is the value you bind to the input. It is updated as soon as `onHotChange` is called.
+* `hotValue`: This is the value you bind to the input. It is updated as soon as `onHotChange` is called to keep the UI always responsive.
 * `value`: This is the value *you set using code* OR is a `hotValue` that has passed validation.
 
 > Calling it `hotValue` helps developers know that this value is not validated.
 
-The following pattern examplains usage of `value`
+The following explains usage of `value`
 
 ```ts
 const res = await someField.validate();
 if (res.hasError) return;
-sendToServer(someField.value); // Bound to be validated and safe
+sendToServer(someField.value); // Validated and safe
 ```
-
-Note that `hotValue` can be changed by UI / User between the time you call `validate` and read its result. For example, if your UI is still enabled when validating and a server validation is taking too long.
-
-> TIP: FieldState has `validating` boolean, that you can use to explicitly move field / input to `readonly` but it results in horrible UX especially if doing *automatic* live validation.
 
 ### Demo: Field
 You create a `Field` component based on your design. But its actually not hard, essentially your `Field` components looks like the following:
@@ -215,6 +171,58 @@ export class Field extends React.Component<FieldProps, {}>{
     );
   }
 }
+```
+
+## TIPS
+
+The API is designed to be simple, but powerful enough to handle most use cases. We provide common design patterns next.
+
+### TIP: Sequential validation
+
+A FieldState takes a list of validators. It basically just calls the super simple `applyValidators` function
+
+```
+function applyValidators<TValue>(value: TValue, validators: Validator<TValue>[]): Promise<string>
+```
+
+This function applies a value through a list of validators. It aborts execution and returns an error as soon as any validator returns an error.
+
+This means that we always get well defined error messages from an validation run. Also this means you get to chain validations quite easily e.g. if you can use a pattern like to following to prevent sending bad values for server validation
+
+```ts
+validators:[required, validateFromServer]
+```
+
+### TIP: Parallel validation
+
+You can even easily compose validators that run multiple validators in parallel if you want e.g.
+
+```ts
+validators:[(value)=>{
+  return Promise.all([first(value), second(value)])
+    .then(([fst,snd]) => {
+      if (fst && snd) return 'Both first and second failed';
+      if (fst) return 'Only first failed';
+      if (snd) return 'Only second failed';
+      return '';
+    });
+}]
+```
+
+### TIP: Empty values
+
+We could isolate the validators from handling such cases by not calling a validator if the empty is value, but its a decision we don't want to make for *your validation requirements*. You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
+
+```ts
+function ifValue(validator:Validator<TValue>):Validator<TValue>{
+  return function(value: TValue) {
+    if (!value || value == null) return '';
+    return validator(value);
+  };
+}
+
+// Usage
+// validators: [ifValue(mySimplerValidator)]
 ```
 
 [mobx]:https://github.com/mobxjs/mobx
