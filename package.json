@@ -1,6 +1,6 @@
 {
   "name": "formstate",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Painless and simple MobX form management",
   "main": "./lib/index.js",
   "typings": "./lib/index",
