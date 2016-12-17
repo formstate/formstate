@@ -23,7 +23,7 @@ and autocomplete so your code reviews + code authoring + refactoring is super __
 
 We work hard on our docs, [so jump straight into them 🌹](https://formstate.github.io/)
 
-![](https://raw.githubusercontent.com/formstate/formstate/master/docs/logo/logo.png)
+[![](https://raw.githubusercontent.com/formstate/formstate/master/docs/logo/logo.png)](https://formstate.github.io/)
 
 [gitter-image]:https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]:https://gitter.im/formstate/general

@@ -1,16 +1,71 @@
-# FormState
-
-> Making form management simple
-
 <iframe src="https://ghbtns.com/github-btn.html?user=formstate&repo=formstate&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
 
 > [Powered by your github ⭐s](https://github.com/formstate/formstate/stargazers).
 
 Note that the API is quite simple and consists of `Validator`, `FieldState` and `FormState`. It is written in TypeScript and designed for TypeSafety.
 
-We could explain the *just the API*, but we think its better to help people understand how truly simple it is by explaining all the rational 🌹.
 
-> TIP I assume you are familiar with [promises](https://basarat.gitbooks.io/typescript/content/docs/promise.html) and [async/await](https://basarat.gitbooks.io/typescript/content/docs/async-await.html).
+### Quick Example
+
+```tsx
+import React from 'react';
+import { observer } from 'mobx-react';
+import { FormState, FieldState } from 'formstate';
+
+class DemoState {
+  // Create a field
+  username = new FieldState({
+    value: '',
+    // Creating validators is super easy
+    validators:[(val) => !val && 'username required']
+  });
+
+  // Compose fields into a form
+  form = new FormState({
+    username: this.username
+  });
+
+  onSubmit = async () => {
+    //  Validate all fields
+    const res = await this.form.validate();
+    // If any errors you would know
+    if (res.hasError) {
+      console.log(res.error);
+      return;
+    }
+    // Yay .. all good. Do what you want with it
+    console.log(this.username.value); // Validated value!
+  };
+}
+
+@observer
+export class Demo extends React.Component<{},{}> {
+  data = new DemoState();
+  render(){
+    return (
+      const data = this.data;
+
+      <form onSubmit={data.onSubmit}>
+        <input
+          type="text"
+          value={data.username.hotValue}
+          onChange={(e)=>data.username.onHotChange(e.target.value)}
+        />
+        <p>{data.username.error}</p>
+        <p>{data.form.error}</p>
+      </form>
+    ));
+  }
+}
+```
+
+> Form state so simple that you will fall in love ❤️
+
+![](https://raw.githubusercontent.com/formstate/formstate/master/docs/logo/logo.png)
+
+We could explain the *just the API*, but to help people understand how truly simple it is we will even go ahead and explain all the rational 🌹.
+
+> TIP: I assume you are familiar with [promises](https://basarat.gitbooks.io/typescript/content/docs/promise.html) and [async/await](https://basarat.gitbooks.io/typescript/content/docs/async-await.html).
 
 ## Mobx
 
@@ -87,10 +142,6 @@ function ifValue(validator:Validator<TValue>):Validator<TValue>{
 // validators: [ifValue(mySimplerValidator)]
 ```
 
-* TODO: add `debounce` function to validation.
-* TODO: document `debounce` function to validation.
-* TODO: consider `validation.ifValue` as a part of core.
-
 ## FieldState
 
 ### Concept: Page / Field / Input
@@ -138,7 +189,32 @@ Note that `hotValue` can be changed by UI / User between the time you call `vali
 > TIP: FieldState has `validating` boolean, that you can use to explicitly move field / input to `readonly` but it results in horrible UX especially if doing *automatic* live validation.
 
 ## Field
-Essentially your `Field` components looks like the following:....TBD
+You create a `Field` component based on your design. But its actually not hard, essentially your `Field` components looks like the following:
 
+```ts
+type FieldProps = {
+  id: string,
+  label: string,
+  fieldState: FieldState<string>,  
+}
+
+@observer
+export class Field extends React.Component<FieldProps, {}>{
+  render() {
+    const fieldState = this.props.fieldState;
+    return (
+      <div>
+        <label htmlFor={this.props.id}>{this.props.label}<label>
+        <input
+          type="text"
+          value={fieldState.hotValue}
+          onChange={(e)=>fieldState.onHotChange(e.target.value)}
+        />
+        <p>{fieldState.error}</p>
+      </div>
+    );
+  }
+}
+```
 
 [mobx]:https://github.com/mobxjs/mobx
