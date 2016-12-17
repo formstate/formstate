@@ -75,13 +75,13 @@ export class FieldState<TValue> implements Validatable<TValue> {
   /**
    * The value is stored in the field. May or may not be *valid*.
    */
-  @observable value: TValue;
+  @observable hotValue: TValue;
 
   /** If there is any error on the field on last validation attempt */
   @observable error?: string;
 
-  /** Whatever the last validated value is if any */
-  @observable validated?: { valid: false } | { valid: true, value: TValue };
+  /** The value set from code or a hot value that's been validated */
+  @observable safeValue?: TValue;
 
   @observable private autoValidationEnabled = true;
   @action public enableAutoValidationAndValidate = () => {
@@ -100,8 +100,8 @@ export class FieldState<TValue> implements Validatable<TValue> {
     autoValidationEnabled?: boolean,
     autoValidationDebounceMs?: number,
   }) {
-    this.value = config.value;
-    this.validated = { valid: false };
+    this.hotValue = config.value;
+    this.safeValue = config.value;
 
     /**
      * Automatic validation configuration
@@ -111,9 +111,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
   }
 
   /** On change on the component side */
-  @action onChange = (value: TValue) => {
+  @action onHotChange = (value: TValue) => {
     // Immediately set for local ui binding
-    this.value = value;
+    this.hotValue = value;
     this.onUpdate();
     if (this.autoValidationEnabled) {
       this.queueValidation();
@@ -126,9 +126,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
    */
   @action reinitValue = (value: TValue) => {
     // This value vetos all previous values
-    this.value = value;
+    this.hotValue = value;
     this.error = undefined;
-    this.validated = { valid: false };
+    this.safeValue = value;
     this.onUpdate();
   }
 
@@ -146,8 +146,8 @@ export class FieldState<TValue> implements Validatable<TValue> {
     this.lastValidationRequest++;
     const lastValidationRequest = this.lastValidationRequest;
     this.validating = true;
-    const value = this.value;
-    return applyValidators(this.value, this.config.validators || [])
+    const value = this.hotValue;
+    return applyValidators(this.hotValue, this.config.validators || [])
       .then(fieldError => {
         if (this.lastValidationRequest !== lastValidationRequest) return;
         this.validating = false;
@@ -164,7 +164,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
           return { hasError };
         }
         else {
-          this.validated = { valid: true, value };
+          this.safeValue = value;
           return {
             hasError,
             value

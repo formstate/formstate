@@ -2,12 +2,13 @@ import { FieldState, FormState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
 
-describe("initial test", () => {
-  it("should pass", () => {
+describe("basic tests", () => {
+  it("hotValue and safeValue is set to initial value", () => {
     const name = new FieldState<string>({
       value: 'hello',
     })
-    assert.equal(name.value, 'hello');
+    assert.equal(name.hotValue, 'hello');
+    assert.equal(name.safeValue, 'hello');
   });
 
   it("reinitValue should change the value immediately", () => {
@@ -15,29 +16,7 @@ describe("initial test", () => {
       value: 'hello',
     })
     name.reinitValue('world')
-    assert.equal(name.value, 'world');
-  });
-
-  it("reinitValue should change the value immediately", () => {
-    const name = new FieldState<string>({
-      value: 'hello',
-    })
-    name.reinitValue('world')
-    assert.equal(name.value, 'world');
-  });
-
-  it("validated should not be available till validation completes", () => {
-    const name = new FieldState<string>({
-      value: 'hello',
-    })
-    assert.equal(name.validated.valid, false);
-  });
-
-  it("validated should become available after validation", async () => {
-    const name = new FieldState<string>({
-      value: 'hello',
-    })
-    const res = await name.validate();
-    assert.equal(name.validated.valid && name.validated.value, 'hello');
+    assert.equal(name.hotValue, 'world');
+    assert.equal(name.safeValue, 'world');
   });
 });

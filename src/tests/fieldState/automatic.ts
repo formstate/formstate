@@ -8,9 +8,9 @@ describe('automatic validation delay', () => {
       value: 'hello',
       autoValidationDebounceMs: 100
     });
-    name.onChange('world');
+    name.onHotChange('world');
     await delay(200);
-    assert.equal(name.validated.valid && name.validated.value, 'world');
+    assert.equal(name.safeValue, 'world');
   });
 
   it("if delay is big it should autovalidate fast", async () => {
@@ -18,20 +18,20 @@ describe('automatic validation delay', () => {
       value: 'hello',
       autoValidationDebounceMs: 200
     });
-    name.onChange('world');
+    name.onHotChange('world');
     await delay(100);
-    assert.equal(name.validated.valid, false);
+    assert.equal(name.safeValue, 'hello');
   });
 
   it("default delay value should also work", async () => {
     const name = new FieldState<string>({
       value: 'hello',
     });
-    name.onChange('world');
+    name.onHotChange('world');
     await delay(100);
-    assert.equal(name.validated.valid, false);
+    assert.equal(name.safeValue, 'hello');
     await delay(200);
-    assert.equal(name.validated.valid && name.validated.value, 'world');
+    assert.equal(name.safeValue, 'world');
   });
 });
 
@@ -41,10 +41,10 @@ describe('automatic validation toggling', () => {
       value: 'hello',
       autoValidationDebounceMs: 100,
     });
-    name.onChange('world');
-    assert.equal(name.validated.valid, false);
+    name.onHotChange('world');
+    assert.equal(name.safeValue, 'hello');
     await delay(200);
-    assert.equal(name.validated.valid && name.validated.value, 'world');
+    assert.equal(name.safeValue, 'world');
   });
 
   it("disabled auto validation should disable", async () => {
@@ -53,21 +53,21 @@ describe('automatic validation toggling', () => {
       autoValidationDebounceMs: 100,
       autoValidationEnabled: false
     });
-    name.onChange('world');
-    assert.equal(name.validated.valid, false);
+    name.onHotChange('world');
+    assert.equal(name.safeValue, 'hello');
     await delay(200);
-    assert.equal(name.validated.valid, false);
+    assert.equal(name.safeValue, 'hello');
   });
 
-  it("enabled auto validation should disable", async () => {
+  it("enabled auto validation should enable", async () => {
     const name = new FieldState<string>({
       value: 'hello',
       autoValidationDebounceMs: 100,
       autoValidationEnabled: true
     });
-    name.onChange('world');
-    assert.equal(name.validated.valid, false);
+    name.onHotChange('world');
+    assert.equal(name.safeValue, 'hello');
     await delay(200);
-    assert.equal(name.validated.valid && name.validated.value, 'world');
+    assert.equal(name.safeValue, 'world');
   });
 });
