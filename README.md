@@ -17,6 +17,8 @@ This project is big on type safety for compile time error analysis
 
 and autocomplete so your code reviews + code authoring + refactoring is super __*smooooth*__.
 
+![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/autocomplete.gif)
+
 # Docs
 
 We work hard on our docs, [so jump straight into them 🌹](https://formstate.github.io/)
