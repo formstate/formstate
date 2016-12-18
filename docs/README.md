@@ -96,12 +96,6 @@ Example validator:
 const required = (val:string) => !val && 'Value required';
 ```
 
-The FieldState takes an optional list of validators so you would use it as simply as :
-
-```ts
-const name = new FieldState({value:'', validators = [required]});
-```
-
 > TIP: because the validator is so simple you can use the same function even on the server if you wanted to.
 
 ## FieldState
@@ -127,9 +121,7 @@ That's better, note that creating your own `Field` component gives you the oppor
 
 ![](./images/inputFieldLabel.png)
 
-### Concept: Validation
-
-It would be great if `FieldState` had just `value` and `onChange`. However to support validation and make it a painless experiece, we have the concept of a *hotValue* and a *value*.
+It would be great if `FieldState` had just `value` and `onChange`. However to support validation and make it a painless experience, we have the concept of a *hotValue* and a *value*.
 
 * `hotValue`: This is the value you bind to the input. It is updated as soon as `onHotChange` is called to keep the UI always responsive.
 * `value`: This is the value *you set using code* OR is a `hotValue` that has passed validation.
@@ -142,6 +134,13 @@ The following explains usage of `value`
 const res = await someField.validate();
 if (res.hasError) return;
 sendToServer(someField.value); // Validated and safe
+```
+
+The FieldState takes an optional list of validators so you would use it as simply as:
+
+```ts
+const required = (val:string) => !val && 'Value required';
+const name = new FieldState({value:'', validators = [required]});
 ```
 
 ### Demo: Field
@@ -177,6 +176,32 @@ Here is a diagram for the visual thinkers:
 
 ![](./images/inputFieldFull.png)
 
+## FormState
+
+`FormState` really just gives you a *composite* API over other `FieldState`s or even other `FormState`s.
+
+To demonstrate this composibility consider the following simple example:
+
+```ts
+const required = (val:string) => !val && 'Value required';
+const form = new FormState({
+  display: new FieldState({value:''}),
+  credentials: new FormState({
+    username: new FieldState({value: '', validators:[required]}),
+    password: new FieldState({value: '', validators:[required]}),
+  })
+})
+```
+You traverse a form the same way you traverse a field, with the `value` member. A simple example to demonstrate form traversal:
+
+```ts
+form.value; // {display:FieldState, credentials:FormState}
+form.value.display; // {value, hotValue, validate, ... other FieldState stuff}
+form.value.credentials.value; // {username: FieldState, password: FieldState}
+```
+
+* Of course all this is type checked by TypeScript as well so you can't go wrong!
+* You can nest as much as you want and any call to `validate` at any level propagates to ALL the children of that level 🌹
 
 ## TIPS
 
