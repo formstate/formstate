@@ -215,6 +215,8 @@ await form.value.credentials.validate(); // Validates *username* and *password*
 
 You generally call `validate` at the root though, after an `onSubmit` to make sure everything is valid. This is shown in the first *quick example* 🌹.
 
+> Since we call `validate` on all sub fields / forms it also automatically populates the *error* members of all the fields. So the user gets automatic nice UX as well if there is any error.
+
 ## TIPS
 
 The API is designed to be simple, but powerful enough to handle most use cases. We provide common design patterns next.
