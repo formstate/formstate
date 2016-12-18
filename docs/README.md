@@ -215,7 +215,7 @@ await form.value.credentials.validate(); // Validates *username* and *password*
 
 You generally call `validate` at the root though, after an `onSubmit` to make sure everything is valid. This is shown in the first *quick example* 🌹.
 
-> Since we call `validate` on all sub fields / forms it also automatically populates the *error* members of all the fields. So the user gets automatic nice UX as well if there is any error.
+> Since we call `validate` on all sub fields / forms it also automatically populates the *error* members of all the fields. So the user gets automatic nice UX against each invalid field if there is any error (assuming your Field shows its `fieldState.error`).
 
 ## TIPS
 
