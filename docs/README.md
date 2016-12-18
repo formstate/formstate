@@ -235,4 +235,16 @@ function ifValue(validator:Validator<TValue>):Validator<TValue>{
 // validators: [ifValue(mySimplerValidator)]
 ```
 
+### TIP: Customizable validators
+
+You can easily create functions that customize a particular validation by using a *validator creating* function. e.g. a highly customizable minimum value validator:
+
+```ts
+const minValue = (minValue, message) => (val) => val < minValue && message;
+
+// usage
+validators:[minValue(1,"The minimum bid is set at $1")];
+validators:[minValue(13,"Sorry, you must be 13 or older to use this website")];
+```
+
 [mobx]:https://github.com/mobxjs/mobx
