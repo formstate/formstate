@@ -192,6 +192,8 @@ const form = new FormState({
   })
 })
 ```
+
+### Access values
 You traverse a form the same way you traverse a field, with the `value` member. A simple example to demonstrate form traversal:
 
 ```ts
@@ -200,8 +202,18 @@ form.value.display; // {value, hotValue, validate, ... other FieldState stuff}
 form.value.credentials.value; // {username: FieldState, password: FieldState}
 ```
 
-* Of course all this is type checked by TypeScript as well so you can't go wrong!
-* You can nest as much as you want and any call to `validate` at any level propagates to ALL the children of that level 🌹
+Of course all this is type checked by TypeScript as well so you can't go wrong!
+
+### Validate
+You can nest as much as you want and any call to `validate` at any level propagates to ALL the children of that level e.g.
+
+```ts
+await form.validate(); // Validates *all the fields*
+await form.value.display.validate(); // Validates just *display*
+await form.value.credentials.validate(); // Validates *username* and *password*
+```
+
+You generally call `validate` at the root though, after an `onSubmit` to make sure everything is valid. This is shown in the first *quick example* 🌹.
 
 ## TIPS
 
