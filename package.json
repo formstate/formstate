@@ -10,7 +10,7 @@
     "test": "npm run build && npm run unittest",
     "preversion": "npm run build",
     "postversion": "git push --follow-tags && npm publish",
-    "start": "concurrently \"npm run build -- -w\" \"npm run unittest -- --watch\" \"docute ./docs\"",
+    "start": "concurrently -k \"npm run build -- -w\" \"npm run unittest -- --watch\" \"docute ./docs\"",
     "publishdocs": "ts-node ./scripts/publishdocs.ts"
   },
   "repository": {
