@@ -46,4 +46,26 @@ describe("basic FormState", () => {
     assert.equal(form.$.name.$, name.$);
     assert.equal(form.$.person.$.username.$, name.$);
   });
+
+  it("should allow nesting a FieldState array", () => {
+    const name = new FieldState({
+      value: 'hello',
+    });
+    const form = new FormState([
+      name,
+    ]);
+    assert.equal(form.$[0].$, name.$);
+  });
+
+  it("should allow nesting another FormState array", () => {
+    const name = new FieldState({
+      value: 'hello',
+    });
+    const form = new FormState([
+      new FormState([
+        name
+      ])
+    ]);
+    assert.equal(form.$[0].$[0].$, name.$);
+  });
 });

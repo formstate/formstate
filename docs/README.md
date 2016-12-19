@@ -148,7 +148,7 @@ You create a `Field` component based on your design. But its actually not hard, 
 type FieldProps = {
   id: string,
   label: string,
-  fieldState: FieldState<string>,  
+  fieldState: FieldState<string>,
 }
 
 @observer
@@ -216,6 +216,42 @@ You generally call `validate` at the root though, after an `onSubmit` to make su
 
 > Since we call `validate` on all sub fields / forms it also automatically populates the *error* members of all the fields. So the user gets automatic nice UX against each invalid field if there is any error (assuming your Field shows its `fieldState.error`).
 
+### Array
+
+Sometimes you have *n* number of subforms and in that case you cannot use `{key:FormState|FieldState}` structure. This is why `FormState` also supports an array as an input.
+
+This is demonstrated below:
+
+```ts
+const form = new FormState([
+  new FormState({
+    username: new FieldState({value: '', validators:[required]}),
+    password: new FieldState({value: '', validators:[required]}),
+  }),
+  new FormState({
+    username: new FieldState({value: '', validators:[required]}),
+    password: new FieldState({value: '', validators:[required]}),
+  }),
+]);
+```
+
+Again calling `validate` will correctly validate *all* sub-children. Also any child array access is still checked by TypeScript for safety.
+
+```ts
+const res = await form.validate();
+if (res.hasError) return;
+
+/** $ is automatically inferred to be an array */
+form.$[0].username.$; // The first formstate's username field's validated value
+
+/** {username: string, password: string} */
+const somethingToSendToServer = form.$.map(child =>
+  ({username: child.$.username.$, password: child.$.password.$})
+);
+```
+
+> TIP: It works with *n* number of subfields as well. And as always you can nest objects and arrays as needed.
+
 ## TIPS
 
 The API is designed to be simple, but powerful enough to handle most use cases. We provide common design patterns next.
@@ -273,9 +309,9 @@ function ifValue(validator:Validator<TValue>):Validator<TValue>{
 // validators: [ifValue(mySimplerValidator)]
 ```
 
-### TIP: Customizable validators
+### TIP: Customisable validators
 
-You can easily create functions that customize a particular validation by using a *validator creating* function. e.g. a highly customizable minimum value validator:
+You can easily create functions that customise a particular validation by using a *validator creating* function. e.g. a highly customisable minimum value validator:
 
 ```ts
 const minValue = (minValue, message) => (val) => val < minValue && message;

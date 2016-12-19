@@ -189,19 +189,34 @@ export class FieldState<TValue> implements Validatable<TValue> {
 }
 
 /** Each key of the object is a validatable */
-export type ValidatableMap =
+export type ValidatableMapOrArray =
   { [key: string]: Validatable<any> }
+  | Validatable<any>[]
 
 /**
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
  */
-export class FormState<TValue extends ValidatableMap> implements Validatable<TValue> {
+export class FormState<TValue extends ValidatableMapOrArray> implements Validatable<TValue> {
+  private mode: 'array' | 'map' = 'map';
   constructor(
     /**
      * SubItems can be any Validatable
      */
     public $: TValue
   ) {
+    /**
+     * Note:
+     * - not use isArray as it might be an observable
+     * - not using `undefined` as length might be a subfield
+     **/
+    this.mode = typeof ($ as any).length === 'number' ? 'array' : 'map';
+  }
+
+  /** Get validatable objects from $ */
+  private getValues = (): Validatable<any>[] => {
+    if (this.mode === 'array') return (this.$ as any);
+    const keys = Object.keys(this.$);
+    return keys.map((key) => this.$[key]);
   }
 
   @observable validating = false;
@@ -213,8 +228,8 @@ export class FormState<TValue extends ValidatableMap> implements Validatable<TVa
    */
   @action validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
-    const keys = Object.keys(this.$);
-    return Promise.all(keys.map((key) => this.$[key].validate())).then((res) => {
+    const values = this.getValues();
+    return Promise.all(values.map((value) => value.validate())).then((res) => {
       this.validating = false;
       const hasError = this.hasError;
       if (hasError) {
@@ -230,14 +245,14 @@ export class FormState<TValue extends ValidatableMap> implements Validatable<TVa
    * Does any field have an error
    */
   @computed get hasError() {
-    return Object.keys(this.$).map((key) => this.$[key]).some(f => f.hasError);
+    return this.getValues().some(f => f.hasError);
   }
 
   /**
    * The first error from any sub if any
    */
   @computed get error() {
-    const subItemWithError = Object.keys(this.$).map((key) => this.$[key]).find(f => !!f.hasError);
+    const subItemWithError = this.getValues().find(f => !!f.hasError);
     return subItemWithError.error;
   }
 }
