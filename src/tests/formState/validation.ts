@@ -128,4 +128,24 @@ describe("FormState validation", () => {
     assert.equal(form.$[0].error, 'value required');
     assert.equal(form.$[0].$[0].$, '');
   });
+
+  it("depenendent validation should work", async () => {
+    const pass1 = new FieldState({ value: '', validators: [(val) => !val && 'Password required'] });
+    const pass2 = new FieldState({
+      value: '',
+      validators: [(val) => val && val !== pass1.$ && 'Passwords must match']
+    })
+    const form = new FormState({
+      pass1,
+      pass2
+    });
+
+    /** Sample user interaction */
+    form.$.pass1.onChange('hello');
+    form.$.pass2.onChange('he');
+
+    const res = await form.validate();
+    assert.equal(res.hasError, true);
+    assert.equal(pass2.error, 'Passwords must match');
+  });
 });
