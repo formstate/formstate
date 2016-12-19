@@ -4,7 +4,7 @@
 
 > [Powered by your github ⭐s](https://github.com/formstate/formstate/stargazers).
 
-Note that the API is quite simple and consists of `Validator`, `FieldState` and `FormState`. It is written in TypeScript and designed for TypeSafety.
+Note that the API is quite simple and consists of `Validator`, `FieldState` and `FormState`. It is written in TypeScript and designed for TypeSafety 🌹.
 
 ![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/autocomplete.gif)
 
