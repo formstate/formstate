@@ -11,6 +11,12 @@ Note that the API is quite simple and consists of `Validator`, `FieldState` and 
 
 ### Quick Example
 
+Install:
+```sh
+npm install formstate --save
+```
+
+Use:
 ```tsx
 import React from 'react';
 import { observer } from 'mobx-react';
