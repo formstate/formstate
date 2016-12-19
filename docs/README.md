@@ -345,4 +345,6 @@ assert.equal(res.hasError, true);
 assert.equal(pass2.error, 'Passwords must match');
 ```
 
+> You don't want cycles in your fields. You can fix cycles by just having an error on the *dependent* field only.
+
 [mobx]:https://github.com/mobxjs/mobx
