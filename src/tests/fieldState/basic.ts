@@ -7,8 +7,8 @@ describe("basic FieldState tests", () => {
     const name = new FieldState({
       value: 'hello',
     })
-    assert.equal(name.hotValue, 'hello');
     assert.equal(name.value, 'hello');
+    assert.equal(name.$, 'hello');
   });
 
   it("reinitValue should change the value immediately", () => {
@@ -16,7 +16,7 @@ describe("basic FieldState tests", () => {
       value: 'hello',
     })
     name.reinitValue('world')
-    assert.equal(name.hotValue, 'world');
     assert.equal(name.value, 'world');
+    assert.equal(name.$, 'world');
   });
 });

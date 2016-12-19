@@ -38,7 +38,7 @@ class DemoState {
       return;
     }
     // Yay .. all good. Do what you want with it
-    console.log(this.username.value); // Validated value!
+    console.log(this.username.$); // Validated value!
   };
 }
 
@@ -52,8 +52,8 @@ export class Demo extends React.Component<{},{}> {
       <form onSubmit={data.onSubmit}>
         <input
           type="text"
-          value={data.username.hotValue}
-          onChange={(e)=>data.username.onHotChange(e.target.value)}
+          value={data.username.value}
+          onChange={(e)=>data.username.onChange(e.target.value)}
         />
         <p>{data.username.error}</p>
         <p>{data.form.error}</p>
@@ -121,19 +121,17 @@ That's better, note that creating your own `Field` component gives you the oppor
 
 ![](./images/inputFieldLabel.png)
 
-It would be great if `FieldState` had just `value` and `onChange`. However to support validation and make it a painless experience, we have the concept of a *hotValue* and a *value*.
+It would be great if `FieldState` had just `value` and `onChange`. However to support validation and make it a painless experience, we have the concept of a safe / validated *value* aka `$`.
 
-* `hotValue`: This is the value you bind to the input. It is updated as soon as `onHotChange` is called to keep the UI always responsive.
-* `value`: This is the value *you set using code* OR is a `hotValue` that has passed validation.
+* `value`: This is the value you bind to the input. It is updated as soon as `onChange` is called to keep the UI always responsive.
+* `$`: This is the value *you set using code* OR is a user entered `value` that has passed validation.
 
-> Calling it `hotValue` helps developers know that this value is not validated.
-
-The following explains usage of `value`
+The following explains usage of `$`
 
 ```ts
 const res = await someField.validate();
 if (res.hasError) return;
-sendToServer(someField.value); // Validated and safe
+sendToServer(someField.$); // Validated and safe
 ```
 
 The FieldState takes an optional list of validators so you would use it as simply as:
@@ -162,8 +160,8 @@ export class Field extends React.Component<FieldProps, {}>{
         <label htmlFor={this.props.id}>{this.props.label}<label>
         <input
           type="text"
-          value={fieldState.hotValue}
-          onChange={(e)=>fieldState.onHotChange(e.target.value)}
+          value={fieldState.value}
+          onChange={(e)=>fieldState.onChange(e.target.value)}
         />
         <p>{fieldState.error}</p>
       </div>
@@ -194,12 +192,13 @@ const form = new FormState({
 ```
 
 ### Access values
-You traverse a form the same way you traverse a field, with the `value` member. A simple example to demonstrate form traversal:
+You traverse a form the same way you traverse a field, with the `$` member. A simple example to demonstrate form traversal:
 
 ```ts
-form.value; // {display:FieldState, credentials:FormState}
-form.value.display; // {value, hotValue, validate, ... other FieldState stuff}
-form.value.credentials.value; // {username: FieldState, password: FieldState}
+form.$; // {display:FieldState, credentials:FormState}
+form.$.display; // {value, onChange, $, validate, ... other FieldState stuff}
+form.$.credentials.$; // {username: FieldState, password: FieldState}
+form.$.credentials.$.username.$; // ''
 ```
 
 Of course all this is type checked by TypeScript as well so you can't go wrong!

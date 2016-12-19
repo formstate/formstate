@@ -68,7 +68,7 @@ export interface Validatable<TValue> {
   validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }>;
   hasError: boolean;
   error?: string;
-  value: TValue;
+  $: TValue;
 }
 
 /**
@@ -80,13 +80,13 @@ export class FieldState<TValue> implements Validatable<TValue> {
   /**
    * The value is stored in the field. May or may not be *valid*.
    */
-  @observable hotValue: TValue;
+  @observable value: TValue;
 
   /** If there is any error on the field on last validation attempt */
   @observable error?: string;
 
   /** The value set from code or a hot value that's been validated */
-  @observable value: TValue;
+  @observable $: TValue;
 
   @observable private autoValidationEnabled = true;
   @action public enableAutoValidationAndValidate = () => {
@@ -105,8 +105,8 @@ export class FieldState<TValue> implements Validatable<TValue> {
     autoValidationEnabled?: boolean,
     autoValidationDebounceMs?: number,
   }) {
-    this.hotValue = config.value;
     this.value = config.value;
+    this.$ = config.value;
 
     /**
      * Automatic validation configuration
@@ -116,9 +116,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
   }
 
   /** On change on the component side */
-  @action onHotChange = (value: TValue) => {
+  @action onChange = (value: TValue) => {
     // Immediately set for local ui binding
-    this.hotValue = value;
+    this.value = value;
     this.onUpdate();
     if (this.autoValidationEnabled) {
       this.queueValidation();
@@ -131,9 +131,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
    */
   @action reinitValue = (value: TValue) => {
     // This value vetos all previous values
-    this.hotValue = value;
-    this.error = undefined;
     this.value = value;
+    this.error = undefined;
+    this.$ = value;
     this.onUpdate();
   }
 
@@ -151,8 +151,8 @@ export class FieldState<TValue> implements Validatable<TValue> {
     this.lastValidationRequest++;
     const lastValidationRequest = this.lastValidationRequest;
     this.validating = true;
-    const value = this.hotValue;
-    return applyValidators(this.hotValue, this.config.validators || [])
+    const value = this.value;
+    return applyValidators(this.value, this.config.validators || [])
       .then(fieldError => {
         if (this.lastValidationRequest !== lastValidationRequest) return;
         this.validating = false;
@@ -169,7 +169,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
           return { hasError };
         }
         else {
-          this.value = value;
+          this.$ = value;
           return {
             hasError,
             value
@@ -200,7 +200,7 @@ export class FormState<TValue extends ValidatableMap> implements Validatable<TVa
     /**
      * SubItems can be any Validatable
      */
-    public value: TValue
+    public $: TValue
   ) {
   }
 
@@ -213,15 +213,15 @@ export class FormState<TValue extends ValidatableMap> implements Validatable<TVa
    */
   @action validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
-    const keys = Object.keys(this.value);
-    return Promise.all(keys.map((key) => this.value[key].validate())).then((res) => {
+    const keys = Object.keys(this.$);
+    return Promise.all(keys.map((key) => this.$[key].validate())).then((res) => {
       this.validating = false;
       const hasError = this.hasError;
       if (hasError) {
         return { hasError };
       }
       else {
-        return { hasError, value: this.value };
+        return { hasError, value: this.$ };
       }
     })
   }
@@ -230,14 +230,14 @@ export class FormState<TValue extends ValidatableMap> implements Validatable<TVa
    * Does any field have an error
    */
   @computed get hasError() {
-    return Object.keys(this.value).map((key) => this.value[key]).some(f => f.hasError);
+    return Object.keys(this.$).map((key) => this.$[key]).some(f => f.hasError);
   }
 
   /**
    * The first error from any sub if any
    */
   @computed get error() {
-    const subItemWithError = Object.keys(this.value).map((key) => this.value[key]).find(f => !!f.hasError);
+    const subItemWithError = Object.keys(this.$).map((key) => this.$[key]).find(f => !!f.hasError);
     return subItemWithError.error;
   }
 }

@@ -11,7 +11,7 @@ describe("basic FormState", () => {
     const form = new FormState({
       name,
     });
-    assert.equal(form.value.name.value, name.value);
+    assert.equal(form.$.name.$, name.$);
   });
 
   it("should allow nesting another FormState", () => {
@@ -23,7 +23,7 @@ describe("basic FormState", () => {
         name
       })
     });
-    assert.equal(form.value.subForm.value.name.value, name.value);
+    assert.equal(form.$.subForm.$.name.$, name.$);
   });
 
   it("should allow nesting FieldState and FormState", () => {
@@ -43,7 +43,7 @@ describe("basic FormState", () => {
         password,
       })
     });
-    assert.equal(form.value.name.value, name.value);
-    assert.equal(form.value.person.value.username.value, name.value);
+    assert.equal(form.$.name.$, name.$);
+    assert.equal(form.$.person.$.username.$, name.$);
   });
 });
