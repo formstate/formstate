@@ -19,6 +19,8 @@ and autocomplete so your code reviews + code authoring + refactoring is super __
 
 ![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/autocomplete.gif)
 
+The simplest way to manage forms with mobx. Works well with any `mobx-` lib e.g `mobx-react` 🌹
+
 # Docs
 
 We work hard on our docs, [so jump straight into them 🌹](https://formstate.github.io/)
