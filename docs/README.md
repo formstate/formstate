@@ -8,6 +8,7 @@ Note that the API is quite simple and consists of `Validator`, `FieldState` and 
 
 ![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/autocomplete.gif)
 
+> If you are looking for comparisons, they are a covered in [why #formstate](/#/?id=why).
 
 ### Quick Example
 
@@ -352,5 +353,13 @@ assert.equal(pass2.error, 'Passwords must match');
 ```
 
 > You don't want cycles in your fields. You can fix cycles by just having an error on the *dependent* field only.
+
+## Why
+
+We considered other options before creating our own. Here is our opinion:
+
+* Type Safety: Other options are very *stringly* typed. That hampers refactor-ability, code reviews and maintainability (analysis).
+* Independent of UI: This is a general purpose library that manages the form state and validity for you. Having it independent of UI allows you to *test* anything easily, review it in isolation and design fields to look exactly like you want for your application.
+* Simpler Semantics: Its just functions and classes that can be written in isolation, tested in isolation, reviewed in isolation. Creating new validators is super simple. Server side validation is just as easy is simple client validations. So is creating new Fields and Forms (again strongly typed!).
 
 [mobx]:https://github.com/mobxjs/mobx
