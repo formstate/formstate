@@ -130,6 +130,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
    * it should call this function
    */
   @action reinitValue = (value: TValue) => {
+    // If a previous validation comes back ignore it
+    this.preventNextDebouncedValidation = true;
+
     // This value vetos all previous values
     this.value = value;
     this.error = undefined;
@@ -143,11 +146,24 @@ export class FieldState<TValue> implements Validatable<TValue> {
 
   @observable validating: boolean = false;
 
+  /** Trackers for validation */
+  @observable private lastValidationRequest: number = 0;
+  @observable private preventNextDebouncedValidation = false;
+
+
   /**
    * Runs validation on the current value immediately
    */
-  @observable private lastValidationRequest: number = 0;
   @action validate = (): Promise<{ hasError: true } | { hasError: false, value: TValue }> => {
+    if (this.preventNextDebouncedValidation) {
+      this.preventNextDebouncedValidation = false;
+      if (this.hasError) {
+        return Promise.resolve({hasError: true});
+      }
+      else {
+        return Promise.resolve({hasError: false as false, value: this.$});
+      }
+    }
     this.lastValidationRequest++;
     const lastValidationRequest = this.lastValidationRequest;
     this.validating = true;

@@ -19,4 +19,19 @@ describe("basic FieldState tests", () => {
     assert.equal(name.value, 'world');
     assert.equal(name.$, 'world');
   });
+
+  it("reinitValue should prevent any validation from running", async () => {
+    const name = new FieldState({
+      value: '',
+      validators: [
+        (val) => !val && 'value required'
+      ]
+    });
+    name.onChange('world');
+    name.reinitValue('');
+    await delay(200);
+    assert.equal(name.hasError, false);
+    assert.equal(name.value, '');
+    assert.equal(name.$, '');
+  });
 });
