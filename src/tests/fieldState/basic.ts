@@ -34,4 +34,20 @@ describe("basic FieldState tests", () => {
     assert.equal(name.value, '');
     assert.equal(name.$, '');
   });
+
+  it("reinitValue followed by onChange should run validators", async () => {
+    const name = new FieldState({
+      value: '',
+      validators: [
+        (val) => !val && 'value required'
+      ]
+    });
+    name.onChange('world');
+    name.reinitValue('');
+    name.onChange('');
+    await delay(200);
+    assert.equal(name.hasError, true);
+    assert.equal(name.value, '');
+    assert.equal(name.$, '');
+  });
 });
