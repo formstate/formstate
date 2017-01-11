@@ -1,9 +1,9 @@
-import { FieldState, FormState } from '../../index';
+import { FieldState, FormState, FormStateLazy } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
 
 
-describe("FormState basic", () => {
+describe("FormStateLazy basic", () => {
   it("should allow nesting a FieldState", () => {
     const name = new FieldState({
       value: 'hello',
@@ -14,7 +14,7 @@ describe("FormState basic", () => {
     assert.equal(form.$.name.$, name.$);
   });
 
-  it("should allow nesting another FormState", () => {
+  it("should allow nesting another FormStateLazy", () => {
     const name = new FieldState({
       value: 'hello',
     });
@@ -51,7 +51,7 @@ describe("FormState basic", () => {
     const name = new FieldState({
       value: 'hello',
     });
-    const form = new FormState([
+    const form = new FormStateLazy(() => [
       name,
     ]);
     assert.equal(form.$[0].$, name.$);
@@ -61,8 +61,8 @@ describe("FormState basic", () => {
     const name = new FieldState({
       value: 'hello',
     });
-    const form = new FormState([
-      new FormState([
+    const form = new FormStateLazy(() => [
+      new FormStateLazy(() => [
         name
       ])
     ]);

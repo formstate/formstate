@@ -2,7 +2,7 @@ import { FieldState, FormState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
 
-describe("basic FieldState tests", () => {
+describe("FieldState basic", () => {
   it("hotValue and safeValue is set to initial value", () => {
     const name = new FieldState({
       value: 'hello',

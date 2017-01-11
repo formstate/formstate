@@ -2,7 +2,7 @@ import { FieldState, FormState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
 
-describe('automatic validation delay', () => {
+describe('FieldState automatic validation', () => {
   it("If delay is low it should autovalidate fast", async () => {
     const name = new FieldState({
       value: 'hello',

@@ -259,6 +259,28 @@ const somethingToSendToServer = form.$.map(child =>
 
 > TIP: It works with *n* number of subfields as well. And as always you can nest objects and arrays as needed.
 
+## FormStateLazy
+If you want to make lazy decisions about which fields to validate you can use `FormStateLazy`. This works by simply accepting a `getFields` function where you can return the fields you want to validate at that point in time.  e.g.
+
+```
+/** Some set of fields you want to maintain as a simple array */
+const myFields:FieldState<string> = [];
+
+/** Some set of fields that you optionally want to validate as a simple array */
+const myFieldsOptional:FieldState<string> = [];
+
+let someCondition: boolean = false;
+
+// Do some stuff with your fields e.g.
+myFields.push( new FieldState({value: '', validators:[required]}));
+
+/** A lazy form state */
+const form = new FormStateLazy(()=>myFields.concat(someCondition ? myFieldsOptional : []));
+
+/** Validate just the fields that FormStateLazy will return at that time */
+await form.validate();
+```
+
 ## TIPS
 
 The API is designed to be simple, but powerful enough to handle most use cases. We provide common design patterns next.
