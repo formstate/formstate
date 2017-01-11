@@ -111,14 +111,18 @@ export class FieldState<TValue> implements Validatable<TValue> {
     /**
      * Automatic validation configuration
      */
-    this.queueValidation = utils.debounce(this.validate, config.autoValidationDebounceMs || 200);
+    this.queueValidation = utils.debounce(this.queuedValidationWakeup, config.autoValidationDebounceMs || 200);
     this.autoValidationEnabled = config.autoValidationEnabled == undefined ? true : config.autoValidationEnabled;
   }
+
+  /** Trackers for validation */
+  @observable private lastValidationRequest: number = 0;
+  @observable private preventNextQueuedValidation = false;
 
   /** On change on the component side */
   @action onChange = (value: TValue) => {
     // no long prevent any debounced validation request
-    this.preventNextDebouncedValidation = false;
+    this.preventNextQueuedValidation = false;
 
     // Immediately set for local ui binding
     this.value = value;
@@ -134,7 +138,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
    */
   @action reinitValue = (value: TValue) => {
     // If a previous validation comes back ignore it
-    this.preventNextDebouncedValidation = true;
+    this.preventNextQueuedValidation = true;
 
     // This value vetos all previous values
     this.value = value;
@@ -149,24 +153,10 @@ export class FieldState<TValue> implements Validatable<TValue> {
 
   @observable validating: boolean = false;
 
-  /** Trackers for validation */
-  @observable private lastValidationRequest: number = 0;
-  @observable private preventNextDebouncedValidation = false;
-
-
   /**
    * Runs validation on the current value immediately
    */
   @action validate = (): Promise<{ hasError: true } | { hasError: false, value: TValue }> => {
-    if (this.preventNextDebouncedValidation) {
-      this.preventNextDebouncedValidation = false;
-      if (this.hasError) {
-        return Promise.resolve({hasError: true});
-      }
-      else {
-        return Promise.resolve({hasError: false as false, value: this.$});
-      }
-    }
     this.lastValidationRequest++;
     const lastValidationRequest = this.lastValidationRequest;
     this.validating = true;
@@ -197,10 +187,18 @@ export class FieldState<TValue> implements Validatable<TValue> {
       });
   }
 
+  @action queuedValidationWakeup = () => {
+    if (this.preventNextQueuedValidation) {
+      this.preventNextQueuedValidation = false;
+      return;
+    }
+    this.validate();
+  }
   /**
    * Runs validation with debouncing to keep the UI super smoothly responsive
+   * NOTE: also setup in constructor
    */
-  @action private queueValidation = utils.debounce(this.validate, 200);
+  @action private queueValidation = utils.debounce(this.queuedValidationWakeup, 200);
 
   @action private onUpdate = () => {
     this.config.onUpdate && this.config.onUpdate(this);
