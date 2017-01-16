@@ -171,14 +171,22 @@ export class FieldState<TValue> implements Validatable<TValue> {
           this.error = fieldError;
         }
 
+        /** Check for error */
+        const hasError = this.hasError;
+
+        /** If no error, copy over the value to validated value */
+        if (!hasError) {
+          this.$ = value;
+        }
+
+        /** before returning update */
         this.onUpdate();
 
-        const hasError = this.hasError;
+        /** return a result based on error status */
         if (hasError) {
           return { hasError };
         }
         else {
-          this.$ = value;
           return {
             hasError,
             value
