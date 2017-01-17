@@ -17,7 +17,10 @@ const fieldState = new FieldState({
 render(() => <form onSubmit={async (e) => {
   e.preventDefault();
   const res = await fieldState.validate();
-  if (res.hasError) return;
+  if (res.hasError) {
+    fieldState.enableAutoValidationAndValidate();
+    return;
+  }
   console.log('Validated Value:', fieldState.$);
 }}>
   <Field
