@@ -39,6 +39,14 @@ export function buildDemos() {
       entryPointPath: __dirname + '/demos/01 basic.tsx',
       height: '200px',
     });
+
+    eze.md(`
+    You can call \`validate\` at any time to validate the field and it flows automatically.
+    `);
+    eze.app({
+      entryPointPath: __dirname + '/demos/02 submit.tsx',
+      height: '200px',
+    });
   });
 }
 

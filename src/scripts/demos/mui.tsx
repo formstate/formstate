@@ -1,4 +1,4 @@
-import { cssRaw, forceRenderStyles } from "typestyle";
+import { cssRaw, forceRenderStyles, style } from "typestyle";
 
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
@@ -36,4 +36,15 @@ export function render(component: () => React.ReactNode) {
     document.getElementById('root')
   );
   forceRenderStyles();
+}
+
+
+import FlatButton from 'material-ui/FlatButton';
+
+export const Button: React.StatelessComponent<{ onClick: () => void }> = ({ children, onClick }) => {
+  return <FlatButton
+    onClick={onClick}
+    primary={true}>
+    {children}
+  </FlatButton>
 }

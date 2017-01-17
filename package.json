@@ -41,7 +41,7 @@
     "eze": "^0.6.0",
     "fs-extra": "^2.0.0",
     "gh-pages": "^0.11.0",
-    "material-ui": "^0.16.7",
+    "material-ui": "0.16.6",
     "mobx": ">=2.0.0",
     "mobx-react": "^4.1.0",
     "mocha": "^3.1.2",
