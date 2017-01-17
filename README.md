@@ -23,7 +23,11 @@ The simplest way to manage forms with mobx. Works well with any `mobx-` lib e.g 
 
 # Docs
 
-We work hard on our docs, [so jump straight into them 🌹](https://formstate.github.io/)
+We work hard on our docs, [so jump here if you want to master the theory and the API 🌹](https://formstate.github.io/)
+
+# Demo
+
+Jump here to see it used in action [*with code samples*](https://formstate.github.io/demos)
 
 [![](https://raw.githubusercontent.com/formstate/formstate/master/demo/logo/logo.png)](https://formstate.github.io/)
 
