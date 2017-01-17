@@ -89,6 +89,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
   @observable $: TValue;
 
   @observable private autoValidationEnabled = true;
+  @action public enableAutoValidation = () => {
+    this.autoValidationEnabled = true;
+  }
   @action public enableAutoValidationAndValidate = () => {
     this.autoValidationEnabled = true;
     this.validate();

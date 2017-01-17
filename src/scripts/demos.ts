@@ -41,16 +41,19 @@ export function buildDemos() {
     });
 
     eze.md(`
-    ## Validation triggering patterns
-    Whenever onChange is called a validation request is trigged in the field state. So if you edit the below field you will see the error pop up till the field becomes valid.
+    # Validation Triggering
+
+    How you decide to do trigger a validation check depends on the UX you are going for and there are [quite a few options](https://uxdesign.cc/forms-need-validation-2ecbccbacea1). Fortunately by not tieing you in to *our Fields* and letting you create your own means, you can easily make a choice and support the pattern you want in your components.
+
+    Whenever \`onChange\` is called, a validation request is queued in the field state. So if you edit the below field you will see the error pop up till the field becomes valid.
     `);
     eze.app({
-      entryPointPath: __dirname + '/demos/02 submit.tsx',
+      entryPointPath: __dirname + '/demos/02 auto.tsx',
       height: '200px',
     });
 
     eze.md(`
-    You can call \`validate\` at any time to explicitly validate the field state.
+    You can disable this by passing in \`autoValidationEnabled: false,\` to the FieldState constructor as shown below. Now you get to decide when you want to call \`validate\` e.g. on a button click:
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/03 submit.tsx',
@@ -58,12 +61,17 @@ export function buildDemos() {
     });
 
     eze.md(`
-    Note that you can also disable automatic validation when we create the \`FieldState\`. If you do this, the best place to call \`validate\` is inside an html \`form\` element. The following example demostrates this.
+    However the best place to call \`validate\` is inside an html \`form\` element. The following example demonstrates this.
+    > Note that after a failed validation attempt you might want to enable the automatic validation as we do below.
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/04 form.tsx',
       height: '200px',
     });
+
+    eze.md(`
+    Another common validation pattern is to do it after first blur and then enable it for automatic validation. This can be easily coded into the \`Field\`. Let's recreate our \`Field\` with this behavior baked in:
+    `);
 
   });
 }
