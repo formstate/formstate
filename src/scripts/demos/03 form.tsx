@@ -10,6 +10,7 @@ import { Field } from './field';
 import { FieldState } from '../../index';
 const fieldState = new FieldState({
   value: '',
+  autoValidationEnabled: false,
   validators: [(val) => val !== 'foo' && "I only allow 'foo'"]
 });
 

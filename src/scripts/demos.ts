@@ -49,7 +49,9 @@ export function buildDemos() {
     });
 
     eze.md(`
-    And the best place to call it is inside an html \`form\` element.
+    And the best place to call it is inside an html \`form\` element. The following example demostrates this.
+
+    > Note that we also disable automatic validation when we create the \`FieldState\` below to force you to press enter :)
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/03 form.tsx',
