@@ -16,6 +16,11 @@ const fieldState = new FieldState({
 render(() => <div>
   <Field
     id="first"
-    label="The magic word is foo"
+    label="Provide me some foo"
     fieldState={fieldState} />
+  <br />
+  <Button
+    onClick={() => fieldState.validate()}>
+    Click me to validate
+  </Button>
 </div>);

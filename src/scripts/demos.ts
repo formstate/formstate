@@ -33,7 +33,7 @@ export function buildDemos() {
     });
 
     eze.md(`
-    Once that is done you now get to use your new shiny \`Field\` with complete safety.
+    Once that is done you now get to use your new shiny \`Field\` with complete compile time safety.
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/01 basic.tsx',
@@ -41,7 +41,8 @@ export function buildDemos() {
     });
 
     eze.md(`
-    You can call \`validate\` at any time to validate the field and it flows automatically.
+    ## Validation triggering patterns
+    Whenever onChange is called a validation request is trigged in the field state. So if you edit the below field you will see the error pop up till the field becomes valid.
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/02 submit.tsx',
@@ -49,14 +50,21 @@ export function buildDemos() {
     });
 
     eze.md(`
-    And the best place to call it is inside an html \`form\` element. The following example demostrates this.
-
-    > Note that we also disable automatic validation when we create the \`FieldState\` below to force you to press enter :)
+    You can call \`validate\` at any time to explicitly validate the field state.
     `);
     eze.app({
-      entryPointPath: __dirname + '/demos/03 form.tsx',
+      entryPointPath: __dirname + '/demos/03 submit.tsx',
       height: '200px',
     });
+
+    eze.md(`
+    Note that you can also disable automatic validation when we create the \`FieldState\`. If you do this, the best place to call \`validate\` is inside an html \`form\` element. The following example demostrates this.
+    `);
+    eze.app({
+      entryPointPath: __dirname + '/demos/04 form.tsx',
+      height: '200px',
+    });
+
   });
 }
 
