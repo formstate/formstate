@@ -13,11 +13,11 @@
 
 This project is big on type safety for compile time error analysis
 
-![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/typeSafety.png)
+![](https://raw.githubusercontent.com/formstate/formstate/master/demo/images/typeSafety.png)
 
 and autocomplete so your code reviews + code authoring + refactoring is super __*smooooth*__.
 
-![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/autocomplete.gif)
+![](https://raw.githubusercontent.com/formstate/formstate/master/demo/images/autocomplete.gif)
 
 The simplest way to manage forms with mobx. Works well with any `mobx-` lib e.g `mobx-react` 🌹
 
@@ -25,7 +25,7 @@ The simplest way to manage forms with mobx. Works well with any `mobx-` lib e.g 
 
 We work hard on our docs, [so jump straight into them 🌹](https://formstate.github.io/)
 
-[![](https://raw.githubusercontent.com/formstate/formstate/master/docs/logo/logo.png)](https://formstate.github.io/)
+[![](https://raw.githubusercontent.com/formstate/formstate/master/demo/logo/logo.png)](https://formstate.github.io/)
 
 [gitter-image]:https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]:https://gitter.im/formstate/general

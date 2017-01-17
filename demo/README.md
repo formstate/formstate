@@ -6,7 +6,7 @@
 
 Note that the API is quite simple and consists of `Validator`, `FieldState` and `FormState`. It is written in TypeScript and designed for TypeSafety 🌹.
 
-![](https://raw.githubusercontent.com/formstate/formstate/master/docs/images/autocomplete.gif)
+![](https://raw.githubusercontent.com/formstate/formstate/master/demo/images/autocomplete.gif)
 
 > If you are looking for comparisons, they are a covered in [why #formstate](/#/?id=why).
 
@@ -72,7 +72,7 @@ export class Demo extends React.Component<{},{}> {
 
 We could explain the *just the API*, but to help people understand how truly simple it is we will even go ahead and explain all the rational 🌹.
 
-> TIP: I assume you are familiar with [promises](https://basarat.gitbooks.io/typescript/content/docs/promise.html) and [async/await](https://basarat.gitbooks.io/typescript/content/docs/async-await.html).
+> TIP: I assume you are familiar with [promises](https://basarat.gitbooks.io/typescript/content/demo/promise.html) and [async/await](https://basarat.gitbooks.io/typescript/content/demo/async-await.html).
 
 ## Mobx
 

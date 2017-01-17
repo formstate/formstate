@@ -5,6 +5,7 @@ lib.es2015/tests
 
 # docs
 docs
+demo
 
 # build tools
 .travis.yml
