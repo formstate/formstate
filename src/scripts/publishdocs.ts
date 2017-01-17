@@ -4,8 +4,15 @@ const ghpages = require('gh-pages');
 const path = require('path');
 const date = new Date();
 
-ghpages.publish(path.resolve(__dirname + '/../docs'), {
-  message: `[ci skip] deployment (${date.getUTCFullYear()}-${date.getUTCMonth()+1}-${date.getUTCDate()}-${date.getUTCHours()}-${date.getUTCMinutes()})`,
+const demoSrc = path.resolve(__dirname + '/../../demo');
+const demoBuilt = path.resolve(__dirname + '/../../docs');
+
+import * as fse from "fs-extra";
+fse.copy(demoSrc, demoBuilt);
+
+
+ghpages.publish(demoBuilt, {
+  message: `[ci skip] deployment (${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}-${date.getUTCHours()}-${date.getUTCMinutes()})`,
 
   /** Branch */
   branch: 'master',
