@@ -10,6 +10,10 @@ Note that the API is quite simple and consists of `Validator`, `FieldState` and 
 
 > If you are looking for comparisons, they are a covered in [why #formstate](/#/?id=why).
 
+## Demos
+
+If you want to see it in action [we have lots of demos here 📝](https://formstate.github.io/demos)
+
 ### Quick Example
 
 Install:
