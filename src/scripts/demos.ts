@@ -47,6 +47,14 @@ export function buildDemos() {
       entryPointPath: __dirname + '/demos/02 submit.tsx',
       height: '200px',
     });
+
+    eze.md(`
+    And the best place to call it is inside an html \`form\` element.
+    `);
+    eze.app({
+      entryPointPath: __dirname + '/demos/03 form.tsx',
+      height: '200px',
+    });
   });
 }
 
