@@ -8,7 +8,7 @@ const demoSrc = path.resolve(__dirname + '/../../demo');
 const demoBuilt = path.resolve(__dirname + '/../../docs');
 
 import * as fse from "fs-extra";
-fse.copy(demoSrc, demoBuilt);
+fse.copySync(demoSrc, demoBuilt);
 
 
 ghpages.publish(demoBuilt, {

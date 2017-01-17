@@ -2,6 +2,9 @@
 .vscode
 .idea
 
+# Docs built
+/docs/**/*
+
 # Content generated on build
 lib/**/*.js
 lib/**/*.d.ts
