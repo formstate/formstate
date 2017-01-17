@@ -69,6 +69,7 @@ export interface Validatable<TValue> {
   hasError: boolean;
   error?: string;
   $: TValue;
+  enableAutoValidation: () => void;
 }
 
 /**
@@ -249,6 +250,10 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
 
   @observable validating = false;
 
+  @action enableAutoValidation = () => {
+    this.getValues().forEach(x => x.enableAutoValidation());
+  }
+
   /**
    * - Re-runs validation on all fields
    * - returns `hasError`
@@ -309,6 +314,10 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
       this.validating = false;
       return { hasError: this.hasError };
     })
+  }
+
+  @action enableAutoValidation = () => {
+    this.getFields().forEach(x => x.enableAutoValidation());
   }
 
   @computed get hasError() {

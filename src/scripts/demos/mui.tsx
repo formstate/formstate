@@ -1,4 +1,5 @@
 import { cssRaw, forceRenderStyles, style, classes } from "typestyle";
+import * as csstips from 'csstips';
 
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';

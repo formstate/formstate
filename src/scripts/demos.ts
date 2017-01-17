@@ -45,7 +45,7 @@ export function buildDemos() {
 
     How you decide to do trigger a validation check depends on the UX you are going for and there are [quite a few options](https://uxdesign.cc/forms-need-validation-2ecbccbacea1). Fortunately by not tieing you in to *our Fields* and letting you create your own means, you can easily make a choice and support the pattern you want in your components.
 
-    Whenever \`onChange\` is called, a validation request is queued in the field state. So if you edit the below field you will see the error pop up till the field becomes valid.
+    The default is the simplest, whenever \`onChange\` is called, a validation request is queued in the field state. So if you edit the below field you will see the error pop up till the field becomes valid.
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/02 auto.tsx',
@@ -72,10 +72,25 @@ export function buildDemos() {
     eze.md(`
     Another common validation pattern is to do it after first blur and then enable it for automatic validation. This can be easily coded into the \`Field\`. Let's recreate our \`Field\` with this behavior baked in:
     `);
+    eze.code({
+      code: fse.readFileSync(__dirname + '/demos/fieldBlur.tsx').toString().split('export const FieldBlur =')[1],
+      mode: 'ts',
+    });
 
+    eze.md(`
+    Now if you blur on any such \`Field\`s they do a validation and enable autoValidation to guide the user towards a valid state.
+    `);
+    eze.app({
+      entryPointPath: __dirname + '/demos/05 blur.tsx',
+      height: '300px',
+    });
+
+    eze.md(`
+    # FormState
+    [We think the docs cover it well](https://formstate.github.io). You can see it in use in onBlur example above as well.
+    `);
   });
 }
-
 
 /** Also build if the file is required */
 buildDemos();
