@@ -21,15 +21,16 @@ and autocomplete so your code reviews + code authoring + refactoring is super __
 
 The simplest way to manage forms with mobx. Works well with any `mobx-` lib e.g `mobx-react` 🌹
 
+[![](https://raw.githubusercontent.com/formstate/formstate/master/demo/logo/logo.png)](https://formstate.github.io/)
+
 # Docs
 
 We work hard on our docs, [so jump here if you want to master the theory and the API 🌹](https://formstate.github.io/)
 
 # Demo
 
-Jump here to see it used in action [*with code samples*](https://formstate.github.io/demos)
+Jump here to see it used in action [*with code samples* ❤️️](https://formstate.github.io/demos)
 
-[![](https://raw.githubusercontent.com/formstate/formstate/master/demo/logo/logo.png)](https://formstate.github.io/)
 
 [gitter-image]:https://badges.gitter.im/Join%20Chat.svg
 [gitter-url]:https://gitter.im/formstate/general
