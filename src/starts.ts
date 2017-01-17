@@ -8,5 +8,6 @@ starts({
     { cmd: 'npm run build -- -w', },
     { cmd: 'npm run unittest -- --watch', },
     { cmd: 'npm run docs', },
+    { cmd: 'npm run demos', watch: ['src/scripts/**/*'] },
   ]
 });
