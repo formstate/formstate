@@ -1,4 +1,5 @@
 import * as eze from 'eze';
+import * as fse from 'fs-extra';
 
 
 /** Wrap our builder in a function so it can be waited on by publishDocs */
@@ -15,8 +16,29 @@ export function buildDemos() {
     * Keep your logic seperate from UI rendering that helps greatly with testing.
     * We can work with complex data types with ease.
 
-
+    Lets create a simple text input field by using [material-ui](http://www.material-ui.com/). First by installing
     `);
+    eze.code({
+      code: 'npm install material-ui --save-dev',
+      mode: 'ts'
+    });
+    eze.md(`
+    Our \`Field\` will take a \`FieldState\` and render the components.
+
+    Internally it wires \`FieldState\` to the input. This is super easy:
+    `);
+    eze.code({
+      code: fse.readFileSync(__dirname + '/demos/field.tsx').toString(),
+      mode: 'ts',
+    });
+
+    eze.md(`
+    Once that is done you now get to use your new shiny \`Field\` with complete safety.
+    `);
+    eze.app({
+      entryPointPath: __dirname + '/demos/01 basic.tsx',
+      height: '200px',
+    });
   });
 }
 
