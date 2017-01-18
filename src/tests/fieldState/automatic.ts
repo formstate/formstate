@@ -5,7 +5,6 @@ import { useStrict, action } from 'mobx';
 
 useStrict(true);
 
-
 describe('FieldState automatic validation', () => {
   it("If delay is low it should autovalidate fast", async () => {
     const name = new FieldState({

@@ -1,6 +1,9 @@
 import { FieldState, FormState, FormStateLazy } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
+import { useStrict } from 'mobx';
+
+useStrict(true);
 
 describe("FormStateLazy validation", () => {
   it("should validate a nested FieldState and pass if valid", async () => {

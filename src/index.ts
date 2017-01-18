@@ -270,16 +270,17 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
   @action validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
     const values = this.getValues();
-    return Promise.all(values.map((value) => value.validate())).then((res) => {
-      this.validating = false;
-      const hasError = this.hasError;
-      if (hasError) {
-        return { hasError };
-      }
-      else {
-        return { hasError, value: this.$ };
-      }
-    })
+    return Promise.all(values.map((value) => value.validate()))
+      .then(action((_) => {
+        this.validating = false;
+        const hasError = this.hasError;
+        if (hasError) {
+          return { hasError };
+        }
+        else {
+          return { hasError, value: this.$ };
+        }
+      }));
   }
 
   /**
@@ -318,10 +319,10 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
 
   @action validate() {
     this.validating = true;
-    return Promise.all(this.getFields().map((value) => value.validate())).then((res) => {
+    return Promise.all(this.getFields().map((value) => value.validate())).then(action((_) => {
       this.validating = false;
       return { hasError: this.hasError };
-    })
+    }));
   }
 
   @action enableAutoValidation = () => {

@@ -1,6 +1,9 @@
 import { FieldState, FormState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
+import { useStrict } from 'mobx';
+
+useStrict(true);
 
 describe('FieldState onUpdate', () => {
   it("Should be called if value changes", async () => {
