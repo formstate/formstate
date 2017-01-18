@@ -254,6 +254,12 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
     this.getValues().forEach(x => x.enableAutoValidation());
   }
 
+  private _validators: Validator<TValue>[] = [];
+  @action validators = (validators: Validator<TValue>[]) => {
+    this._validators = validators;
+    return this;
+  }
+
   /**
    * - Re-runs validation on all fields
    * - returns `hasError`
