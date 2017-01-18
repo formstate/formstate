@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, runInAction } from 'mobx';
 import * as utils from './internal/utils';
 
 
@@ -109,14 +109,16 @@ export class FieldState<TValue> implements Validatable<TValue> {
     autoValidationEnabled?: boolean,
     autoValidationDebounceMs?: number,
   }) {
-    this.value = config.value;
-    this.$ = config.value;
+    runInAction(() => {
+      this.value = config.value;
+      this.$ = config.value;
 
-    /**
-     * Automatic validation configuration
-     */
-    this.queueValidation = utils.debounce(this.queuedValidationWakeup, config.autoValidationDebounceMs || 200);
-    this.autoValidationEnabled = config.autoValidationEnabled == undefined ? true : config.autoValidationEnabled;
+      /**
+       * Automatic validation configuration
+       */
+      this.queueValidation = action(utils.debounce(this.queuedValidationWakeup, config.autoValidationDebounceMs || 200));
+      this.autoValidationEnabled = config.autoValidationEnabled == undefined ? true : config.autoValidationEnabled;
+    })
   }
 
   /** Trackers for validation */
@@ -166,7 +168,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
     this.validating = true;
     const value = this.value;
     return applyValidators(this.value, this.config.validators || [])
-      .then(fieldError => {
+      .then(action((fieldError: string) => {
         if (this.lastValidationRequest !== lastValidationRequest) return;
         this.validating = false;
 
@@ -196,7 +198,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
             value
           };
         }
-      });
+      }));
   }
 
   @action queuedValidationWakeup = () => {

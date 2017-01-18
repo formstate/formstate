@@ -1,6 +1,10 @@
 import { FieldState, FormState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
+import { useStrict, action } from 'mobx';
+
+useStrict(true);
+
 
 describe('FieldState automatic validation', () => {
   it("If delay is low it should autovalidate fast", async () => {
