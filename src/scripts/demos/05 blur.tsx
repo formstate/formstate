@@ -1,4 +1,4 @@
-/** React + MUI + mobx*/
+/** React + MUI + mobx */
 import * as React from 'react';
 import { render, Button } from './mui';
 import { observer } from 'mobx-react';
