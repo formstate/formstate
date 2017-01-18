@@ -104,8 +104,6 @@ export class FieldState<TValue> implements Validatable<TValue> {
   constructor(private config: {
     value: TValue,
     onUpdate?: (state: FieldState<TValue>) => any,
-    validators?: Validator<TValue>[],
-
     autoValidationEnabled?: boolean,
     autoValidationDebounceMs?: number,
   }) {
@@ -119,6 +117,12 @@ export class FieldState<TValue> implements Validatable<TValue> {
       this.queueValidation = action(utils.debounce(this.queuedValidationWakeup, config.autoValidationDebounceMs || 200));
       this.autoValidationEnabled = config.autoValidationEnabled == undefined ? true : config.autoValidationEnabled;
     })
+  }
+
+  private _validators: Validator<TValue>[] = [];
+  @action validators = (validators: Validator<TValue>[]) => {
+    this._validators = validators;
+    return this;
   }
 
   /** Trackers for validation */
@@ -167,7 +171,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
     const lastValidationRequest = this.lastValidationRequest;
     this.validating = true;
     const value = this.value;
-    return applyValidators(this.value, this.config.validators || [])
+    return applyValidators(this.value, this._validators || [])
       .then(action((fieldError: string) => {
         if (this.lastValidationRequest !== lastValidationRequest) return;
         this.validating = false;

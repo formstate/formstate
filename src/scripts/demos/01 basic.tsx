@@ -10,8 +10,7 @@ import { Field } from './field';
 import { FieldState } from '../../index';
 const fieldState = new FieldState({
   value: '',
-  validators:[(val) => !val.trim() && 'Value required']
-});
+}).validators([(val) => !val.trim() && 'Value required']);
 
 render(() => <div>
   <Field

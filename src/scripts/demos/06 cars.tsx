@@ -14,12 +14,10 @@ import { FieldState, FormState } from '../../index';
 const cars = new FormState({
   foo: new FieldState({
     value: '',
-    validators: [(val) => val !== 'foo' && "I only allow 'foo'"]
-  }),
+  }).validators([(val) => val !== 'foo' && "I only allow 'foo'"]),
   bar: new FieldState({
     value: '',
-    validators: [(val) => val !== 'bar' && "I only allow 'bar'"]
-  })
+  }).validators([(val) => val !== 'bar' && "I only allow 'bar'"]),
 })
 
 // /**
