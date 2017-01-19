@@ -36,6 +36,15 @@ class AppState {
     })
     this.cars.$.push(car);
   }
+
+  @action addAFeatureToACar = (car: Car) => {
+    const feature: Feature
+      = new FormState({
+        name: new FieldState({ value: '' })
+          .validators([required])
+      });
+    car.$.features.$.push(feature);
+  }
 }
 const state = new AppState();
 
