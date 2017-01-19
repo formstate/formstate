@@ -271,27 +271,44 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
    * - returns `hasError`
    * - if no error also return the validated values against each key.
    */
-  @action validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
+  @action async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
     const values = this.getValues();
-    return Promise.all(values.map((value) => value.validate()))
-      .then(action((_) => {
+    let fieldsResult = await Promise.all(values.map((value) => value.validate()));
+    const done = runInAction(() => {
+      if (fieldsResult.some(f=>f.hasError)) {
         this.validating = false;
-        const hasError = this.hasError;
-        if (hasError) {
-          return { hasError };
-        }
-        else {
-          return { hasError, value: this.$ };
-        }
-      }));
+        return true;
+      }
+      return false
+    });
+    if (done) return { hasError: true as true };
+
+    /** Otherwise do any local validations */
+    const error = await applyValidators(this.$, this._validators || []);
+    const res = runInAction(() => {
+      if (error != this._error) {
+        this._error = error;
+      }
+      this.validating = false;
+
+      const hasError = !!error;
+      if (hasError) {
+        return { hasError: true as true };
+      }
+      return { hasError: false as false, value: this.$ };
+    });
+
+    return res;
   }
+
+  @observable _error: string = '';
 
   /**
    * Does any field have an error
    */
   @computed get hasError() {
-    return this.getValues().some(f => f.hasError);
+    return this.getValues().some(f => f.hasError) || !!this._error;
   }
 
   /**
@@ -299,7 +316,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
    */
   @computed get error() {
     const subItemWithError = this.getValues().find(f => !!f.hasError);
-    return subItemWithError.error;
+    return subItemWithError ? subItemWithError.error : this._error;
   }
 }
 
