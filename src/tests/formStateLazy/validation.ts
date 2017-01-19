@@ -33,9 +33,9 @@ describe("FormStateLazy validation", () => {
   it("should validate a nested FieldState and fail if invalid", async () => {
     const name = new FieldState({
       value: '',
-    }).validators([
+    }).validators(
         (val) => !val && 'value required'
-    ]);
+    );
     const form = new FormState({
       name,
     });
@@ -49,9 +49,9 @@ describe("FormStateLazy validation", () => {
   it("array: should validate a nested FieldState and fail if invalid", async () => {
     const name = new FieldState({
       value: '',
-    }).validators([
+    }).validators(
         (val) => !val && 'value required'
-    ]);
+    );
     const form = new FormStateLazy(() => [
       name,
     ]);
@@ -93,9 +93,9 @@ describe("FormStateLazy validation", () => {
   it("should validate a nested - nested FieldState and fail if invalid", async () => {
     const name = new FieldState({
       value: '',
-    }).validators([
+    }).validators(
         (val) => !val && 'value required'
-    ]);
+    );
     const form = new FormState({
       name: new FormState({
         name
@@ -112,9 +112,9 @@ describe("FormStateLazy validation", () => {
   it("array: should validate a nested - nested FieldState and fail if invalid", async () => {
     const name = new FieldState({
       value: '',
-    }).validators([
+    }).validators(
         (val) => !val && 'value required'
-    ]);
+    );
     const form = new FormStateLazy(() => [
       new FormStateLazy(() => [
         name
@@ -129,10 +129,10 @@ describe("FormStateLazy validation", () => {
   });
 
   it("dependent validation should work", async () => {
-    const pass1 = new FieldState({ value: '' }).validators([(val) => !val && 'Password required']);
+    const pass1 = new FieldState({ value: '' }).validators((val) => !val && 'Password required');
     const pass2 = new FieldState({
       value: '',
-    }).validators([(val) => val && val !== pass1.$ && 'Passwords must match']);
+    }).validators((val) => val && val !== pass1.$ && 'Passwords must match');
     const form = new FormState({
       pass1,
       pass2

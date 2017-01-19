@@ -39,7 +39,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
   }
 
   private _validators: Validator<TValue>[] = [];
-  @action validators = (validators: Validator<TValue>[]) => {
+  @action validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
   }

@@ -51,7 +51,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
   }
 
   private _validators: Validator<TValue>[] = [];
-  @action validators = (validators: Validator<TValue>[]) => {
+  @action validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
   }

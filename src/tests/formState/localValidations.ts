@@ -12,9 +12,9 @@ describe("FormState local validations", () => {
     });
     const form = new FormState({
       name,
-    }).validators([($) => {
+    }).validators(($) => {
       return $.name.$.length < 2 && 'The lenght of name must be at least 2';
-    }]);
+    });
     const res = await form.validate();
     assert.equal(res.hasError, true);
     assert.equal(form.hasError, true);
@@ -27,9 +27,9 @@ describe("FormState local validations", () => {
     });
     const form = new FormState([
       name,
-    ]).validators([($) => {
+    ]).validators(($) => {
       return $.length < 2 && 'You must have at least two names';
-    }]);
+    });
     const res = await form.validate();
     assert.equal(res.hasError, true);
     assert.equal(form.hasError, true);

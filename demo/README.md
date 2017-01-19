@@ -33,7 +33,7 @@ class DemoState {
     value: '',
 
     // Creating validators is super easy
-  }).validators([(val) => !val && 'username required']);
+  }).validators((val) => !val && 'username required');
 
   // Compose fields into a form
   form = new FormState({
@@ -149,7 +149,7 @@ The FieldState takes an optional list of validators so you would use it as simpl
 
 ```ts
 const required = (val:string) => !val && 'Value required';
-const name = new FieldState({value:''}).validators([required]);
+const name = new FieldState({value:''}).validators(required);
 ```
 
 ### Demo: Field
@@ -196,8 +196,8 @@ const required = (val:string) => !val && 'Value required';
 const form = new FormState({
   display: new FieldState({value:''}),
   credentials: new FormState({
-    username: new FieldState({value: ''}).validators([required]),
-    password: new FieldState({value: ''}).validators([required]),
+    username: new FieldState({value: ''}).validators(required),
+    password: new FieldState({value: ''}).validators(required),
   })
 })
 ```
@@ -236,12 +236,12 @@ This is demonstrated below:
 ```ts
 const form = new FormState([
   new FormState({
-    username: new FieldState({value: ''}).validators([required]),
-    password: new FieldState({value: ''}).validators([required]),
+    username: new FieldState({value: ''}).validators(required),
+    password: new FieldState({value: ''}).validators(required),
   }),
   new FormState({
-    username: new FieldState({value: ''}).validators([required]),
-    password: new FieldState({value: ''}).validators([required]),
+    username: new FieldState({value: ''}).validators(required),
+    password: new FieldState({value: ''}).validators(required),
   }),
 ]);
 ```
@@ -276,7 +276,7 @@ const myFieldsOptional:FieldState<string> = [];
 let someCondition: boolean = false;
 
 // Do some stuff with your fields e.g.
-myFields.push( new FieldState({value: ''}).validators([required]);
+myFields.push( new FieldState({value: ''}).validators(required);
 
 /** A lazy form state */
 const form = new FormStateLazy(()=>myFields.concat(someCondition ? myFieldsOptional : []));
@@ -307,7 +307,7 @@ This function applies a value through a list of validators. It aborts execution 
 This means that we always get well defined error messages from an validation run. Also this means you get to chain validations quite easily e.g. if you can use a pattern like to following to prevent sending bad values for server validation
 
 ```ts
-validators([required, validateFromServer])
+validators(required, validateFromServer)
 ```
 
 ### TIP: Parallel validation
@@ -315,7 +315,7 @@ validators([required, validateFromServer])
 You can even easily compose validators that run multiple validators in parallel if you want e.g.
 
 ```ts
-validators([(value)=>{
+validators((value)=>{
   return Promise.all([first(value), second(value)])
     .then(([fst,snd]) => {
       if (fst && snd) return 'Both first and second failed';
@@ -323,7 +323,7 @@ validators([(value)=>{
       if (snd) return 'Only second failed';
       return '';
     });
-}]);
+});
 ```
 
 ### TIP: Empty values
@@ -339,7 +339,7 @@ function ifValue(validator:Validator<TValue>):Validator<TValue>{
 }
 
 // Usage
-// validators([ifValue(mySimplerValidator)])
+// validators(ifValue(mySimplerValidator))
 ```
 
 ### TIP: Customisable validators
@@ -350,8 +350,8 @@ You can easily create functions that customise a particular validation by using 
 const minValue = (minValue, message) => (val) => val < minValue && message;
 
 // usage
-validators([minValue(1,"The minimum bid is set at $1")]);
-validators([minValue(13,"Sorry, you must be 13 or older to use this website")]);
+validators(minValue(1,"The minimum bid is set at $1"));
+validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
 ```
 
 ### TIP: Cross field validation
@@ -362,7 +362,7 @@ For any cross field validation you just create a validator that uses the `FieldS
 const pass1 = new FieldState({ value: '' }).validators([(val) => !val && 'Password required']);
 const pass2 = new FieldState({
   value: '',
-}).validators([(val) => val && val !== pass1.$ && 'Passwords must match']);
+}).validators((val) => val && val !== pass1.$ && 'Passwords must match');
 const form = new FormState({
   pass1,
   pass2

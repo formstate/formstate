@@ -26,9 +26,9 @@ describe("FieldState basic", () => {
   it("reinitValue should prevent any automatic validation from running", async () => {
     const name = new FieldState({
       value: '',
-    }).validators([
+    }).validators(
         (val) => !val && 'value required'
-    ]);
+    );
     name.onChange('world');
     name.reinitValue('');
     await delay(300);
@@ -40,9 +40,9 @@ describe("FieldState basic", () => {
   it("reinitValue followed by onChange should run validators", async () => {
     const name = new FieldState({
       value: '',
-    }).validators([
+    }).validators(
         (val) => !val && 'value required'
-    ]);
+    );
     name.onChange('world');
     name.reinitValue('');
     name.onChange('');
@@ -55,9 +55,9 @@ describe("FieldState basic", () => {
   it("reinitValue followed by validate should still validate", async () => {
     const name = new FieldState({
       value: '',
-    }).validators([
+    }).validators(
         (val) => !val && 'value required'
-    ]);
+    );
     name.onChange('world');
     name.reinitValue('');
     const res = await name.validate();

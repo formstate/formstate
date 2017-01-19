@@ -11,7 +11,7 @@ import { FieldState } from '../../index';
 const fieldState = new FieldState({
   value: '',
   autoValidationEnabled: false,
-}).validators([(val) => val !== 'foo' && "I only allow 'foo'"]);
+}).validators((val) => val !== 'foo' && "I only allow 'foo'");
 
 render(() => <form onSubmit={async (e) => {
   e.preventDefault();
