@@ -263,7 +263,7 @@ const somethingToSendToServer = form.$.map(child =>
 
 > TIP: It works with *n* number of subfields as well. And as always you can nest objects and arrays as needed.
 
-### Local Validators
+### FormState Validators
 For any cross field validation or validation that only impacts the *overall* state of the form (not tied to its individual fields) you can add validators to `FormState` e.g. passwords must match:
 
 ```ts
