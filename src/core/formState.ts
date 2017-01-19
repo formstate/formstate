@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx';
+import { observable, action, computed, runInAction, isObservable } from 'mobx';
 import { Validatable, Validator, applyValidators } from './types';
 
 /** Each key of the object is a validatable */
@@ -23,6 +23,11 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
      * - not using `undefined` as length might be a subfield
      **/
     this.mode = typeof ($ as any).length === 'number' ? 'array' : 'map';
+
+    /** If they didn't send in something observable make the local $ observable */
+    if (!isObservable(this.$)) {
+      this.$ = observable(this.$);
+    }
   }
 
   /** Get validatable objects from $ */

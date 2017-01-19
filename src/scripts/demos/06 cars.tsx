@@ -11,57 +11,62 @@ import { Field } from './field';
 /** FieldState */
 import { FieldState, FormState } from '../../index';
 
-const cars = new FormState({
-  foo: new FieldState({
-    value: '',
-  }).validators([(val) => val !== 'foo' && "I only allow 'foo'"]),
-  bar: new FieldState({
-    value: '',
-  }).validators([(val) => val !== 'bar' && "I only allow 'bar'"]),
-})
 
-// /**
-//  * TypeScript tip:
-//  * Specialize your generic types to make annotations easier
-//  **/
-// type Name = FieldState<string>;
-// type Feature = FormState<{ name: Name }>;
-// type Features = FieldState<Feature[]>;
-// type Car = FormState<{ name: Name, features: FieldState<Feature[]> }>;
-// type Cars = FormState<Car[]>;
+/** Our validations */
+const required = (val: string) => !val.trim() && 'Value required';
+const atLeastOne = (val: any[]) => !val.length && 'At least one required';
 
-// class AppState {
-//   @observable cars: Cars = new FormState([]);
+/**
+ * TypeScript tip:
+ * Specialize your generic types to make annotations easier
+ **/
+type Name = FieldState<string>;
+type Feature = FormState<{ name: Name }>;
+type Features = FormState<Feature[]>;
+type Car = FormState<{ name: Name, features: Features }>;
+type Cars = FormState<Car[]>;
 
-//   @action addACar = () => {
-//     this.cars.$.push(new FormState({
-//       name: new FieldState<string>
-//     }))
-//   }
-// }
-// const state = new AppState();
+class AppState {
+  @observable cars: Cars = new FormState([]);
 
-// render(() => <form onSubmit={async (e) => {
-//   e.preventDefault();
-//   const res = await state.cars.validate();
-//   if (res.hasError) {
-//     return;
-//   }
-//   console.log('valid!');
-// }}>
-//   <Button onClick={state.addACar}>
-//     Add {state.cars.$.length ? 'a' : 'another'} car.
-//   </Button>
-//   <br/>
-//   {state.cars.$.map((car, key) => {
-//     <Field
-//       id={"carName" + key}
-//       label="Car Name"
-//       fieldState={car.$.name} />
-//   })}
-//   <br />
-//   <Button
-//     type="submit">
-//     Submit
-//   </Button>
-// </form>);
+  @action addACar = () => {
+    const car: Car = new FormState({
+      name: new FieldState({ value: '' }).validators([required]),
+      features: new FormState([]).validators([atLeastOne]),
+    })
+    this.cars.$.push(car);
+  }
+}
+const state = new AppState();
+
+render(() => {
+  return (<form onSubmit={async (e) => {
+    e.preventDefault();
+    const res = await state.cars.validate();
+    if (res.hasError) {
+      return;
+    }
+    alert('Valid!');
+  }}>
+    <Button onClick={state.addACar}>
+      Add {state.cars.$.length ? 'another' : 'a'} car
+    </Button>
+    <br />
+    {state.cars.$.map((car, key) => {
+      return (
+        <div key={key}>
+          <Field
+            id={"carName" + key}
+            label="Car Name"
+            fieldState={car.$.name} />
+          <br />
+        </div>
+      );
+    })}
+    <br />
+    <Button
+      type="submit">
+      Submit
+  </Button>
+  </form>);
+});
