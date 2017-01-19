@@ -263,6 +263,26 @@ const somethingToSendToServer = form.$.map(child =>
 
 > TIP: It works with *n* number of subfields as well. And as always you can nest objects and arrays as needed.
 
+### Local Validators
+For any cross field validation or validation that only impacts the *overall* state of the form (not tied to its individual fields) you can add validators to `FormState` e.g. passwords must match:
+
+```ts
+const passwordRequired = (val) => !val && 'Password required';
+const form = new FormState({
+  pass1: new FieldState({ value: '' }).validators(passwordRequired),
+  pass2: new FieldState({ value: '' }).validators(passwordRequired),
+}).validators(($) => $.pass1.$ !== $.pass2.$ && 'Passwords must match');
+
+/** Sample user interaction */
+form.$.pass1.onChange('hello');
+form.$.pass2.onChange('he');
+
+/** What the state will look like after validation */
+const res = await form.validate();
+assert.equal(res.hasError, true);
+assert.equal(pass2.error, 'Passwords must match');
+```
+
 ## FormStateLazy
 If you want to make lazy decisions about which fields to validate you can use `FormStateLazy`. This works by simply accepting a `getFields` function where you can return the fields you want to validate at that point in time.  e.g.
 
@@ -353,31 +373,6 @@ const minValue = (minValue, message) => (val) => val < minValue && message;
 validators(minValue(1,"The minimum bid is set at $1"));
 validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
 ```
-
-### TIP: Cross field validation
-
-For any cross field validation you just create a validator that uses the `FieldState` that you want to inspect. e.g. passwords must match:
-
-```ts
-const pass1 = new FieldState({ value: '' }).validators([(val) => !val && 'Password required']);
-const pass2 = new FieldState({
-  value: '',
-}).validators((val) => val && val !== pass1.$ && 'Passwords must match');
-const form = new FormState({
-  pass1,
-  pass2
-});
-
-/** Sample user interaction */
-form.$.pass1.onChange('hello');
-form.$.pass2.onChange('he');
-
-const res = await form.validate();
-assert.equal(res.hasError, true);
-assert.equal(pass2.error, 'Passwords must match');
-```
-
-> You don't want cycles in your fields. You can fix cycles by just having an error on the *dependent* field only.
 
 ## Why
 
