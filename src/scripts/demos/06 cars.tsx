@@ -32,12 +32,12 @@ type Car = FormState<{ name: Name, features: Features }>;
 type Cars = FormState<Car[]>;
 
 class AppState {
-  @observable cars: Cars = new FormState([]);
+  @observable cars: Cars = new FormState([]).validators(atLeastOneWithMessage("At least on car is needed"));
 
   @action addACar = () => {
     const car: Car = new FormState({
       name: new FieldState({ value: '' }).validators(requiredWithMessage("Car needs a name")),
-      features: new FormState([]).validators(atLeastOneWithMessage("At least one feature should be provided")),
+      features: new FormState([]).validators(atLeastOneWithMessage("Car must have at least one feature")),
     })
     this.cars.$.push(car);
   }
