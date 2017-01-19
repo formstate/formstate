@@ -87,24 +87,18 @@ export function buildDemos() {
 
     eze.md(`
     # FormState
-    [We think the docs cover it well](https://formstate.github.io). You can see it in use in onBlur example above as well.
+    [We think the docs cover it well](https://formstate.github.io). You can also see it in use in onBlur example above as well. But here is another example where we have a the following requirements:
+
+    * nested structure of \`Car\`s containing \`Feature\`s.
+    * a Car has a name which is required.
+    * a Car must have at least one Feature.
+    * each Feature has a name which is required.
+    * we want to allow submit only once all these requirements are met.
     `);
-
-    /** WIP new version */
-    // eze.md(`
-    // # FormState
-    // [We think the docs cover it well](https://formstate.github.io). You can see it in use in onBlur example above as well. But here is another example where we have a the following requirements:
-
-    // * nested structure of \`Car\`s containing \`Feature\`s.
-    // * a Car has a name which is required.
-    // * a Car must have at least one Feature.
-    // * each Feature has a name which is required.
-    // * we want to allow submit only once all these requirements are met.
-    // `);
-    // eze.app({
-    //   entryPointPath: __dirname + '/demos/06 cars.tsx',
-    //   height: '300px',
-    // });
+    eze.app({
+      entryPointPath: __dirname + '/demos/06 cars.tsx',
+      height: '600px',
+    });
   });
 }
 
