@@ -72,3 +72,7 @@ export const Button
       type={props.type || 'button'}
       className={classes(buttonClass, props.className)}
     />
+
+export const ErrorText: React.StatelessComponent<{}> = ({children}) => {
+  return <div style={{ color: 'red', fontFamily: 'arial' }}>{children}</div>;
+}

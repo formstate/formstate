@@ -1,9 +1,10 @@
 /** React + MUI + mobx */
 import * as React from 'react';
-import { render, Button } from './mui';
+import { render, Button, ErrorText } from './mui';
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { resize } from 'eze/lib/client';
+import { Vertical, Horizontal } from './gls';
 
 /** Field */
 import { Field } from './field';
@@ -13,8 +14,12 @@ import { FieldState, FormState } from '../../index';
 
 
 /** Our validations */
-const required = (val: string) => !val.trim() && 'Value required';
-const atLeastOne = (val: any[]) => !val.length && 'At least one required';
+const requiredWithMessage
+  = (message: string) =>
+    (val: string) => !val.trim() && message;
+const atLeastOneWithMessage
+  = (message: string) =>
+    (val: any[]) => !val.length && message;
 
 /**
  * TypeScript tip:
@@ -31,8 +36,8 @@ class AppState {
 
   @action addACar = () => {
     const car: Car = new FormState({
-      name: new FieldState({ value: '' }).validators([required]),
-      features: new FormState([]).validators([atLeastOne]),
+      name: new FieldState({ value: '' }).validators([requiredWithMessage("Car needs a name")]),
+      features: new FormState([]).validators([atLeastOneWithMessage("At least one feature should be provided")]),
     })
     this.cars.$.push(car);
   }
@@ -41,7 +46,7 @@ class AppState {
     const feature: Feature
       = new FormState({
         name: new FieldState({ value: '' })
-          .validators([required])
+          .validators([requiredWithMessage("Feature needs a name")])
       });
     car.$.features.$.push(feature);
   }
@@ -57,25 +62,54 @@ render(() => {
     }
     alert('Valid!');
   }}>
-    <Button onClick={state.addACar}>
-      Add {state.cars.$.length ? 'another' : 'a'} car
-    </Button>
-    <br />
-    {state.cars.$.map((car, key) => {
-      return (
-        <div key={key}>
-          <Field
-            id={"carName" + key}
-            label="Car Name"
-            fieldState={car.$.name} />
-          <br />
-        </div>
-      );
-    })}
-    <br />
-    <Button
-      type="submit">
-      Submit
-  </Button>
+    <Vertical>
+      {/** Add cars button */}
+      <Button onClick={state.addACar}>
+        Add {state.cars.$.length ? 'another' : 'a'} car
+      </Button>
+
+      {/** For each car */}
+      {state.cars.$.map((car, carKey) => {
+        return (
+          <Vertical key={carKey} style={{ marginLeft: '10px' }}>
+            <Field
+              id={"carName" + carKey}
+              label="Car Name"
+              fieldState={car.$.name}
+            />
+
+            {/** For each feature in car */}
+            {!!car.$.features.$.length
+              && <Vertical style={{ padding: '10px', border: '1px dotted #333' }}>
+                {car.$.features.$.map((feature, featureKey) => {
+                  return (
+                    <Field
+                      key={featureKey}
+                      id={carKey + "featureName" + featureKey}
+                      label="Feature Name"
+                      fieldState={feature.$.name}
+                    />
+                  );
+                })}
+              </Vertical>
+            }
+
+            {car.hasError && <ErrorText>Car has error: {car.error}</ErrorText>}
+            <Button onClick={() => state.addAFeatureToACar(car)}>
+              Add {car.$.features.$.length ? 'another' : 'a'} feature
+            </Button>
+          </Vertical>
+        );
+      })}
+
+      {/** Over all form submit */}
+      <Horizontal verticalAlign="center">
+        <Button
+          type="submit">
+          Submit
+        </Button>
+        {state.cars.hasError && <ErrorText>Form has error: {state.cars.error}</ErrorText>}
+      </Horizontal>
+    </Vertical>
   </form>);
 });

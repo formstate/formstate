@@ -26,6 +26,7 @@ export type FieldProps = {
 export const Field = observer((props: FieldProps) => (
   <TextField
     id={props.id}
+    fullWidth={true}
     floatingLabelText={props.label}
     value={props.fieldState.value}
     onChange={function() { props.fieldState.onChange(arguments[1]) }}
