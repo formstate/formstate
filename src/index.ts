@@ -302,7 +302,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
     return res;
   }
 
-  @observable _error: string = '';
+  @observable private _error: string = '';
 
   /**
    * Does any field have an error
