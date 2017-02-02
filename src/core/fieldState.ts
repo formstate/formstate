@@ -2,6 +2,7 @@ import { observable, action, computed, runInAction } from 'mobx';
 import { Validatable, Validator, applyValidators } from './types';
 import { debounce } from '../internal/utils';
 
+export type ChangeEvent<T> = { prev: T, next: T };
 
 /**
  * Helps maintain the value + error information about a field
@@ -35,6 +36,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
   constructor(private config: {
     value: TValue,
     onUpdate?: (state: FieldState<TValue>) => any,
+    on$ChangeAfterValidation?: (evt: ChangeEvent<TValue>) => any,
     autoValidationEnabled?: boolean,
     autoValidationDebounceMs?: number,
   }) {
@@ -117,7 +119,12 @@ export class FieldState<TValue> implements Validatable<TValue> {
 
         /** If no error, copy over the value to validated value */
         if (!hasError) {
-          this.$ = value;
+          const prev = this.$;
+          const next = value;
+          if (prev !== next) {
+            this.$ = value;
+            this.on$ChangeAfterValidation({prev,next})
+          }
         }
 
         /** before returning update */
@@ -151,5 +158,8 @@ export class FieldState<TValue> implements Validatable<TValue> {
 
   @action private onUpdate = () => {
     this.config.onUpdate && this.config.onUpdate(this);
+  }
+  @action private on$ChangeAfterValidation = (evt: ChangeEvent<TValue>) => {
+    this.config.on$ChangeAfterValidation && this.config.on$ChangeAfterValidation(evt);
   }
 }

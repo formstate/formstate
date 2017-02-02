@@ -104,6 +104,13 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
   }
 
   /**
+   * Call it when you are `reinit`ing child fields
+   */
+  @action clearFormError() {
+    this._error = '';
+  }
+
+  /**
    * The first error from any sub if any
    */
   @computed get error() {

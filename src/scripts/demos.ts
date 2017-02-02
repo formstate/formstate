@@ -99,6 +99,17 @@ export function buildDemos() {
       entryPointPath: __dirname + '/demos/06 cars.tsx',
       height: '600px',
     });
+
+    eze.md(`
+    # Cross field validation
+    You basically compose the FieldStates into a FormState. Then:
+    * Display a formError if \`hasFormError\` is \`true\`.
+    * Revalidate the form on \`on$ChangeAfterValidation\` on each relevant field.
+    `);
+    eze.app({
+      entryPointPath: __dirname + '/demos/07 cross.tsx',
+      height: '300px',
+    });
   });
 }
 
