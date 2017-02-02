@@ -83,10 +83,24 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
   @observable private _error: string = '';
 
   /**
-   * Does any field have an error
+   * Does any field or form have an error
    */
   @computed get hasError() {
-    return this.getValues().some(f => f.hasError) || !!this._error;
+    return this.hasFieldError || this.hasFormError;
+  }
+
+  /**
+   * Does any field have an error
+   */
+  @computed get hasFieldError() {
+    return this.getValues().some(f => f.hasError);
+  }
+
+  /**
+   * Does form level validation have an error
+   */
+  @computed get hasFormError() {
+    return !!this._error;
   }
 
   /**
