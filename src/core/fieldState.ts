@@ -106,7 +106,23 @@ export class FieldState<TValue> implements Validatable<TValue> {
     const value = this.value;
     return applyValidators(this.value, this._validators || [])
       .then(action((fieldError: string) => {
-        if (this.lastValidationRequest !== lastValidationRequest) return;
+
+        /**
+         * If validation comes back out of order then the result of this validation is not siginificant
+         * We simply copy the value from the last validation attempt
+         */
+        if (this.lastValidationRequest !== lastValidationRequest) {
+          if (this.hasError) {
+            return { hasError: true };
+          }
+          else {
+            return {
+              hasError: false,
+              value: this.$,
+            };
+          }
+        }
+
         this.validating = false;
 
         /** For any change in field error, update our error */
@@ -123,7 +139,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
           const next = value;
           if (prev !== next) {
             this.$ = value;
-            this.on$ChangeAfterValidation({prev,next})
+            this.on$ChangeAfterValidation({ prev, next })
           }
         }
 
