@@ -415,7 +415,7 @@ export const Responsive = (props: ResponsiveGridParentProps) => {
     )
   );
 
-  const childClassName = (className) => typestyle.classes(
+  const childClassName = (className: string) => typestyle.classes(
     className,
     typestyle.style(
       csstips.inlineBlock,

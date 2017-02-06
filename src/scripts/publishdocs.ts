@@ -26,7 +26,7 @@ buildDemos().then(() => {
       name: 'basarat',
       email: 'basarat@example.com'
     }
-  }, (err) => {
+  }, (err: any) => {
     if (err) {
       console.log('--publish failed!--', err)
       return;

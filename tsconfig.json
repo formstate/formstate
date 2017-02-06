@@ -6,6 +6,8 @@
     "moduleResolution": "node",
     "outDir": "./lib",
     "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
     "lib": [
       "es6",
       "dom"

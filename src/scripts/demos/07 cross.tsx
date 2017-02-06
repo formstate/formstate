@@ -13,8 +13,8 @@ import { Field } from './field';
 import { FieldState, FormState } from '../../index';
 
 
-const nameRequired = (val) => !val && 'Name required';
-const revalidateForm = () => form.hasFormError && form.validate();
+const nameRequired = (val: string) => !val && 'Name required';
+const revalidateForm = (): any => form.hasFormError && form.validate();
 const form = new FormState({
   name1: new FieldState({
     value: '',

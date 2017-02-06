@@ -49,7 +49,7 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
       }
 
       // wait for error response
-      res.then((msg) => {
+      res.then((msg: any) => {
         if (!msg) gotoNextValidator();
         else resolve(msg);
       })
