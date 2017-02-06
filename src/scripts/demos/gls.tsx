@@ -331,7 +331,7 @@ export const Vertical = (props: VerticalProps) => {
   const className = typestyle.classes(
     props.className,
     typestyle.style(csstips.verticallySpaced(spacing)),
-    maxWidth && typestyle.style({ maxWidth: maxWidth + 'px' }),
+    maxWidth != null && typestyle.style({ maxWidth: maxWidth + 'px' }),
     horizontalAlign == 'center' && typestyle.style(csstips.center),
   );
 

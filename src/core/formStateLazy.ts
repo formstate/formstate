@@ -36,6 +36,6 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
 
   @computed get error() {
     const subItemWithError = this.getFields().find(f => !!f.hasError);
-    return subItemWithError.error;
+    return subItemWithError == undefined ? undefined : subItemWithError.error;
   }
 }

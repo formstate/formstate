@@ -80,7 +80,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
     return res;
   }
 
-  @observable private _error: string = '';
+  @observable private _error: string | null | undefined = '';
 
   /**
    * Does any field or form have an error
