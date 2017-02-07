@@ -111,10 +111,24 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
   }
 
   /**
-   * The first error from any sub if any
+   * Error from some sub field if any
+   */
+  @computed get fieldError() {
+    const subItemWithError = this.getValues().find(f => !!f.hasError);
+    return subItemWithError ? subItemWithError.error : null;
+  }
+
+  /**
+   * Error from form if any
+   */
+  @computed get formError() {
+    return this._error;
+  }
+
+  /**
+   * The first error from any sub (if any) or form error
    */
   @computed get error() {
-    const subItemWithError = this.getValues().find(f => !!f.hasError);
-    return subItemWithError ? subItemWithError.error : this._error;
+    return this.fieldError || this.formError;
   }
 }
