@@ -102,9 +102,10 @@ export function buildDemos() {
 
     eze.md(`
     # Cross field validation
-    You basically compose the FieldStates into a FormState. Then:
-    * Display a formError if \`hasFormError\` is \`true\`.
-    * Revalidate the form on \`on$ChangeAfterValidation\` on each relevant field.
+    You basically compose the FieldStates into a FormState
+
+    * Call \`FormState().compose()\` whenever you assign FieldStates to a FormState.
+    * Instead of calling \`validate\` on the formState you call \`enableAutoValidationAndValidate\`
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/07 cross.tsx',
