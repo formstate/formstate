@@ -153,7 +153,17 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     const values = this.getValues();
     values.forEach(value => value.setCompositionParent(
       {
-        on$ChangeAfterValidation: () => this.autoValidationEnabled && !this.hasFieldError && this.validate()
+        on$ChangeAfterValidation: action(() => {
+          /** Always clear the form error as its no longer relevant */
+          if (this.hasFormError) {
+            this.clearFormError();
+          }
+
+          /** If auto validation enabled and no field has error then re-validate the form */
+          if (this.autoValidationEnabled && !this.hasFieldError) {
+            this.validate();
+          }
+        })
       }
     ))
     return this;
