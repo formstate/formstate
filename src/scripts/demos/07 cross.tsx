@@ -14,22 +14,21 @@ import { FieldState, FormState } from '../../index';
 
 
 const nameRequired = (val: string) => !val && 'Name required';
-const revalidateForm = (): any => form.hasFormError && form.validate();
 const form = new FormState({
   name1: new FieldState({
     value: '',
-    on$ChangeAfterValidation: revalidateForm,
   }).validators(nameRequired),
   name2: new FieldState({
     value: '',
-    on$ChangeAfterValidation: revalidateForm,
   }).validators(nameRequired),
-}).validators(($) => $.name1.$ !== $.name2.$ && 'Names must match');
+})
+  .compose()
+  .validators(($) => $.name1.$ !== $.name2.$ && 'Names must match');
 
 render(() => {
   return (<form onSubmit={async (e) => {
     e.preventDefault();
-    const res = await form.validate();
+    const res = await form.enableAutoValidationAndValidate();
     if (res.hasError) {
       return;
     }

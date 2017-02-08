@@ -1,15 +1,13 @@
 import { observable, action, computed, runInAction } from 'mobx';
-import { Validatable, Validator, applyValidators } from './types';
+import { ComposibleValidatable, Validator, applyValidators } from './types';
 import { debounce } from '../internal/utils';
-
-export type ChangeEvent<T> = { prev: T, next: T };
 
 /**
  * Helps maintain the value + error information about a field
  *
  * This is the glue between the *page* and *field* in the presence of invalid states.
  */
-export class FieldState<TValue> implements Validatable<TValue> {
+export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * The value is stored in the field. May or may not be *valid*.
    */
@@ -27,7 +25,7 @@ export class FieldState<TValue> implements Validatable<TValue> {
   }
   @action public enableAutoValidationAndValidate = () => {
     this.autoValidationEnabled = true;
-    this.validate();
+    return this.validate();
   }
   @action public disableAutoValidation = () => {
     this.autoValidationEnabled = false;
@@ -36,7 +34,6 @@ export class FieldState<TValue> implements Validatable<TValue> {
   constructor(private config: {
     value: TValue,
     onUpdate?: (state: FieldState<TValue>) => any,
-    on$ChangeAfterValidation?: (evt: ChangeEvent<TValue>) => any,
     autoValidationEnabled?: boolean,
     autoValidationDebounceMs?: number,
   }) {
@@ -135,11 +132,9 @@ export class FieldState<TValue> implements Validatable<TValue> {
 
         /** If no error, copy over the value to validated value */
         if (!hasError) {
-          const prev = this.$;
-          const next = value;
-          if (prev !== next) {
+          if (this.$ !== value) {
             this.$ = value;
-            this.on$ChangeAfterValidation({ prev, next })
+            this.on$ChangeAfterValidation()
           }
         }
 
@@ -175,7 +170,12 @@ export class FieldState<TValue> implements Validatable<TValue> {
   @action private onUpdate = () => {
     this.config.onUpdate && this.config.onUpdate(this);
   }
-  @action private on$ChangeAfterValidation = (evt: ChangeEvent<TValue>) => {
-    this.config.on$ChangeAfterValidation && this.config.on$ChangeAfterValidation(evt);
+
+  /**
+   * Composible fields (fields that work in conjuction with FormState)
+   */
+  @action on$ChangeAfterValidation = () => {}
+  @action setCompositionParent = (config: {on$ChangeAfterValidation: ()=>void}) => {
+    this.on$ChangeAfterValidation = action(config.on$ChangeAfterValidation);
   }
 }

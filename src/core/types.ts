@@ -61,7 +61,7 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
 }
 
 
-/** Anything that provides this interface can be composed into the validation system */
+/** Anything that provides this interface can be plugged into the validation system */
 export interface Validatable<TValue> {
   validating: boolean;
   validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }>;
@@ -69,4 +69,17 @@ export interface Validatable<TValue> {
   error?: string | null | undefined;
   $: TValue;
   enableAutoValidation: () => void;
+}
+
+/**
+ * Composible fields (fields that work in conjuction with a parent FormState)
+ */
+export interface ComposibleValidatable<TValue> extends Validatable<TValue> {
+  /** Used to tell the parent about validation */
+  on$ChangeAfterValidation: () => void;
+
+  /** Used by the parent to register listeners */
+  setCompositionParent: (config: {
+    on$ChangeAfterValidation: () => void
+  }) => void;
 }

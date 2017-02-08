@@ -1,15 +1,15 @@
 import { observable, action, computed, runInAction, isObservable, isArrayLike } from 'mobx';
-import { Validatable, Validator, applyValidators } from './types';
+import { ComposibleValidatable, Validator, applyValidators } from './types';
 
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
-  { [key: string]: Validatable<any> }
-  | Validatable<any>[]
+  { [key: string]: ComposibleValidatable<any> }
+  | ComposibleValidatable<any>[]
 
 /**
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
  */
-export class FormState<TValue extends ValidatableMapOrArray> implements Validatable<TValue> {
+export class FormState<TValue extends ValidatableMapOrArray> implements ComposibleValidatable<TValue> {
   private mode: 'array' | 'map' = 'map';
   constructor(
     /**
@@ -26,17 +26,13 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
   }
 
   /** Get validatable objects from $ */
-  private getValues = (): Validatable<any>[] => {
+  private getValues = (): ComposibleValidatable<any>[] => {
     if (this.mode === 'array') return (this.$ as any);
     const keys = Object.keys(this.$);
     return keys.map((key) => this.$[key]);
   }
 
   @observable validating = false;
-
-  @action enableAutoValidation = () => {
-    this.getValues().forEach(x => x.enableAutoValidation());
-  }
 
   private _validators: Validator<TValue>[] = [];
   @action validators = (...validators: Validator<TValue>[]) => {
@@ -74,6 +70,8 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
       if (hasError) {
         return { hasError: true as true };
       }
+
+      this.on$ChangeAfterValidation();
       return { hasError: false as false, value: this.$ };
     });
 
@@ -130,5 +128,39 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Validata
    */
   @computed get error() {
     return this.fieldError || this.formError;
+  }
+
+  /**
+   * Auto validation
+   */
+  @observable private autoValidationEnabled = false;
+  @action public enableAutoValidation = () => {
+    this.autoValidationEnabled = true;
+    this.getValues().forEach(x => x.enableAutoValidation());
+  }
+  @action public enableAutoValidationAndValidate = () => {
+    this.autoValidationEnabled = true;
+    return this.validate();
+  }
+  @action public disableAutoValidation = () => {
+    this.autoValidationEnabled = false;
+  }
+
+  /**
+   * Composible fields (fields that work in conjuction with FormState)
+   */
+  @action compose() {
+    const values = this.getValues();
+    values.forEach(value => value.setCompositionParent(
+      {
+        on$ChangeAfterValidation: () => this.autoValidationEnabled && !this.hasFieldError && this.validate()
+      }
+    ))
+    return this;
+  }
+
+  @action on$ChangeAfterValidation = () => { }
+  @action setCompositionParent = (config: { on$ChangeAfterValidation: () => void }) => {
+    this.on$ChangeAfterValidation = action(config.on$ChangeAfterValidation);
   }
 }
