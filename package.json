@@ -50,7 +50,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "starts": "^0.7.0",
     "ts-node": "^1.5.2",
-    "typescript": "2.2.0-dev.20161130",
+    "typescript": "2.2.0-dev.20170207",
     "typestyle": "^0.25.0"
   }
 }
