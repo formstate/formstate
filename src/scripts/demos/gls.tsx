@@ -267,31 +267,6 @@ export const FlexVerticalMargined = (props: MarginedProps) => {
 FlexHorizontalMargined.displayName = "FlexVerticalMargined";
 
 /**
- * Lays out the children vertically with
- * - Parent: gets to chose the overall Width
- * - ThisComponent: gets the Height : (by sum) of the children
- * - Children: get the Width : sized by content
- * - Children: get the Height : sized by content
- * - ThisComponent: Puts a margin between each item.
- * - ThisComponent: Puts a negative margin on itself to offset the margins of the children (prevents them from leaking out)
- */
-export const GridMargined = (props: MarginedProps) => {
-  const { margin, children, ...otherProps } = props;
-  const spacing = (margin == null ? defaultValues.verticalSpacing : margin) + 'px';
-
-  const className = typestyle.style(csstips.wrap as any, { marginTop: '-' + spacing, marginLeft: '-' + spacing }, props.style || {});
-
-  return (
-    <ContentHorizontal {...otherProps} className={className}>
-      {
-        React.Children.toArray(children).filter(c => !!c).map((child, i) => <Content key={(child as any).key || i} style={{ marginLeft: spacing, marginTop: spacing }}>{child}</Content>)
-      }
-    </ContentHorizontal>
-  );
-}
-GridMargined.displayName = "GridMargined";
-
-/**
  * Just a display:block with vertical spacing between each child
  */
 export const VerticalMargined = (props: MarginedProps) => {
