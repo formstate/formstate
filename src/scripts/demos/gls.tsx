@@ -279,7 +279,7 @@ export const GridMargined = (props: MarginedProps) => {
   const { margin, children, ...otherProps } = props;
   const spacing = (margin == null ? defaultValues.verticalSpacing : margin) + 'px';
 
-  const className = typestyle.style(csstips.wrap, { marginTop: '-' + spacing, marginLeft: '-' + spacing }, props.style || {});
+  const className = typestyle.style(csstips.wrap as any, { marginTop: '-' + spacing, marginLeft: '-' + spacing }, props.style || {});
 
   return (
     <ContentHorizontal {...otherProps} className={className}>
