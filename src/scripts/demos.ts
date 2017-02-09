@@ -11,7 +11,7 @@ export function buildDemos() {
   }, (eze) => {
     eze.md(`
 
-    > In case you came here directly please note [that we do have hand crafted docs](https://formstate.github.io) which explain a lot of the reasing behind formstate 🌹
+    > In case you came here directly please note [that we do have hand crafted docs](https://formstate.github.io) which explain a lot of the reasoning behind formstate 🌹
 
     # Creating a Field
 
