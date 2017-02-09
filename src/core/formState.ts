@@ -165,6 +165,9 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     const values = this.getValues();
     values.forEach(value => value.setCompositionParent(
       {
+        on$Reinit: action(() => {
+          this.validatedSubFields = this.validatedSubFields.filter(v => v !== value);
+        }),
         on$ChangeAfterValidation: action(() => {
           /** Always clear the form error as its no longer relevant */
           if (this.hasFormError) {
@@ -192,7 +195,12 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   }
 
   @action on$ChangeAfterValidation = () => { }
-  @action setCompositionParent = (config: { on$ChangeAfterValidation: () => void }) => {
-    this.on$ChangeAfterValidation = action(config.on$ChangeAfterValidation);
+  @action on$Reinit = () => { }
+  @action setCompositionParent = (config: {
+    on$ChangeAfterValidation: () => void;
+    on$Reinit: () => void;
+  }) => {
+    this.on$ChangeAfterValidation = config.on$ChangeAfterValidation;
+    this.on$Reinit = config.on$Reinit;
   }
 }

@@ -28,7 +28,7 @@ const form = new FormState({
 render(() => {
   return (<form onSubmit={async (e) => {
     e.preventDefault();
-    const res = await form.enableAutoValidationAndValidate();
+    const res = await form.validate();
     if (res.hasError) {
       return;
     }

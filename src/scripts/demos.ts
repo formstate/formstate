@@ -106,10 +106,7 @@ export function buildDemos() {
 
     eze.md(`
     # Cross field validation
-    You basically compose the FieldStates into a FormState
-
-    * Call \`FormState().compose()\` whenever you assign FieldStates to a FormState.
-    * Instead of calling \`validate\` on the formState you call \`enableAutoValidationAndValidate\`
+    Call \`FormState().compose()\` whenever you want to compose the FieldState -> auto validate FormState behaviour.
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/07 cross.tsx',

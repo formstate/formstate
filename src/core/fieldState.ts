@@ -84,6 +84,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this.value = value;
     this.error = undefined;
     this.$ = value;
+    this.on$Reinit();
     this.onUpdate();
   }
 
@@ -174,8 +175,13 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * Composible fields (fields that work in conjuction with FormState)
    */
-  @action on$ChangeAfterValidation = () => {}
-  @action setCompositionParent = (config: {on$ChangeAfterValidation: ()=>void}) => {
-    this.on$ChangeAfterValidation = action(config.on$ChangeAfterValidation);
+  @action on$ChangeAfterValidation = () => { }
+  @action on$Reinit = () => { }
+  @action setCompositionParent = (config: {
+    on$ChangeAfterValidation: () => void;
+    on$Reinit: () => void;
+  }) => {
+    this.on$ChangeAfterValidation = config.on$ChangeAfterValidation;
+    this.on$Reinit = config.on$Reinit;
   }
 }
