@@ -5,10 +5,14 @@ import * as fse from 'fs-extra';
 /** Wrap our builder in a function so it can be waited on by publishDocs */
 export function buildDemos() {
   return eze.render({
+    title: 'FormState demos',
     outputDir: __dirname + '/../../docs/demos',
     repoUrl: 'https://github.com/formstate/formstate'
   }, (eze) => {
     eze.md(`
+
+    > In case you came here directly please note [that we do have hand crafted docs](https://formstate.github.io) which explain a lot of the reasing behind formstate 🌹
+
     # Creating a Field
 
     Note that because you write your own Fields you get:
