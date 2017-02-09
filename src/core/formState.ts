@@ -154,6 +154,11 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   }
 
   /**
+   * Composible field validation tracking
+   */
+  @observable validatedSubFields: ComposibleValidatable<any>[] = [];
+
+  /**
    * Composible fields (fields that work in conjuction with FormState)
    */
   @action compose() {
@@ -166,8 +171,18 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
             this.clearFormError();
           }
 
-          /** If auto validation enabled and no field has error then re-validate the form */
-          if (this.autoValidationEnabled && !this.hasFieldError) {
+          /** Add the field to the validated sub fields */
+          if (this.validatedSubFields.indexOf(value) === -1) {
+            this.validatedSubFields.push(value);
+          }
+
+          /**
+           * If no field has error
+           * and all subfields are validated
+           *  then re-validate the form */
+          if (!this.hasFieldError
+            && !this.getValues().some(value => this.validatedSubFields.indexOf(value) === -1)
+          ) {
             this.validate();
           }
         })
