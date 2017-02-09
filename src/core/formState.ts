@@ -131,6 +131,13 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   }
 
   /**
+   * You should only show the form error if there are no field errors
+   */
+  @computed get showFormError() {
+    return !this.hasFieldError && this.hasFormError;
+  }
+
+  /**
    * Auto validation
    */
   @observable private autoValidationEnabled = false;

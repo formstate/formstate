@@ -46,7 +46,7 @@ render(() => {
         fieldState={form.$.name2}
       />
 
-      {form.hasFormError && <ErrorText>{form.error}</ErrorText>}
+      {form.showFormError && <ErrorText>{form.formError}</ErrorText>}
 
       {/** Over all form submit */}
       <Horizontal verticalAlign="center">
