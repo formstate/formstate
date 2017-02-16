@@ -56,6 +56,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
 
   /** Trackers for validation */
+  @observable public hasBeenValidated: boolean = false;
   @observable private lastValidationRequest: number = 0;
   @observable private preventNextQueuedValidation = false;
 
@@ -83,6 +84,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     // This value vetos all previous values
     this.value = value;
     this.error = undefined;
+    this.hasBeenValidated = false;
     this.$ = value;
     this.on$Reinit();
     this.onUpdate();
@@ -93,7 +95,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
 
   @observable validating: boolean = false;
-
+  
   /**
    * Runs validation on the current value immediately
    */
@@ -152,6 +154,10 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
             value
           };
         }
+      }))
+      .then(action(status => {
+        this.hasBeenValidated = true;
+        return status;
       }));
   }
 

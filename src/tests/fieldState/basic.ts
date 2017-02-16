@@ -14,13 +14,39 @@ describe("FieldState basic", () => {
     assert.equal(name.$, 'hello');
   });
 
+  it("no validation should keep hasBeenValidated false", () => {
+    const name = new FieldState({
+      value: 'hello',
+    })
+    assert.equal(name.hasBeenValidated, false);
+  });
+
+  it("validating changes hasBeenValidated to true", async () => {
+    const name = new FieldState({
+      value: 'hello',
+    })
+    name.onChange('world')
+    await name.validate()    
+    assert.equal(name.hasBeenValidated, true);
+  });
+
+  it("reinitValue changes hasBeenValidated to false", () => {
+    const name = new FieldState({
+      value: 'hello',
+    })
+    name.reinitValue('world')
+    assert.equal(name.hasBeenValidated, false)
+  })
+
   it("reinitValue should change the value immediately", () => {
     const name = new FieldState({
       value: 'hello',
     })
     name.reinitValue('world')
+
     assert.equal(name.value, 'world');
     assert.equal(name.$, 'world');
+    assert.equal(name.hasBeenValidated, false);
   });
 
   it("reinitValue should prevent any automatic validation from running", async () => {
@@ -35,6 +61,7 @@ describe("FieldState basic", () => {
     assert.equal(name.hasError, false);
     assert.equal(name.value, '');
     assert.equal(name.$, '');
+    assert.equal(name.hasBeenValidated, false);
   });
 
   it("reinitValue followed by onChange should run validators", async () => {
