@@ -9,15 +9,22 @@ import { debounce } from '../internal/utils';
  */
 export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
-   * The value is stored in the field. May or may not be *valid*.
+   * The value you should bind to the input in your field.
    */
   @observable value: TValue;
 
   /** If there is any error on the field on last validation attempt */
   @observable error?: string;
 
-  /** The value set from code or a hot value that's been validated */
+  /** The value set from code or a `value` that's been validated */
   @observable $: TValue;
+
+  /**
+   * Set to true if a validation run has been completed since init
+   * Use case:
+   * - to show a green color in the field if `hasError` is false
+   **/
+  @observable hasBeenValidated: boolean = false;
 
   @observable private autoValidationEnabled = true;
   @action public enableAutoValidation = () => {
@@ -56,7 +63,6 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
 
   /** Trackers for validation */
-  @observable public hasBeenValidated: boolean = false;
   @observable private lastValidationRequest: number = 0;
   @observable private preventNextQueuedValidation = false;
 
@@ -95,7 +101,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
 
   @observable validating: boolean = false;
-  
+
   /**
    * Runs validation on the current value immediately
    */
@@ -124,6 +130,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
         }
 
         this.validating = false;
+        this.hasBeenValidated = true;
 
         /** For any change in field error, update our error */
         if (fieldError != this.error) {
@@ -154,10 +161,6 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
             value
           };
         }
-      }))
-      .then(action(status => {
-        this.hasBeenValidated = true;
-        return status;
       }));
   }
 
