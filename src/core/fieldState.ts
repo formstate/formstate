@@ -26,39 +26,44 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    **/
   @observable hasBeenValidated: boolean = false;
 
-  @observable private autoValidationEnabled = true;
+  @observable private _autoValidationEnabled = true;
   @action public enableAutoValidation = () => {
-    this.autoValidationEnabled = true;
+    this._autoValidationEnabled = true;
+    return this;
   }
   @action public enableAutoValidationAndValidate = () => {
-    this.autoValidationEnabled = true;
+    this._autoValidationEnabled = true;
     return this.validate();
   }
   @action public disableAutoValidation = () => {
-    this.autoValidationEnabled = false;
+    this._autoValidationEnabled = false;
+    return this;
   }
-
-  constructor(private config: {
-    value: TValue,
-    onUpdate?: (state: FieldState<TValue>) => any,
-    autoValidationEnabled?: boolean,
-    autoValidationDebounceMs?: number,
-  }) {
+  constructor(value: TValue) {
     runInAction(() => {
-      this.value = config.value;
-      this.$ = config.value;
-
+      this.value = value;
+      this.$ = value;
       /**
        * Automatic validation configuration
        */
-      this.queueValidation = action(debounce(this.queuedValidationWakeup, config.autoValidationDebounceMs || 200));
-      this.autoValidationEnabled = config.autoValidationEnabled == undefined ? true : config.autoValidationEnabled;
+      this.queueValidation = action(debounce(this.queuedValidationWakeup, 200));
+      this._autoValidationEnabled = true;
     })
   }
 
   private _validators: Validator<TValue>[] = [];
   @action validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
+    return this;
+  }
+  private _onUpdate: (state: FieldState<TValue>) => any;
+  @action public onUpdate = (handler: (state: FieldState<TValue>) => any) => {
+    this._onUpdate = handler;
+    return this;
+  }
+
+  @action public setAutoValidationDebouncedMs = (milliseconds: number) => {
+    this.queueValidation = action(debounce(this.queuedValidationWakeup, milliseconds));
     return this;
   }
 
@@ -73,8 +78,8 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
 
     // Immediately set for local ui binding
     this.value = value;
-    this.onUpdate();
-    if (this.autoValidationEnabled) {
+    this.executeOnUpdate();
+    if (this._autoValidationEnabled) {
       this.queueValidation();
     }
   }
@@ -93,7 +98,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this.hasBeenValidated = false;
     this.$ = value;
     this.on$Reinit();
-    this.onUpdate();
+    this.executeOnUpdate();
   }
 
   get hasError() {
@@ -149,7 +154,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
         }
 
         /** before returning update */
-        this.onUpdate();
+        this.executeOnUpdate();
 
         /** return a result based on error status */
         if (hasError) {
@@ -177,8 +182,8 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    */
   private queueValidation = action(debounce(this.queuedValidationWakeup, 200));
 
-  @action private onUpdate = () => {
-    this.config.onUpdate && this.config.onUpdate(this);
+  @action private executeOnUpdate = () => {
+    this._onUpdate && this._onUpdate(this);
   }
 
   /**

@@ -8,9 +8,7 @@ import { Field } from './field';
 
 /** FieldState */
 import { FieldState } from '../../index';
-const fieldState = new FieldState({
-  value: '',
-}).validators((val) => val !== 'foo' && "I only allow 'foo'");
+const fieldState = new FieldState('').validators((val) => val !== 'foo' && "I only allow 'foo'");
 
 render(() => <div>
   <Field

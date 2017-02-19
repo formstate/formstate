@@ -7,9 +7,7 @@ useStrict(true);
 
 describe("FormStateLazy validation", () => {
   it("should validate a nested FieldState and pass if valid", async () => {
-    const name = new FieldState({
-      value: '',
-    });
+    const name = new FieldState('');
     const form = new FormStateLazy(() => [
       name,
     ]);
@@ -19,9 +17,7 @@ describe("FormStateLazy validation", () => {
   });
 
   it("should validate a nested FieldState and fail if invalid", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
       (val) => !val && 'value required'
       );
     const form = new FormStateLazy(() => [
@@ -35,9 +31,7 @@ describe("FormStateLazy validation", () => {
   });
 
   it("should validate a nested - nested FieldState and pass if valid", async () => {
-    const name = new FieldState({
-      value: '',
-    });
+    const name = new FieldState('');
     const form = new FormStateLazy(() => [
       new FormStateLazy(() => [
         name
@@ -49,9 +43,7 @@ describe("FormStateLazy validation", () => {
   });
 
   it("should validate a nested - nested FieldState and fail if invalid", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
       (val) => !val && 'value required'
       );
     const form = new FormStateLazy(() => [

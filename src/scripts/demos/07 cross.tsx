@@ -15,12 +15,8 @@ import { FieldState, FormState } from '../../index';
 
 const nameRequired = (val: string) => !val && 'Name required';
 const form = new FormState({
-  name1: new FieldState({
-    value: '',
-  }).validators(nameRequired),
-  name2: new FieldState({
-    value: '',
-  }).validators(nameRequired),
+  name1: new FieldState('').validators(nameRequired),
+  name2: new FieldState('').validators(nameRequired),
 })
   .compose()
   .validators(($) => $.name1.$ !== $.name2.$ && 'Names must match');

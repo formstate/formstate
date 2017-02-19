@@ -7,9 +7,7 @@ useStrict(true);
 
 describe("FormState local validations", () => {
   it("should validate a local validation", async () => {
-    const name = new FieldState({
-      value: '',
-    });
+    const name = new FieldState('');
     const form = new FormState({
       name,
     }).validators(($) => {
@@ -22,9 +20,7 @@ describe("FormState local validations", () => {
   });
 
   it("array: should validate a local validation", async () => {
-    const name = new FieldState({
-      value: '',
-    });
+    const name = new FieldState('');
     const form = new FormState([
       name,
     ]).validators(($) => {
