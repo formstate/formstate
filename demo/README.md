@@ -29,11 +29,7 @@ import { FormState, FieldState } from 'formstate';
 
 class DemoState {
   // Create a field
-  username = new FieldState({
-    value: '',
-
-    // Creating validators is super easy
-  }).validators((val) => !val && 'username required');
+  username = new FieldState('').validators((val) => !val && 'username required');
 
   // Compose fields into a form
   form = new FormState({
@@ -149,7 +145,7 @@ The FieldState takes an optional list of validators so you would use it as simpl
 
 ```ts
 const required = (val:string) => !val && 'Value required';
-const name = new FieldState({value:''}).validators(required);
+const name = new FieldState(''}).validators(required);
 ```
 
 ### Demo: Field
@@ -194,10 +190,10 @@ To demonstrate this composibility consider the following simple example:
 ```ts
 const required = (val:string) => !val && 'Value required';
 const form = new FormState({
-  display: new FieldState({value:''}),
+  display: new FieldState(''),
   credentials: new FormState({
-    username: new FieldState({value: ''}).validators(required),
-    password: new FieldState({value: ''}).validators(required),
+    username: new FieldState('').validators(required),
+    password: new FieldState('').validators(required),
   })
 })
 ```
@@ -236,12 +232,12 @@ This is demonstrated below:
 ```ts
 const form = new FormState([
   new FormState({
-    username: new FieldState({value: ''}).validators(required),
-    password: new FieldState({value: ''}).validators(required),
+    username: new FieldState('').validators(required),
+    password: new FieldState('').validators(required),
   }),
   new FormState({
-    username: new FieldState({value: ''}).validators(required),
-    password: new FieldState({value: ''}).validators(required),
+    username: new FieldState('').validators(required),
+    password: new FieldState('').validators(required),
   }),
 ]);
 ```
@@ -269,8 +265,8 @@ For any cross field validation or validation that only impacts the *overall* sta
 ```ts
 const passwordRequired = (val) => !val && 'Password required';
 const form = new FormState({
-  pass1: new FieldState({ value: '' }).validators(passwordRequired),
-  pass2: new FieldState({ value: '' }).validators(passwordRequired),
+  pass1: new FieldState('').validators(passwordRequired),
+  pass2: new FieldState('').validators(passwordRequired),
 }).validators(($) => $.pass1.$ !== $.pass2.$ && 'Passwords must match');
 
 /** Sample user interaction */
@@ -296,7 +292,7 @@ const myFieldsOptional:FieldState<string> = [];
 let someCondition: boolean = false;
 
 // Do some stuff with your fields e.g.
-myFields.push( new FieldState({value: ''}).validators(required);
+myFields.push( new FieldState('').validators(required);
 
 /** A lazy form state */
 const form = new FormStateLazy(()=>myFields.concat(someCondition ? myFieldsOptional : []));

@@ -10,14 +10,8 @@ import { FieldBlur } from './fieldBlur';
 import { FieldState, FormState } from '../../index';
 
 const formState = new FormState({
-  foo: new FieldState({
-    value: '',
-    autoValidationEnabled: false,
-  }).validators((val) => val !== 'foo' && "I only allow 'foo'"),
-  bar: new FieldState({
-    value: '',
-    autoValidationEnabled: false,
-  }).validators((val) => val !== 'bar' && "I only allow 'bar'")
+  foo: new FieldState('').disableAutoValidation().validators((val) => val !== 'foo' && "I only allow 'foo'"),
+  bar: new FieldState('').disableAutoValidation().validators((val) => val !== 'bar' && "I only allow 'bar'")
 })
 render(() => <form onSubmit={async (e) => {
   e.preventDefault();

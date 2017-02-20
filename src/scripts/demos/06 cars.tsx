@@ -36,7 +36,7 @@ class AppState {
 
   @action addACar = () => {
     const car: Car = new FormState({
-      name: new FieldState({ value: '' }).validators(requiredWithMessage("Car needs a name")),
+      name: new FieldState('').validators(requiredWithMessage("Car needs a name")),
       features: new FormState([]).validators(atLeastOneWithMessage("Car must have at least one feature")),
     })
     this.cars.$.push(car);
@@ -45,7 +45,7 @@ class AppState {
   @action addAFeatureToACar = (car: Car) => {
     const feature: Feature
       = new FormState({
-        name: new FieldState({ value: '' })
+        name: new FieldState('')
           .validators(requiredWithMessage("Feature needs a name"))
       });
     car.$.features.$.push(feature);

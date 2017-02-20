@@ -7,41 +7,31 @@ useStrict(true);
 
 describe("FieldState basic", () => {
   it("hotValue and safeValue is set to initial value", () => {
-    const name = new FieldState({
-      value: 'hello',
-    })
+    const name = new FieldState('hello')
     assert.equal(name.value, 'hello');
     assert.equal(name.$, 'hello');
   });
 
   it("no validation should keep hasBeenValidated false", () => {
-    const name = new FieldState({
-      value: 'hello',
-    })
+    const name = new FieldState('hello')
     assert.equal(name.hasBeenValidated, false);
   });
 
   it("validating changes hasBeenValidated to true", async () => {
-    const name = new FieldState({
-      value: 'hello',
-    })
+    const name = new FieldState('hello')
     name.onChange('world')
     await name.validate()    
     assert.equal(name.hasBeenValidated, true);
   });
 
   it("reinitValue changes hasBeenValidated to false", () => {
-    const name = new FieldState({
-      value: 'hello',
-    })
+    const name = new FieldState('world')
     name.reinitValue('world')
     assert.equal(name.hasBeenValidated, false)
   })
 
   it("reinitValue should change the value immediately", () => {
-    const name = new FieldState({
-      value: 'hello',
-    })
+    const name = new FieldState('hello')
     name.reinitValue('world')
 
     assert.equal(name.value, 'world');
@@ -50,9 +40,7 @@ describe("FieldState basic", () => {
   });
 
   it("reinitValue should prevent any automatic validation from running", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
         (val) => !val && 'value required'
     );
     name.onChange('world');
@@ -65,9 +53,7 @@ describe("FieldState basic", () => {
   });
 
   it("reinitValue followed by onChange should run validators", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
         (val) => !val && 'value required'
     );
     name.onChange('world');
@@ -80,9 +66,7 @@ describe("FieldState basic", () => {
   });
 
   it("reinitValue followed by validate should still validate", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
         (val) => !val && 'value required'
     );
     name.onChange('world');

@@ -7,9 +7,7 @@ useStrict(true);
 
 describe("FormState basic", () => {
   it("should allow nesting a FieldState", () => {
-    const name = new FieldState({
-      value: 'hello',
-    });
+    const name = new FieldState('hello');
     const form = new FormState({
       name,
     });
@@ -17,9 +15,7 @@ describe("FormState basic", () => {
   });
 
   it("should allow nesting another FormState", () => {
-    const name = new FieldState({
-      value: 'hello',
-    });
+    const name = new FieldState('hello');
     const form = new FormState({
       subForm: new FormState({
         name
@@ -29,15 +25,9 @@ describe("FormState basic", () => {
   });
 
   it("should allow nesting FieldState and FormState", () => {
-    const name = new FieldState({
-      value: 'hello',
-    });
-    const username = new FieldState({
-      value: 'hello',
-    });
-    const password = new FieldState({
-      value: 'hello',
-    });
+    const name = new FieldState('hello');
+    const username = new FieldState('hello');
+    const password = new FieldState('hello');
     const form = new FormState({
       name,
       person: new FormState({
@@ -50,9 +40,7 @@ describe("FormState basic", () => {
   });
 
   it("should allow nesting a FieldState array", () => {
-    const name = new FieldState({
-      value: 'hello',
-    });
+    const name = new FieldState('hello');
     const form = new FormState([
       name,
     ]);
@@ -60,9 +48,7 @@ describe("FormState basic", () => {
   });
 
   it("should allow nesting another FormState array", () => {
-    const name = new FieldState({
-      value: 'hello',
-    });
+    const name = new FieldState('hello');
     const form = new FormState([
       new FormState([
         name

@@ -7,9 +7,7 @@ useStrict(true);
 
 describe("FormState validation", () => {
   it("should validate a nested FieldState and pass if valid", async () => {
-    const name = new FieldState({
-      value: '',
-    });
+    const name = new FieldState('');
     const form = new FormState({
       name,
     });
@@ -19,9 +17,7 @@ describe("FormState validation", () => {
   });
 
   it("array: should validate a nested FieldState and pass if valid", async () => {
-    const name = new FieldState({
-      value: '',
-    });
+    const name = new FieldState('');
     const form = new FormState([
       name,
     ]);
@@ -31,9 +27,7 @@ describe("FormState validation", () => {
   });
 
   it("should validate a nested FieldState and fail if invalid", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
         (val) => !val && 'value required'
     );
     const form = new FormState({
@@ -47,9 +41,7 @@ describe("FormState validation", () => {
   });
 
   it("array: should validate a nested FieldState and fail if invalid", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
       (val) => !val && 'value required'
     );
     const form = new FormState([
@@ -63,9 +55,7 @@ describe("FormState validation", () => {
   });
 
   it("should validate a nested - nested FieldState and pass if valid", async () => {
-    const name = new FieldState({
-      value: '',
-    });
+    const name = new FieldState('');
     const form = new FormState({
       name: new FormState({
         name
@@ -77,9 +67,7 @@ describe("FormState validation", () => {
   });
 
   it("array: should validate a nested - nested FieldState and pass if valid", async () => {
-    const name = new FieldState({
-      value: '',
-    });
+    const name = new FieldState('');
     const form = new FormState([
       new FormState([
         name
@@ -91,9 +79,7 @@ describe("FormState validation", () => {
   });
 
   it("should validate a nested - nested FieldState and fail if invalid", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
       (val) => !val && 'value required'
     );
     const form = new FormState({
@@ -110,9 +96,7 @@ describe("FormState validation", () => {
   });
 
   it("array: should validate a nested - nested FieldState and fail if invalid", async () => {
-    const name = new FieldState({
-      value: '',
-    }).validators(
+    const name = new FieldState('').validators(
         (val) => !val && 'value required'
     );
     const form = new FormState([
@@ -129,10 +113,8 @@ describe("FormState validation", () => {
   });
 
   it("dependent validation should work", async () => {
-    const pass1 = new FieldState({ value: '' }).validators((val) => !val && 'Password required');
-    const pass2 = new FieldState({
-      value: '',
-    }).validators((val) => val && val !== pass1.$ && 'Passwords must match')
+    const pass1 = new FieldState('').validators((val) => !val && 'Password required');
+    const pass2 = new FieldState('').validators((val) => val && val !== pass1.$ && 'Passwords must match')
     const form = new FormState({
       pass1,
       pass2
@@ -147,3 +129,4 @@ describe("FormState validation", () => {
     assert.equal(pass2.error, 'Passwords must match');
   });
 });
+ 
