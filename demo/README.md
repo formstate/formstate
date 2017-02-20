@@ -145,7 +145,7 @@ The FieldState takes an optional list of validators so you would use it as simpl
 
 ```ts
 const required = (val:string) => !val && 'Value required';
-const name = new FieldState(''}).validators(required);
+const name = new FieldState('').validators(required);
 ```
 
 ### Demo: Field
