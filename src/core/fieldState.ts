@@ -26,7 +26,18 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    **/
   @observable hasBeenValidated: boolean = false;
 
-  @observable private _autoValidationEnabled = true;
+  /**
+   * Allows you to preserve the `_autoValidationEnabled` value across `reinit`s
+   */
+  @observable private _autoValidationDefault = true;
+  @action public setAutoValidationDefault = (autoValidationDefault: boolean) => {
+    this._autoValidationDefault = autoValidationDefault;
+    this._autoValidationEnabled = autoValidationDefault;
+    return this;
+  }
+  @action public getAutoValidationDefault = () => this._autoValidationDefault;
+
+  @observable private _autoValidationEnabled = this._autoValidationDefault;
   @action public enableAutoValidation = () => {
     this._autoValidationEnabled = true;
     return this;
@@ -39,6 +50,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this._autoValidationEnabled = false;
     return this;
   }
+
   constructor(value: TValue) {
     runInAction(() => {
       this.value = value;
@@ -93,6 +105,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this.preventNextQueuedValidation = true;
 
     // This value vetos all previous values
+    this._autoValidationEnabled = this._autoValidationDefault;
     this.value = value;
     this.error = undefined;
     this.hasBeenValidated = false;
