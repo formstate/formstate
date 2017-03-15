@@ -13,12 +13,12 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
   }
   constructor(
     /** It is a function as fields can change over time */
-    private getFields: () => TValue
+    protected getFields: () => TValue
   ) { }
 
   @observable validating = false;
 
-  private _validators: Validator<TValue>[] = [];
+  protected _validators: Validator<TValue>[] = [];
   @action validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
@@ -60,7 +60,7 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
   }
 
 
-  @observable private _error: string | null | undefined = '';
+  @observable protected _error: string | null | undefined = '';
 
   /**
    * Does any field or form have an error

@@ -10,7 +10,7 @@ export type ValidatableMapOrArray =
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
  */
 export class FormState<TValue extends ValidatableMapOrArray> implements ComposibleValidatable<TValue> {
-  private mode: 'array' | 'map' = 'map';
+  protected mode: 'array' | 'map' = 'map';
   constructor(
     /**
      * SubItems can be any Validatable
@@ -26,7 +26,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   }
 
   /** Get validatable objects from $ */
-  private getValues = (): ComposibleValidatable<any>[] => {
+  protected getValues = (): ComposibleValidatable<any>[] => {
     if (this.mode === 'array') return (this.$ as any);
     const keys = Object.keys(this.$);
     return keys.map((key) => this.$[key]);
@@ -34,7 +34,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
 
   @observable validating = false;
 
-  private _validators: Validator<TValue>[] = [];
+  protected _validators: Validator<TValue>[] = [];
   @action validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
@@ -78,7 +78,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     return res;
   }
 
-  @observable private _error: string | null | undefined = '';
+  @observable protected _error: string | null | undefined = '';
 
   /**
    * Does any field or form have an error
@@ -140,7 +140,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   /**
    * Auto validation
    */
-  @observable private autoValidationEnabled = false;
+  @observable protected autoValidationEnabled = false;
   @action public enableAutoValidation = () => {
     this.autoValidationEnabled = true;
     this.getValues().forEach(x => x.enableAutoValidation());

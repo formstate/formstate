@@ -29,7 +29,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * Allows you to preserve the `_autoValidationEnabled` value across `reinit`s
    */
-  @observable private _autoValidationDefault = true;
+  @observable protected _autoValidationDefault = true;
   @action public setAutoValidationDefault = (autoValidationDefault: boolean) => {
     this._autoValidationDefault = autoValidationDefault;
     this._autoValidationEnabled = autoValidationDefault;
@@ -37,7 +37,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
   @action public getAutoValidationDefault = () => this._autoValidationDefault;
 
-  @observable private _autoValidationEnabled = this._autoValidationDefault;
+  @observable protected _autoValidationEnabled = this._autoValidationDefault;
   @action public enableAutoValidation = () => {
     this._autoValidationEnabled = true;
     return this;
@@ -63,12 +63,12 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     })
   }
 
-  private _validators: Validator<TValue>[] = [];
+  protected _validators: Validator<TValue>[] = [];
   @action validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
   }
-  private _onUpdate: (state: FieldState<TValue>) => any;
+  protected _onUpdate: (state: FieldState<TValue>) => any;
   @action public onUpdate = (handler: (state: FieldState<TValue>) => any) => {
     this._onUpdate = handler;
     return this;
@@ -80,8 +80,8 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
 
   /** Trackers for validation */
-  @observable private lastValidationRequest: number = 0;
-  @observable private preventNextQueuedValidation = false;
+  @observable protected lastValidationRequest: number = 0;
+  @observable protected preventNextQueuedValidation = false;
 
   /** On change on the component side */
   @action onChange = (value: TValue) => {
@@ -193,9 +193,9 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    * Runs validation with debouncing to keep the UI super smoothly responsive
    * NOTE: also setup in constructor
    */
-  private queueValidation = action(debounce(this.queuedValidationWakeup, 200));
+  protected queueValidation = action(debounce(this.queuedValidationWakeup, 200));
 
-  @action private executeOnUpdate = () => {
+  @action protected executeOnUpdate = () => {
     this._onUpdate && this._onUpdate(this);
   }
 
