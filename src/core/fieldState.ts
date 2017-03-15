@@ -191,9 +191,11 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
   /**
    * Runs validation with debouncing to keep the UI super smoothly responsive
-   * NOTE: also setup in constructor
+   * NOTE:
+   * - also setup in constructor
+   * - Not using `action` from mobx *here* as it throws off our type definitions
    */
-  protected queueValidation = action(debounce(this.queuedValidationWakeup, 200));
+  protected queueValidation = debounce(this.queuedValidationWakeup, 200);
 
   @action protected executeOnUpdate = () => {
     this._onUpdate && this._onUpdate(this);
