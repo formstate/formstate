@@ -41,7 +41,7 @@ class DemoState {
     const res = await this.form.validate();
     // If any errors you would know
     if (res.hasError) {
-      console.log(res.error);
+      console.log(this.form.error);
       return;
     }
     // Yay .. all good. Do what you want with it
