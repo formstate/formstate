@@ -16,6 +16,10 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /** If there is any error on the field on last validation attempt */
   @observable error?: string;
 
+
+  /** If the field has been touched */
+  @observable dirty?: boolean = false;
+
   /** The value set from code or a `value` that's been validated */
   @observable $: TValue;
 
@@ -90,6 +94,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
 
     // Immediately set for local ui binding
     this.value = value;
+    this.dirty = true;
     this.executeOnUpdate();
     if (this._autoValidationEnabled) {
       this.queueValidation();
@@ -108,6 +113,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this._autoValidationEnabled = this._autoValidationDefault;
     this.value = value;
     this.error = undefined;
+    this.dirty = false;
     this.hasBeenValidated = false;
     this.$ = value;
     this.on$Reinit();
