@@ -73,9 +73,30 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     return this;
   }
   protected _onUpdate: (state: FieldState<TValue>) => any;
+  /**
+   * onUpdate is called whenever we change something in our local state that is significant
+   * - value
+   * - $
+   * - error
+   */
   @action public onUpdate = (handler: (state: FieldState<TValue>) => any) => {
     this._onUpdate = handler;
     return this;
+  }
+  @action protected executeOnUpdate = () => {
+    this._onUpdate && this._onUpdate(this);
+  }
+
+  /**
+   * Allows you to take actions in your code based on `value` changes caused by user interactions
+   */
+  protected _onWillChange: (config: { newValue: TValue, oldValue: TValue }) => any;
+  @action public onWillChange = (handler: (config: { newValue: TValue, oldValue: TValue }) => any) => {
+    this._onWillChange = handler;
+    return this;
+  }
+  @action protected executeOnWillChange = (config: { newValue: TValue, oldValue: TValue }) => {
+    this._onWillChange && this._onWillChange(config);
   }
 
   @action public setAutoValidationDebouncedMs = (milliseconds: number) => {
@@ -91,6 +112,9 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   @action onChange = (value: TValue) => {
     // no long prevent any debounced validation request
     this.preventNextQueuedValidation = false;
+
+    // Call on will change if any
+    this.executeOnWillChange({ newValue: value, oldValue: this.value });
 
     // Immediately set for local ui binding
     this.value = value;
@@ -202,10 +226,6 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    * - Not using `action` from mobx *here* as it throws off our type definitions
    */
   protected queueValidation = debounce(this.queuedValidationWakeup, 200);
-
-  @action protected executeOnUpdate = () => {
-    this._onUpdate && this._onUpdate(this);
-  }
 
   /**
    * Composible fields (fields that work in conjuction with FormState)
