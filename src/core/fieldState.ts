@@ -143,11 +143,11 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
          */
         if (this.lastValidationRequest !== lastValidationRequest) {
           if (this.hasError) {
-            return { hasError: true };
+            return { hasError: true as true };
           }
           else {
             return {
-              hasError: false,
+              hasError: false as false,
               value: this.$,
             };
           }
@@ -177,11 +177,11 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
 
         /** return a result based on error status */
         if (hasError) {
-          return { hasError };
+          return { hasError: true as true };
         }
         else {
           return {
-            hasError,
+            hasError: false as false,
             value
           };
         }

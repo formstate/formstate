@@ -35,10 +35,10 @@
     "@types/material-ui": "^0.16.46",
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.45",
-    "@types/react": "^15.0.0",
-    "@types/react-dom": "^0.14.20",
-    "csstips": "0.2.0",
-    "eze": "^0.6.0",
+    "@types/react": "15.0.32",
+    "@types/react-dom": "15.5.1",
+    "csstips": "0.2.2",
+    "eze": "0.6.0",
     "fs-extra": "^2.0.0",
     "gh-pages": "^0.11.0",
     "material-ui": "0.16.6",
@@ -50,7 +50,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "starts": "^0.7.0",
     "ts-node": "^1.5.2",
-    "typescript": "2.2.0-dev.20170207",
+    "typescript": "2.4.1",
     "typestyle": "1.1.0"
   }
 }
