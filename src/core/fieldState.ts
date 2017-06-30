@@ -90,13 +90,13 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * Allows you to take actions in your code based on `value` changes caused by user interactions
    */
-  protected _onWillChange: (config: { newValue: TValue, oldValue: TValue }) => any;
-  @action public onWillChange = (handler: (config: { newValue: TValue, oldValue: TValue }) => any) => {
-    this._onWillChange = handler;
+  protected _onDidChange: (config: { newValue: TValue, oldValue: TValue }) => any;
+  @action public onDidChange = (handler: (config: { newValue: TValue, oldValue: TValue }) => any) => {
+    this._onDidChange = handler;
     return this;
   }
-  @action protected executeOnWillChange = (config: { newValue: TValue, oldValue: TValue }) => {
-    this._onWillChange && this._onWillChange(config);
+  @action protected executeOnDidChange = (config: { newValue: TValue, oldValue: TValue }) => {
+    this._onDidChange && this._onDidChange(config);
   }
 
   @action public setAutoValidationDebouncedMs = (milliseconds: number) => {
@@ -109,15 +109,19 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   @observable protected preventNextQueuedValidation = false;
 
   /** On change on the component side */
-  @action onChange = (value: TValue) => {
+  @action
+  onChange = (value: TValue) => {
     // no long prevent any debounced validation request
     this.preventNextQueuedValidation = false;
 
-    // Call on will change if any
-    this.executeOnWillChange({ newValue: value, oldValue: this.value });
-
+    // Store local old value for onDidChange
+    const oldValue = this.value;
     // Immediately set for local ui binding
     this.value = value;
+
+    // Call on did change if any
+    this.executeOnDidChange({ newValue: value, oldValue });
+
     this.dirty = true;
     this.executeOnUpdate();
     if (this._autoValidationEnabled) {
