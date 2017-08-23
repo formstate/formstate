@@ -1,5 +1,5 @@
-import * as utils from '../internal/utils';
 
+export type ErrorOr<T> = { hasError: true } | { hasError: false, value: T };
 
 /** A truthy string or falsy values */
 export type ValidationResponse =
@@ -64,11 +64,11 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
 /** Anything that provides this interface can be plugged into the validation system */
 export interface Validatable<TValue> {
   validating: boolean;
-  validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }>;
+  validate(): Promise<ErrorOr<TValue>>;
   hasError: boolean;
   error?: string | null | undefined;
   $: TValue;
-  enableAutoValidation: () => void;
+  enableAutoValidation: () => Validatable<TValue>;
 }
 
 /**

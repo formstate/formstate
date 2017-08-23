@@ -1,13 +1,37 @@
-import { observable, action, computed, runInAction } from 'mobx';
-import { ComposibleValidatable, Validator, applyValidators } from './types';
-import { debounce } from '../internal/utils';
+import {action, observable, runInAction} from 'mobx';
+import {ComposibleValidatable, ErrorOr, Validator, applyValidators} from './types';
+import {debounce} from '../internal/utils';
 
 /**
  * Helps maintain the value + error information about a field
  *
  * This is the glue between the *page* and *field* in the presence of invalid states.
  */
-export class FieldState<TValue> implements ComposibleValidatable<TValue> {
+export interface FieldState<TValue> extends ComposibleValidatable<TValue> {
+  dirty?: boolean;
+  disableAutoValidation: () => FieldState<TValue>;
+  enableAutoValidationAndValidate: () => Promise<ErrorOr<TValue>>;
+  enableAutoValidation: () => FieldState<TValue>;
+  getAutoValidationDefault: () => boolean;
+  hasBeenValidated: boolean;
+  onChange: (value: TValue) => void;
+  onDidChange: (handler: (config: { newValue: TValue; oldValue: TValue; }) => any) => FieldState<TValue>;
+  onUpdate: (handler: (state: FieldState<TValue>) => any) => FieldState<TValue>;
+  queuedValidationWakeup: () => void;
+  reinitValue: (value?: TValue) => void;
+  setAutoValidationDebouncedMs: (milliseconds: number) => FieldState<TValue>;
+  setAutoValidationDefault: (autoValidationDefault: boolean) => FieldState<TValue>;
+  validating: boolean;
+  validators: (...validators: Validator<TValue>[]) => FieldState<TValue>;
+  value: TValue;
+}
+
+/**
+ * Helps maintain the value + error information about a field
+ *
+ * This is the glue between the *page* and *field* in the presence of invalid states.
+ */
+class FieldStateBase<TValue> implements FieldState<TValue> {
   /**
    * The value you should bind to the input in your field.
    */
@@ -157,7 +181,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * Runs validation on the current value immediately
    */
-  @action validate = (): Promise<{ hasError: true } | { hasError: false, value: TValue }> => {
+  @action validate = (): Promise<ErrorOr<TValue>> => {
     this.lastValidationRequest++;
     const lastValidationRequest = this.lastValidationRequest;
     this.validating = true;
@@ -244,3 +268,6 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this.on$Reinit = config.on$Reinit;
   }
 }
+
+export const FieldState: new<TValue>(_initValue: TValue) => FieldState<TValue> =
+  FieldStateBase;

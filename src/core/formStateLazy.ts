@@ -1,13 +1,60 @@
 import { observable, action, computed, runInAction } from 'mobx';
-import { Validatable, Validator, applyValidators } from './types';
+import { ErrorOr, Validatable, Validator, applyValidators } from './types';
 
 /** Each item in the array is a validatable */
 export type ValidatableArray = Validatable<any>[];
 
+export interface FormStateLazy<TValue extends ValidatableArray> extends Validatable<TValue>{
+  validating: boolean;
+  validators: (...validators: Validator<TValue>[]) => FormStateLazy<TValue>
+  validate: () => Promise<ErrorOr<TValue>>
+  enableAutoValidation: () => FormStateLazy<TValue>
+
+  /**
+   * Does any field or form have an error
+   */
+  hasError: boolean
+
+  /**
+   * Does any field have an error
+   */
+  hasFieldError: boolean
+
+  /**
+   * Does form level validation have an error
+   */
+  hasFormError: boolean
+
+  /**
+   * Call it when you are `reinit`ing child fields
+   */
+  clearFormError: () => void;
+
+  /**
+   * Error from some sub field if any
+   */
+  fieldError: string | null | undefined;
+
+  /**
+   * Error from form if any
+   */
+  formError: string | null | undefined;
+
+  /**
+   * The first error from any sub (if any) or form error
+   */
+  error: string | null | undefined;
+
+  /**
+   * You should only show the form error if there are no field errors
+   */
+  showFormError: boolean;
+}
+
 /**
  * Makes it easier to work with dynamically maintained array
  */
-export class FormStateLazy<TValue extends ValidatableArray> implements Validatable<TValue> {
+class FormStateLazyBase<TValue extends ValidatableArray> implements FormStateLazy<TValue> {
   @computed get $() {
     return this.getFields();
   }
@@ -24,7 +71,7 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
     return this;
   }
 
-  @action async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
+  @action async validate(): Promise<ErrorOr<TValue>> {
     this.validating = true;
     const values = this.getFields();
     let fieldsResult = await Promise.all(values.map((value) => value.validate()));
@@ -57,8 +104,8 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
 
   @action enableAutoValidation = () => {
     this.getFields().forEach(x => x.enableAutoValidation());
+    return this;
   }
-
 
   @observable protected _error: string | null | undefined = '';
 
@@ -119,3 +166,6 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
     return !this.hasFieldError && this.hasFormError;
   }
 }
+
+export const FormStateLazy: new<TValue extends ValidatableArray>(getFields: () => TValue) => FormStateLazy<TValue> =
+  FormStateLazyBase;
