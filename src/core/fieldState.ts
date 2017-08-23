@@ -1,6 +1,9 @@
 import {action, observable, runInAction} from 'mobx';
-import {ComposibleValidatable, ErrorOr, Validator, applyValidators} from './types';
+import {ComposibleValidatable, Validator} from './types';
 import {debounce} from '../internal/utils';
+import {ViewFieldState} from "./ViewFieldState";
+import {applyValidators} from "./applyValidators";
+import {ErrorOr} from "./ErrorOr";
 
 /**
  * Helps maintain the value + error information about a field
@@ -24,6 +27,7 @@ export interface FieldState<TValue> extends ComposibleValidatable<TValue> {
   validating: boolean;
   validators: (...validators: Validator<TValue>[]) => FieldState<TValue>;
   value: TValue;
+  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FieldState<T>
 }
 
 /**
@@ -62,22 +66,22 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
     this._autoValidationDefault = autoValidationDefault;
     this._autoValidationEnabled = autoValidationDefault;
     return this;
-  }
+  };
   @action public getAutoValidationDefault = () => this._autoValidationDefault;
 
   @observable protected _autoValidationEnabled = this._autoValidationDefault;
   @action public enableAutoValidation = () => {
     this._autoValidationEnabled = true;
     return this;
-  }
+  };
   @action public enableAutoValidationAndValidate = () => {
     this._autoValidationEnabled = true;
     return this.validate();
-  }
+  };
   @action public disableAutoValidation = () => {
     this._autoValidationEnabled = false;
     return this;
-  }
+  };
 
   constructor(private _initValue: TValue) {
     runInAction(() => {
@@ -95,7 +99,7 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
   @action validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
-  }
+  };
   protected _onUpdate: (state: FieldState<TValue>) => any;
   /**
    * onUpdate is called whenever we change something in our local state that is significant
@@ -106,10 +110,10 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
   @action public onUpdate = (handler: (state: FieldState<TValue>) => any) => {
     this._onUpdate = handler;
     return this;
-  }
+  };
   @action protected executeOnUpdate = () => {
     this._onUpdate && this._onUpdate(this);
-  }
+  };
 
   /**
    * Allows you to take actions in your code based on `value` changes caused by user interactions
@@ -118,15 +122,15 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
   @action public onDidChange = (handler: (config: { newValue: TValue, oldValue: TValue }) => any) => {
     this._onDidChange = handler;
     return this;
-  }
+  };
   @action protected executeOnDidChange = (config: { newValue: TValue, oldValue: TValue }) => {
     this._onDidChange && this._onDidChange(config);
-  }
+  };
 
   @action public setAutoValidationDebouncedMs = (milliseconds: number) => {
     this.queueValidation = action(debounce(this.queuedValidationWakeup, milliseconds));
     return this;
-  }
+  };
 
   /** Trackers for validation */
   @observable protected lastValidationRequest: number = 0;
@@ -151,7 +155,7 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
     if (this._autoValidationEnabled) {
       this.queueValidation();
     }
-  }
+  };
 
   /**
    * If the page wants to reinitialize the field with a new value,
@@ -170,7 +174,7 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
     this.$ = value;
     this.on$Reinit();
     this.executeOnUpdate();
-  }
+  };
 
   get hasError() {
     return !!this.error;
@@ -238,7 +242,7 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
           };
         }
       }));
-  }
+  };
 
   @action queuedValidationWakeup = () => {
     if (this.preventNextQueuedValidation) {
@@ -246,7 +250,7 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
       return;
     }
     this.validate();
-  }
+  };
   /**
    * Runs validation with debouncing to keep the UI super smoothly responsive
    * NOTE:
@@ -258,14 +262,18 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
   /**
    * Composible fields (fields that work in conjuction with FormState)
    */
-  @action on$ChangeAfterValidation = () => { }
-  @action on$Reinit = () => { }
+  @action on$ChangeAfterValidation = () => { };
+  @action on$Reinit = () => { };
   @action setCompositionParent = (config: {
     on$ChangeAfterValidation: () => void;
     on$Reinit: () => void;
   }) => {
     this.on$ChangeAfterValidation = config.on$ChangeAfterValidation;
     this.on$Reinit = config.on$Reinit;
+  };
+
+  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FieldState<T> {
+    return new ViewFieldState<TValue, T>(this, from, to);
   }
 }
 

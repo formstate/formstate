@@ -1,5 +1,8 @@
-import { observable, action, computed, runInAction, isObservable, isArrayLike } from 'mobx';
-import { ComposibleValidatable, ErrorOr, Validator, applyValidators } from './types';
+import {action, computed, isArrayLike, isObservable, observable, runInAction} from 'mobx';
+import {ComposibleValidatable, Validator} from './types';
+import {ViewFormState} from "./ViewFormState";
+import {applyValidators} from "./applyValidators";
+import {ErrorOr} from "./ErrorOr";
 
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
@@ -21,12 +24,13 @@ export interface FormState<TValue> extends ComposibleValidatable<TValue> {
   enableAutoValidationAndValidate: () => Promise<ErrorOr<TValue>>;
   validatedSubFields: ComposibleValidatable<any>[];
   validators: (...validators: Validator<TValue>[]) => this;
+  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormState<T>;
 }
 
 /**
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
  */
-export class FormStateBase<TValue extends ValidatableMapOrArray> implements FormState<TValue> {
+class FormStateBase<TValue extends ValidatableMapOrArray> implements FormState<TValue> {
   protected mode: 'array' | 'map' = 'map';
   constructor(
     /**
@@ -221,6 +225,10 @@ export class FormStateBase<TValue extends ValidatableMapOrArray> implements Form
   }) => {
     this.on$ChangeAfterValidation = config.on$ChangeAfterValidation;
     this.on$Reinit = config.on$Reinit;
+  }
+
+  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormState<T> {
+    return new ViewFormState(this, from, to);
   }
 }
 

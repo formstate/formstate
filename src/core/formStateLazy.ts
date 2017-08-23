@@ -1,54 +1,40 @@
-import { observable, action, computed, runInAction } from 'mobx';
-import { ErrorOr, Validatable, Validator, applyValidators } from './types';
+import {action, computed, observable, runInAction} from 'mobx';
+import {Validatable, Validator} from './types';
+import {ViewFormStateLazy} from "./ViewFormStateLazy";
+import {applyValidators} from "./applyValidators";
+import {ErrorOr} from "./ErrorOr";
 
 /** Each item in the array is a validatable */
 export type ValidatableArray = Validatable<any>[];
 
-export interface FormStateLazy<TValue extends ValidatableArray> extends Validatable<TValue>{
-  validating: boolean;
-  validators: (...validators: Validator<TValue>[]) => FormStateLazy<TValue>
-  validate: () => Promise<ErrorOr<TValue>>
-  enableAutoValidation: () => FormStateLazy<TValue>
-
-  /**
-   * Does any field or form have an error
-   */
-  hasError: boolean
-
+export interface FormStateLazy<TValue> extends Validatable<TValue> {
+  validators: (...validators: Validator<TValue>[]) => FormStateLazy<TValue>;
   /**
    * Does any field have an error
    */
-  hasFieldError: boolean
-
+  hasFieldError: boolean;
   /**
    * Does form level validation have an error
    */
-  hasFormError: boolean
-
+  hasFormError: boolean;
   /**
    * Call it when you are `reinit`ing child fields
    */
   clearFormError: () => void;
-
   /**
    * Error from some sub field if any
    */
   fieldError: string | null | undefined;
-
   /**
    * Error from form if any
    */
   formError: string | null | undefined;
-
-  /**
-   * The first error from any sub (if any) or form error
-   */
-  error: string | null | undefined;
-
   /**
    * You should only show the form error if there are no field errors
    */
   showFormError: boolean;
+
+  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormStateLazy<T>
 }
 
 /**
@@ -164,6 +150,10 @@ class FormStateLazyBase<TValue extends ValidatableArray> implements FormStateLaz
    */
   @computed get showFormError() {
     return !this.hasFieldError && this.hasFormError;
+  }
+
+  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormStateLazy<T> {
+    return new ViewFormStateLazy(this, from, to);
   }
 }
 
