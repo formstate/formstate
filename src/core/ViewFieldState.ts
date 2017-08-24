@@ -7,10 +7,9 @@ export class ViewFieldState<Wrapped, TValue> extends ViewComposibleValidatable<W
   protected wrapped: FieldState<Wrapped>;
   private from: (t: TValue) => Wrapped;
 
-  constructor(wrapped: FieldState<Wrapped>, from: (t: TValue) => Wrapped, to: (t: Wrapped) => TValue) {
+  constructor(wrapped: FieldState<Wrapped>, to: (t: Wrapped) => TValue, from: (t: TValue) => Wrapped) {
     super(wrapped, to);
     this.wrapped = wrapped;
-    this.to = to;
     this.from = from
   };
 
@@ -53,7 +52,7 @@ export class ViewFieldState<Wrapped, TValue> extends ViewComposibleValidatable<W
     this.wrapped.onChange(this.from(value));
 
   onUpdate = (handler: (state: FieldState<TValue>) => any) => {
-    this.wrapped.onUpdate((state: FieldState<Wrapped>) => handler(state.viewedAs<TValue>(this.from, this.to)));
+    this.wrapped.onUpdate((state: FieldState<Wrapped>) => handler(state.viewedAs<TValue>(this.to, this.from)));
     return this;
   };
 
@@ -78,7 +77,7 @@ export class ViewFieldState<Wrapped, TValue> extends ViewComposibleValidatable<W
     return this;
   };
 
-  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FieldState<T> {
-    return new ViewFieldState<TValue, T>(this, from, to);
+  viewedAs<T>(to: (tValue: TValue) => T, from: (t: T) => TValue): FieldState<T> {
+    return new ViewFieldState<TValue, T>(this, to, from);
   }
 }

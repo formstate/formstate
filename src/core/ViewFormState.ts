@@ -8,13 +8,11 @@ export class ViewFormState<Wrapped, TValue>
   implements FormState<TValue> {
 
   protected wrapped: FormState<Wrapped>;
-  private from: (t: TValue) => Wrapped;
 
-  constructor(wrapped: FormState<Wrapped>, from: (t: TValue) => Wrapped, to: (t: Wrapped) => TValue) {
+  constructor(wrapped: FormState<Wrapped>, to: (t: Wrapped) => TValue) {
     super(wrapped, to);
     this.wrapped = wrapped;
     this.to = to;
-    this.from = from
   };
 
   get fieldError() {
@@ -69,7 +67,7 @@ export class ViewFormState<Wrapped, TValue>
     return this;
   };
 
-  viewedAs<T>(from: (t: T) => TValue, to: (t: TValue) => T): FormState<T> {
-    return new ViewFormState<TValue, T>(this, from, to);
+  viewedAs<T>(to: (t: TValue) => T): FormState<T> {
+    return new ViewFormState<TValue, T>(this, to);
   }
 }

@@ -11,7 +11,7 @@ interface A {
 const A = (str: string) => ({value: str});
 
 const aField: (str: string) => FieldState<A> =
-  str => new FieldState(str).viewedAs<A>(a => a.value, A).viewedAs<string>(A, a => a.value).viewedAs<A>(a => a.value, A);
+  str => new FieldState(str).viewedAs<A>(A, a => a.value).viewedAs<string>(a => a.value, A).viewedAs<A>(A, a => a.value);
 
 
 describe("Views: FieldState basic", () => {

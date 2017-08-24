@@ -11,7 +11,6 @@ export abstract class ViewComposibleValidatable<Wrapped, TValue>
   constructor(wrapped: ComposibleValidatable<Wrapped>, to: (t: Wrapped) => TValue) {
     super(wrapped, to);
     this.wrapped = wrapped;
-    this.to = to;
   };
 
   on$ChangeAfterValidation() {

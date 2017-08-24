@@ -34,7 +34,7 @@ export interface FormStateLazy<TValue> extends Validatable<TValue> {
    */
   showFormError: boolean;
 
-  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormStateLazy<T>
+  viewedAs<T>(to: (tValue: TValue) => T): FormStateLazy<T>
 }
 
 /**
@@ -152,8 +152,8 @@ class FormStateLazyBase<TValue extends ValidatableArray> implements FormStateLaz
     return !this.hasFieldError && this.hasFormError;
   }
 
-  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormStateLazy<T> {
-    return new ViewFormStateLazy(this, from, to);
+  viewedAs<T>(to: (tValue: TValue) => T): FormStateLazy<T> {
+    return new ViewFormStateLazy(this, to);
   }
 }
 

@@ -11,12 +11,12 @@ interface A {
 const A = (str: string) => ({value: str});
 
 const aField: (str: string) => FieldState<string> =
-  str => new FieldState(str).viewedAs<A>(a => a.value, A).viewedAs<string>(A, a => a.value);
+  str => new FieldState(str).viewedAs<A>(A, a => a.value).viewedAs<string>(a => a.value, A);
 
 const aForm = <TValue extends ValidatableArray>(t: () => TValue) => {
   let toArray = (tValue: TValue) => [tValue];
   let fromArray = (array: TValue[]) => array[0];
-  return new FormStateLazy(t).viewedAs(fromArray, toArray).viewedAs(toArray, fromArray);
+  return new FormStateLazy(t).viewedAs(toArray).viewedAs(fromArray);
 };
 
 describe("Views: FormStateLazy basic", () => {

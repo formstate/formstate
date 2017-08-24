@@ -24,7 +24,7 @@ export interface FormState<TValue> extends ComposibleValidatable<TValue> {
   enableAutoValidationAndValidate: () => Promise<ErrorOr<TValue>>;
   validatedSubFields: ComposibleValidatable<any>[];
   validators: (...validators: Validator<TValue>[]) => this;
-  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormState<T>;
+  viewedAs<T>(to: (tValue: TValue) => T): FormState<T>;
 }
 
 /**
@@ -227,8 +227,8 @@ class FormStateBase<TValue extends ValidatableMapOrArray> implements FormState<T
     this.on$Reinit = config.on$Reinit;
   }
 
-  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormState<T> {
-    return new ViewFormState(this, from, to);
+  viewedAs<T>(to: (tValue: TValue) => T): FormState<T> {
+    return new ViewFormState(this, to);
   }
 }
 

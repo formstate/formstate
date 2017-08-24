@@ -4,13 +4,10 @@ import {Validator} from "./types";
 
 export class ViewFormStateLazy<Wrapped, TValue> extends ViewValidatable<Wrapped, TValue> implements FormStateLazy<TValue> {
   protected wrapped: FormStateLazy<Wrapped>;
-  private from: (t: TValue) => Wrapped;
 
-  constructor(wrapped: FormStateLazy<Wrapped>, from: (t: TValue) => Wrapped, to: (t: Wrapped) => TValue) {
+  constructor(wrapped: FormStateLazy<Wrapped>, to: (t: Wrapped) => TValue) {
     super(wrapped, to);
     this.wrapped = wrapped;
-    this.to = to;
-    this.from = from
   };
 
   validators = (...vals: Validator<TValue>[]): FormStateLazy<TValue> => {
@@ -42,7 +39,7 @@ export class ViewFormStateLazy<Wrapped, TValue> extends ViewValidatable<Wrapped,
     return this.wrapped.clearFormError();
   }
 
-  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FormStateLazy<T> {
-    return new ViewFormStateLazy<TValue, T>(this, from, to);
+  viewedAs<T>(to: (tValue: TValue) => T): FormStateLazy<T> {
+    return new ViewFormStateLazy<TValue, T>(this, to);
   }
 }

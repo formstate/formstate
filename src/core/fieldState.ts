@@ -27,7 +27,7 @@ export interface FieldState<TValue> extends ComposibleValidatable<TValue> {
   validating: boolean;
   validators: (...validators: Validator<TValue>[]) => FieldState<TValue>;
   value: TValue;
-  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FieldState<T>
+  viewedAs<T>(to: (tValue: TValue) => T, from: (t: T) => TValue): FieldState<T>
 }
 
 /**
@@ -272,8 +272,8 @@ class FieldStateBase<TValue> implements FieldState<TValue> {
     this.on$Reinit = config.on$Reinit;
   };
 
-  viewedAs<T>(from: (t: T) => TValue, to: (tValue: TValue) => T): FieldState<T> {
-    return new ViewFieldState<TValue, T>(this, from, to);
+  viewedAs<T>(to: (tValue: TValue) => T, from: (t: T) => TValue): FieldState<T> {
+    return new ViewFieldState<TValue, T>(this, to, from);
   }
 }
 
