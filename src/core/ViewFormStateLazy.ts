@@ -2,7 +2,10 @@ import {FormStateLazy} from "./formStateLazy";
 import {ViewValidatable} from "./ViewValidatable";
 import {Validator} from "./types";
 
-export class ViewFormStateLazy<Wrapped, TValue> extends ViewValidatable<Wrapped, TValue> implements FormStateLazy<TValue> {
+export class ViewFormStateLazy<Wrapped, TValue>
+  extends ViewValidatable<Wrapped, TValue>
+  implements FormStateLazy<TValue> {
+
   protected wrapped: FormStateLazy<Wrapped>;
 
   constructor(wrapped: FormStateLazy<Wrapped>, to: (t: Wrapped) => TValue) {

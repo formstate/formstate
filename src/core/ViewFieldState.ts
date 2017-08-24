@@ -4,6 +4,7 @@ import {ViewComposibleValidatable} from "./ViewComposibleValidatable";
 import {mapErrorOr} from "./ErrorOr";
 
 export class ViewFieldState<Wrapped, TValue> extends ViewComposibleValidatable<Wrapped, TValue> implements FieldState<TValue> {
+
   protected wrapped: FieldState<Wrapped>;
   private from: (t: TValue) => Wrapped;
 

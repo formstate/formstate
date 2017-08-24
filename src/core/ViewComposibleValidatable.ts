@@ -6,7 +6,6 @@ export abstract class ViewComposibleValidatable<Wrapped, TValue>
   implements ComposibleValidatable<TValue> {
 
   protected wrapped: ComposibleValidatable<Wrapped>;
-  protected to: (t: Wrapped) => TValue;
 
   constructor(wrapped: ComposibleValidatable<Wrapped>, to: (t: Wrapped) => TValue) {
     super(wrapped, to);
