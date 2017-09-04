@@ -6,7 +6,7 @@ const validator = <T>(t: T) => {
 };
 
 describe("validation", () => {
-  it("should not go into infinite loop", () => {
+  it("Should not loop infinitely when validating nested composeed FormStates", () => {
     const form = new FormState({
       f1: new FieldState("").validators(validator),
       f2: new FieldState("").validators(validator),
