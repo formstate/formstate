@@ -179,12 +179,17 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
             this.validatedSubFields.push(value);
           }
 
-          const allSubFieldsValidated = !this.getValues().some(value => this.validatedSubFields.indexOf(value) === -1);
-
-          /* this breaks a circular validation flow with nested composed FormStates */
-          const isAlreadyValidating = this.validating;
-
-          if (!this.hasFieldError && allSubFieldsValidated && !isAlreadyValidating) {
+          /**
+           * Compose triggers an automatic self validation of the form based on this criteria
+           */
+          if (
+            /** If no field has error */
+            !this.hasFieldError
+            /** And there isn't an active validation taking place */
+            && !this.validating
+            /** And all subfields are validated */
+            && !this.getValues().some(value => this.validatedSubFields.indexOf(value) === -1)
+          ) {
             this.validate();
           }
         })
