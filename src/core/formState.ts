@@ -179,18 +179,17 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
             this.validatedSubFields.push(value);
           }
 
-          /**
-           * If no field has error
-           * and all subfields are validated
-           *  then re-validate the form */
-          if (!this.hasFieldError
-            && !this.getValues().some(value => this.validatedSubFields.indexOf(value) === -1)
-          ) {
+          const allSubFieldsValidated = !this.getValues().some(value => this.validatedSubFields.indexOf(value) === -1);
+
+          /* this breaks a circular validation flow with nested composed FormStates */
+          const isAlreadyValidating = this.validating;
+
+          if (!this.hasFieldError && allSubFieldsValidated && !isAlreadyValidating) {
             this.validate();
           }
         })
       }
-    ))
+    ));
     return this;
   }
 
