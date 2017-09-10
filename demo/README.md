@@ -374,7 +374,7 @@ validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
 
 We considered other options before creating our own. Here is our opinion:
 
-* Type Safety: Other options are very *stringly* typed. That hampers refactor-ability, code reviews and maintainability (analysis).
+* Type Safety: Other options are very *strongly* typed. That hampers refactor-ability, code reviews and maintainability (analysis).
 * Independent of UI: This is a general purpose library that manages the form state and validity for you. Having it independent of UI allows you to *test* anything easily, review it in isolation and design fields to look exactly like you want for your application.
 * Simpler Semantics: Its just functions and classes that can be written in isolation, tested in isolation, reviewed in isolation. Creating new validators is super simple. Server side validation is just as easy is simple client validations. So is creating new Fields and Forms (again strongly typed!).
 
