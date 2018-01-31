@@ -75,6 +75,9 @@ export interface Validatable<TValue> {
  * Composible fields (fields that work in conjuction with a parent FormState)
  */
 export interface ComposibleValidatable<TValue> extends Validatable<TValue> {
+  /** Allows a convinient reset for all fields */
+  reset: () => void;
+
   /** Used to tell the parent about validation */
   on$ChangeAfterValidation: () => void;
   on$Reinit: () => void;

@@ -56,4 +56,30 @@ describe("FormState basic", () => {
     ]);
     assert.equal(form.$[0].$[0].$, name.$);
   });
+
+  it("reset should cascade down to all fields", async () => {
+    const name = new FieldState('');
+    const pass = new FieldState('');
+
+    name.onChange('hello');
+    pass.onChange('world');
+    await name.validate();
+    await pass.validate();
+    assert.equal(name.$, 'hello');
+    assert.equal(pass.$, 'world');
+
+    const form = new FormState([
+      new FormState([
+        name,
+        new FormState({
+          pass
+        })
+      ])
+    ]);
+
+    form.reset();
+    await form.validate();
+    assert.equal(name.$, '');
+    assert.equal(pass.$, '');
+  });
 });

@@ -130,10 +130,10 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
 
   /**
-   * If the page wants to reinitialize the field with a new value,
+   * If the page wants to reinitialize the field,
    * it should call this function
    */
-  @action reinitValue = (value: TValue = this._initValue) => {
+  @action reset = (value: TValue = this._initValue) => {
     // If a previous validation comes back ignore it
     this.preventNextQueuedValidation = true;
 

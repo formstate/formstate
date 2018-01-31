@@ -138,6 +138,13 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   }
 
   /**
+   * Resets all the fields in the form
+   */
+  @action reset = () => {
+    this.getValues().map(v => v.reset());
+  }
+
+  /**
    * Auto validation
    */
   @observable protected autoValidationEnabled = false;

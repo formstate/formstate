@@ -20,31 +20,31 @@ describe("FieldState basic", () => {
   it("validating changes hasBeenValidated to true", async () => {
     const name = new FieldState('hello')
     name.onChange('world')
-    await name.validate()    
+    await name.validate()
     assert.equal(name.hasBeenValidated, true);
   });
 
-  it("reinitValue changes hasBeenValidated to false", () => {
+  it("reset changes hasBeenValidated to false", () => {
     const name = new FieldState('world')
-    name.reinitValue('world')
+    name.reset('world')
     assert.equal(name.hasBeenValidated, false)
   })
 
-  it("reinitValue should change the value immediately", () => {
+  it("reset should change the value immediately", () => {
     const name = new FieldState('hello')
-    name.reinitValue('world')
+    name.reset('world')
 
     assert.equal(name.value, 'world');
     assert.equal(name.$, 'world');
     assert.equal(name.hasBeenValidated, false);
   });
 
-  it("reinitValue should prevent any automatic validation from running", async () => {
+  it("reset should prevent any automatic validation from running", async () => {
     const name = new FieldState('').validators(
         (val) => !val && 'value required'
     );
     name.onChange('world');
-    name.reinitValue('');
+    name.reset('');
     await delay(300);
     assert.equal(name.hasError, false);
     assert.equal(name.value, '');
@@ -52,12 +52,12 @@ describe("FieldState basic", () => {
     assert.equal(name.hasBeenValidated, false);
   });
 
-  it("reinitValue followed by onChange should run validators", async () => {
+  it("reset followed by onChange should run validators", async () => {
     const name = new FieldState('').validators(
         (val) => !val && 'value required'
     );
     name.onChange('world');
-    name.reinitValue('');
+    name.reset('');
     name.onChange('');
     await delay(300);
     assert.equal(name.hasError, true);
@@ -65,12 +65,12 @@ describe("FieldState basic", () => {
     assert.equal(name.$, '');
   });
 
-  it("reinitValue followed by validate should still validate", async () => {
+  it("reset followed by validate should still validate", async () => {
     const name = new FieldState('').validators(
         (val) => !val && 'value required'
     );
     name.onChange('world');
-    name.reinitValue('');
+    name.reset('');
     const res = await name.validate();
     assert.equal(res.hasError, true);
     assert.equal(name.value, '');
