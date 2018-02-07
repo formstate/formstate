@@ -1,15 +1,36 @@
-import { observable, action, computed, runInAction, isObservable, isArrayLike } from 'mobx';
-import { ComposibleValidatable, Validator, applyValidators } from './types';
+import {action, computed, isArrayLike, isObservable, observable, runInAction} from 'mobx';
+import {ComposibleValidatable, Validator} from './types';
+import {ViewFormState} from "./ViewFormState";
+import {applyValidators} from "./applyValidators";
+import {ErrorOr} from "./ErrorOr";
 
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
   { [key: string]: ComposibleValidatable<any> }
   | ComposibleValidatable<any>[]
 
+export interface FormState<TValue> extends ComposibleValidatable<TValue> {
+  readonly error: string | null | undefined;
+  readonly fieldError: string | null | undefined;
+  readonly formError: string | null | undefined;
+  readonly hasError: boolean;
+  readonly hasFieldError: boolean;
+  readonly hasFormError: boolean;
+  readonly showFormError: boolean;
+
+  clearFormError(): void;
+  compose(): this;
+  disableAutoValidation: () => void;
+  enableAutoValidationAndValidate: () => Promise<ErrorOr<TValue>>;
+  validatedSubFields: ComposibleValidatable<any>[];
+  validators: (...validators: Validator<TValue>[]) => this;
+  viewedAs<T>(to: (tValue: TValue) => T): FormState<T>;
+}
+
 /**
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
  */
-export class FormState<TValue extends ValidatableMapOrArray> implements ComposibleValidatable<TValue> {
+class FormStateBase<TValue extends ValidatableMapOrArray> implements FormState<TValue> {
   protected mode: 'array' | 'map' = 'map';
   constructor(
     /**
@@ -45,10 +66,11 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
    * - returns `hasError`
    * - if no error also return the validated values against each key.
    */
-  @action async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
+  @action async validate(): Promise<ErrorOr<TValue>> {
     this.validating = true;
     const values = this.getValues();
     let fieldsResult = await Promise.all(values.map((value) => value.validate()));
+
     const done = runInAction(() => {
       if (fieldsResult.some(f => f.hasError)) {
         this.validating = false;
@@ -151,6 +173,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   @action public enableAutoValidation = () => {
     this.autoValidationEnabled = true;
     this.getValues().forEach(x => x.enableAutoValidation());
+    return this;
   }
   @action public enableAutoValidationAndValidate = () => {
     this.autoValidationEnabled = true;
@@ -214,4 +237,11 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     this.on$ChangeAfterValidation = config.on$ChangeAfterValidation;
     this.on$Reinit = config.on$Reinit;
   }
+
+  viewedAs<T>(to: (tValue: TValue) => T): FormState<T> {
+    return new ViewFormState(this, to);
+  }
 }
+
+export const FormState: new<TValue extends ValidatableMapOrArray>($: TValue) => FormState<TValue> =
+  FormStateBase;
