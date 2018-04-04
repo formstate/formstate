@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/formstate/formstate#readme",
   "peerDependencies": {
-    "mobx": ">=2.0.0"
+    "mobx": ">=3.0.0"
   },
   "dependencies": {},
   "devDependencies": {
@@ -42,8 +42,8 @@
     "fs-extra": "^2.0.0",
     "gh-pages": "^0.11.0",
     "material-ui": "0.16.6",
-    "mobx": ">=3.0.0",
-    "mobx-react": "^4.1.0",
+    "mobx": "4.1.1",
+    "mobx-react": "5.0.0",
     "mocha": "^3.1.2",
     "react": "15.4.2",
     "react-dom": "15.4.2",

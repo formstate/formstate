@@ -1,9 +1,11 @@
 import { FieldState, FormState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
-import { useStrict } from "mobx";
+import { configure } from "mobx";
 
-useStrict(true);
+configure({
+  enforceActions: true
+});
 
 describe("FieldState basic", () => {
   it("hotValue and safeValue is set to initial value", () => {

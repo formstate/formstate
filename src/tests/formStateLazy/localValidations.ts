@@ -1,9 +1,11 @@
 import { FieldState, FormStateLazy } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 
-useStrict(true);
+configure({
+  enforceActions: true
+});
 
 describe("FormStateLazy local validations", () => {
   it("should validate a local validation", async () => {

@@ -1,9 +1,11 @@
 import { FieldState, FormState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
-import { useStrict } from 'mobx';
+import { configure } from 'mobx';
 
-useStrict(true);
+configure({
+  enforceActions: true
+});
 
 describe("FormState basic", () => {
   it("should allow nesting a FieldState", () => {
