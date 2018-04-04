@@ -9,8 +9,6 @@
 
 > [Powered by your github ⭐s](https://github.com/formstate/formstate/stargazers)
 
-<iframe src="https://ghbtns.com/github-btn.html?user=formstate&repo=formstate&type=star&count=true" frameborder="0" scrolling="0" width="170px" height="20px"></iframe>
-
 This project is big on type safety for compile time error analysis
 
 ![](https://raw.githubusercontent.com/formstate/formstate/master/demo/images/typeSafety.png)
