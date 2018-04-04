@@ -145,8 +145,10 @@ The FieldState takes an optional list of validators so you would use it as simpl
 
 ```ts
 const required = (val:string) => !val && 'Value required';
-const name = new FieldState('').validators(required);
+const only3letters  = (val:string) => !val && val.length !== 3  && 'only 3 letters';
+const name = new FieldState('').validators(required, only3letters);
 ```
+> We also cover serial and parallel validation in the TIPs section below.
 
 ### Demo: Field
 You create a `Field` component based on your design. But its actually not hard, essentially your `Field` components looks like the following:
