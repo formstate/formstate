@@ -112,6 +112,15 @@ export function buildDemos() {
       entryPointPath: __dirname + '/demos/07 cross.tsx',
       height: '300px',
     });
+
+    eze.md(`
+    # Custom type TValue
+    A fieldstate can work with any type. The complexity of converting TValue to *display* and calling *onChange* with TValue can all be handled in the field component. E.g. here is a number component.
+    `);
+    eze.app({
+      entryPointPath: __dirname + '/demos/08 number.tsx',
+      height: '300px',
+    });
   });
 }
 

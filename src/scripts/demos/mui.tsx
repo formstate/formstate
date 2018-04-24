@@ -76,3 +76,14 @@ export const Button
 export const ErrorText: React.StatelessComponent<{}> = ({children}) => {
   return <div style={{ color: 'red', fontFamily: 'arial' }}>{children}</div>;
 }
+
+/**
+ * For styling the simple label+input
+ */
+export const labelClass = style({
+  fontFamily: 'sans-serif',
+  marginRight: '5px',
+});
+export const inputClass = style({
+  fontSize: '14px'
+});

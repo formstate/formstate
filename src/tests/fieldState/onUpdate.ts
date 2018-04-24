@@ -10,7 +10,7 @@ configure({
 describe('FieldState onUpdate', () => {
   it("Should be called if value changes", async () => {
     let callCount = 0;
-    const name = new FieldState('hello').disableAutoValidation().onUpdate(() => callCount ++);    
+    const name = new FieldState('hello').disableAutoValidation().onUpdate(() => callCount++);
     name.onChange('world');
     await delay(200);
     assert.equal(callCount, 1);
