@@ -45,6 +45,7 @@
     "mobx": "4.1.1",
     "mobx-react": "5.0.0",
     "mocha": "5.0.5",
+    "moment": "2.22.1",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-tap-event-plugin": "^2.0.1",

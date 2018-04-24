@@ -13,7 +13,7 @@ import { FieldState } from '../../index';
 const fieldState = new FieldState<number | null>(null)
   .validators(
     (val) => val == null && 'Value required',
-    (val) => val! < 2 && 'Value must be greater than 2',
+    (val) => val != null && val < 2 && 'Value must be greater than 2',
 );
 
 /** Example NumberInputField */
