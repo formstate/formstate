@@ -12,7 +12,7 @@ Note that the API is quite simple and consists of `Validator`, `FieldState` and 
 
 ## Demos
 
-If you want to see it in action [we have lots of demos here 📝](https://formstate.github.io/demos)
+If you want to see it in action [we have lots of demos here 📝][demos]
 
 ### Quick Example
 
@@ -398,6 +398,20 @@ validators(minValue(1,"The minimum bid is set at $1"));
 validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
 ```
 
+### TIP: Inheritance
+
+Feel free to inherit `FieldState` and change its behaviour to customize it for your *common* pattern. e.g. for a different default validation trigger:
+
+```ts
+export class MyAwesomeFieldState<TValue> extends FieldState<TValue> {
+  constructor(initValue: TValue){
+    super(initValue);
+    this.setAutoValidationDefault(false);
+  }
+}
+```
+> Note: validation triggers are covered in [demos][demos].
+
 ## Why
 
 We considered other options before creating our own. Here is our opinion:
@@ -407,3 +421,4 @@ We considered other options before creating our own. Here is our opinion:
 * Simpler Semantics: Its just functions and classes that can be written in isolation, tested in isolation, reviewed in isolation. Creating new validators is super simple. Server side validation is just as easy is simple client validations. So is creating new Fields and Forms (again strongly typed!).
 
 [mobx]:https://github.com/mobxjs/mobx
+[demos]:https://formstate.github.io/demos
