@@ -346,18 +346,44 @@ validators((value)=>{
 
 ### TIP: Empty values
 
-We could isolate the validators from handling such cases by not calling a validator if the empty is value, but its a decision we don't want to make for *your validation requirements*. You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
+When the field is empty, the only validator that should consider it *invalid* should be the *required* validator. Most other validators should consider it as *valid*.
+
+Example: Here is a *required* and *email* validator:
 
 ```ts
-function ifValue(validator:Validator<TValue>):Validator<TValue>{
+export const required: Validator<string | null | undefined> = (value) => {
+  const error = "Value Required";
+  if (value == null || !value.trim()) {
+    return error;
+  }
+  return null;
+}
+export const email: Validator<string | null | undefined> = (value) => {
+  // Empty values are not invalid emails
+  if (required(email)) return null;
+  value = value.trim();
+  // Src : http://emailregex.com/
+  if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g.exec(value)) {
+    return "Not a valid email address";
+  }
+  return null;
+}
+```
+
+This way if you just use `validators(email)` you do not get an error for empty values and only get an error on invalid emails when they are provided. If you use `validators(required,email)` you get an error for empty values plus invalid emails.
+
+You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
+
+```ts
+function ifValue(validator:Validator<TValue>):Validator<TValue | null | undefined>{
   return function(value: TValue) {
-    if (!value || value == null) return '';
+    if (!value || value == null) return null;
     return validator(value);
   };
 }
 
 // Usage
-// validators(ifValue(mySimplerValidator))
+// validators: [ifValue(mySimplerValidator)]
 ```
 
 ### TIP: Customisable validators
