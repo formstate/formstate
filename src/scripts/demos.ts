@@ -122,12 +122,13 @@ export function buildDemos() {
       height: '300px',
     });
     eze.md(`
-    The number field only allows *valid* numbers to be typed in. If your input allows invalid *strings* to be input then you should do the conversion at the (ui) -toType> (use in state logic / backend) and (use in state / backend) -toString> (ui). E.g. if you use a keyboard driven date input:
+    The number field only allows *valid* numbers to be typed in. If your input allows invalid *strings* to be input then you should do the conversion as needed. E.g. if you use a keyboard driven date input:
     `);
     eze.app({
       entryPointPath: __dirname + '/demos/09 date.tsx',
       height: '300px',
     });
+    eze.md(`Here you can use the value with a check \`if (!field.hasError) { /* safe to type convert */ }\``);
   });
 }
 
