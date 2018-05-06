@@ -278,7 +278,7 @@ form.$.pass2.onChange('he');
 /** What the state will look like after validation */
 const res = await form.validate();
 assert.equal(res.hasError, true);
-assert.equal(pass2.error, 'Passwords must match');
+assert.equal(res.error, 'Passwords must match');
 ```
 
 ## FormStateLazy
