@@ -26,7 +26,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * Set to true if a validation run has been completed since init
    * Use case:
-   * - to show a green color in the field if `hasError` is false
+   * - to show a green color in the field : `hasError == false && hasBeenValidated == true`
    **/
   @observable hasBeenValidated: boolean = false;
 
