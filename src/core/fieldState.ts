@@ -16,6 +16,16 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /** If there is any error on the field on last validation attempt */
   @observable error?: string;
 
+  /**
+   * Allows you to set an error on a field lazily
+   * Use case:
+   *  You validate some things on client (e.g. isRequired)
+   *  You then validate the field on the backend with an explict action (e.g. continue button)
+   *  You now want to highlight an error from the backend for this field
+   **/
+  @action setError(error: string) {
+    this.error = error;
+  }
 
   /** If the field has been touched */
   @observable dirty?: boolean = false;
