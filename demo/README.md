@@ -166,7 +166,7 @@ export class Field extends React.Component<FieldProps, {}>{
     const fieldState = this.props.fieldState;
     return (
       <div>
-        <label htmlFor={this.props.id}>{this.props.label}<label>
+        <label htmlFor={this.props.id}>{this.props.label}</label>
         <input
           type="text"
           value={fieldState.value}
