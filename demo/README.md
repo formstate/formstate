@@ -52,10 +52,10 @@ class DemoState {
 @observer
 export class Demo extends React.Component<{},{}> {
   data = new DemoState();
-  render(){
-    return (
-      const data = this.data;
 
+  render(){
+    const data = this.data;
+    return (
       <form onSubmit={data.onSubmit}>
         <input
           type="text"
