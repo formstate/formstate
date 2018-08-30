@@ -398,6 +398,17 @@ validators(minValue(1,"The minimum bid is set at $1"));
 validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
 ```
 
+### TIP: Interacting on behalf of user
+You can invoke `onChange` if you want to imperitively act on behalf of the user. Doing so keeps the fieldState in a consistent state e.g. ensure that the validations run and you don't get inconsistencies between `value` and `$`. Here is an example: 
+
+```ts
+// Some fieldState
+const name = new FieldState('').validators(x=>!x.trim() && 'Value required');
+
+// Due to some application logic you want to set a new value on behalf of the user
+name.onChange('Little Piggy');
+```
+
 ### TIP: Inheritance
 
 Feel free to inherit `FieldState` and change its behaviour to customize it for your *common* pattern. e.g. for a different default validation trigger:
