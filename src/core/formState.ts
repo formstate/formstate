@@ -1,23 +1,24 @@
-import { observable, action, computed, runInAction, isObservable, isArrayLike } from 'mobx';
-import { ComposibleValidatable, Validator, applyValidators } from './types';
+import {action, computed, isArrayLike, isObservable, observable, runInAction} from 'mobx';
+import {isES6Map} from "../internal/utils";
+import {applyValidators, ComposibleValidatable, Validator} from './types';
 
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
   { [key: string]: ComposibleValidatable<any> }
-  | ComposibleValidatable<any>[]
+  | ComposibleValidatable<any>[] | Map<any, ComposibleValidatable<any>>
 
 /**
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
  */
 export class FormState<TValue extends ValidatableMapOrArray> implements ComposibleValidatable<TValue> {
-  protected mode: 'array' | 'map' = 'map';
+  protected mode: 'array' | 'map' | 'es6map' = 'map';
   constructor(
     /**
      * SubItems can be any Validatable
      */
     public $: TValue
   ) {
-    this.mode = isArrayLike($) ? 'array' : 'map';
+    this.mode = isArrayLike($) ? 'array' : isES6Map($) ? 'es6map' : 'map';
 
     /** If they didn't send in something observable make the local $ observable */
     if (!isObservable(this.$)) {
@@ -28,6 +29,9 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   /** Get validatable objects from $ */
   protected getValues = (): ComposibleValidatable<any>[] => {
     if (this.mode === 'array') return (this.$ as any);
+    if (this.mode === 'es6map') return Array.from(
+      (this.$ as Map<any, ComposibleValidatable<any>>).values()
+    );
     const keys = Object.keys(this.$);
     return keys.map((key) => this.$[key]);
   }
