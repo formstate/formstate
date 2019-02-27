@@ -37,7 +37,7 @@ export function debounce<T extends Function>(func: T, milliseconds: number, imme
 };
 
 export function isES6Map(thing: any) {
-  if (Map !== undefined && thing instanceof Map)
+  if (typeof Map !== 'undefined' && thing instanceof Map)
     return true;
   return false;
 }
