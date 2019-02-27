@@ -1,5 +1,5 @@
-import {action, computed, isArrayLike, isObservable, observable, runInAction} from 'mobx';
-import {isES6Map} from "../internal/utils";
+import {action, computed, isArrayLike, isObservable, observable, runInAction, isObservableMap} from 'mobx';
+import {isMapLike} from "../internal/utils";
 import {applyValidators, ComposibleValidatable, Validator} from './types';
 
 /** Each key of the object is a validatable */
@@ -18,7 +18,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
      */
     public $: TValue
   ) {
-    this.mode = isArrayLike($) ? 'array' : isES6Map($) ? 'es6map' : 'map';
+    this.mode = isArrayLike($) ? 'array' : isMapLike($) ? 'es6map' : 'map';
 
     /** If they didn't send in something observable make the local $ observable */
     if (!isObservable(this.$)) {
