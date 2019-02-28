@@ -265,7 +265,7 @@ const somethingToSendToServer = form.$.map(child =>
 Sometimes you want to dynamically add and remove *named* fields. In that case you can use an es6 `Map` as the backing structuring in `FormState` e.g.
 
 ```ts
-const form = new FormState(new Map<'name'|'email'|'phone'>([
+const form = new FormState(new Map<'name'|'email'|'phone', FieldState<string>>([
   ['name', new FieldState('')],
   ['email', new FieldState('').validators(someEmailValidator)],
 ]));
@@ -280,7 +280,7 @@ form.validate(); // Will only validate the fields that exist in the form at the 
 You can even go wild-wild-west 💥 and just use `string` as keys:
 
 ```ts
-const form = new FormState(new Map<string>([
+const form = new FormState(new Map<string, FieldState<string>>([
   ['name', new FieldState('')],
   ['email', new FieldState('').validators(someEmailValidator)],
 ]));
