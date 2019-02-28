@@ -321,6 +321,8 @@ const form = new FormStateLazy(()=>myFields.concat(someCondition ? myFieldsOptio
 await form.validate();
 ```
 
+This is useful for highly dymamic pages with `submit` (or `continue`) buttons. You don't want to keep maintaining which fields are valid in a form all over the place and only want to make the choice in a nice consistent way for the submit button. You still get to use the nice `form.hasError` / `form.error` etc. as a consolidation of whatever sub `FormState` / `FieldState` you return at that time.
+
 ## TIPS
 
 The API is designed to be simple, but powerful enough to handle most use cases. We provide common design patterns next.
