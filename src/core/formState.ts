@@ -1,11 +1,12 @@
-import {action, computed, isArrayLike, isObservable, observable, runInAction, isObservableMap} from 'mobx';
-import {isMapLike} from "../internal/utils";
-import {applyValidators, ComposibleValidatable, Validator} from './types';
+import { action, computed, isArrayLike, isObservable, observable, runInAction } from 'mobx';
+import { isMapLike } from "../internal/utils";
+import { applyValidators, ComposibleValidatable, Validator } from './types';
 
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
-  { [key: string]: ComposibleValidatable<any> }
-  | ComposibleValidatable<any>[] | Map<any, ComposibleValidatable<any>>
+  | { [key: string]: ComposibleValidatable<any> }
+  | ComposibleValidatable<any>[]
+  | Map<any, ComposibleValidatable<any>>
 
 /**
  * Just a wrapper around the helpers for a set of FieldStates or FormStates
