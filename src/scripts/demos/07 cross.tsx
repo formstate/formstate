@@ -1,6 +1,6 @@
 /** React + MUI + mobx */
 import * as React from 'react';
-import { render, Button, ErrorText } from './mui';
+import { render, Button, ErrorText, vertical } from './mui';
 import { observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 import { resize } from 'eze/lib/client';
@@ -22,7 +22,7 @@ const form = new FormState({
   .validators(($) => $.name1.$ !== $.name2.$ && 'Names must match');
 
 render(() => {
-  return (<form onSubmit={async (e) => {
+  return (<form className={vertical} onSubmit={async (e) => {
     e.preventDefault();
     const res = await form.validate();
     if (res.hasError) {

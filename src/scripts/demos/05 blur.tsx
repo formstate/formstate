@@ -1,6 +1,6 @@
 /** React + MUI + mobx */
 import * as React from 'react';
-import { render, Button } from './mui';
+import { render, Button, vertical } from './mui';
 import { observer } from 'mobx-react';
 
 /** Field */
@@ -13,7 +13,7 @@ const formState = new FormState({
   foo: new FieldState('').disableAutoValidation().validators((val) => val !== 'foo' && "I only allow 'foo'"),
   bar: new FieldState('').disableAutoValidation().validators((val) => val !== 'bar' && "I only allow 'bar'")
 })
-render(() => <form onSubmit={async (e) => {
+render(() => <form className={vertical} onSubmit={async (e) => {
   e.preventDefault();
   const res = await formState.validate();
   if (res.hasError) {

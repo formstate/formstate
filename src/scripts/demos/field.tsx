@@ -2,34 +2,47 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 
-/** Material UI */
-import TextField from 'material-ui/TextField';
-
 /** FieldState */
 import { FieldState } from '../../index';
 
-/**
- * Field Props
- */
+
+// SPLIT HERE
+
+/** Material UI */
+import { FormControl, InputLabel, Input, FormHelperText } from '@material-ui/core';
+
+/** Field Props */
 export type FieldProps = {
-  /** Any UI stuff you need */
+  /** This library : fieldState */
+  fieldState: FieldState<string>
+
+  /**
+   * Any UI stuff you need
+   * Use your imagination 🦄!
+   */
   id: string,
   label: string,
-
-  /** The fieldState */
-  fieldState: FieldState<string>
 }
 
 /**
- * Field component. Must be an observer.
+ * Observer Field component.
+ * Wires FieldState to any native or library elements you want.
+ * Use your imagination 🦄!
  */
 export const Field = observer((props: FieldProps) => (
-  <TextField
-    id={props.id}
-    fullWidth={true}
-    floatingLabelText={props.label}
-    value={props.fieldState.value}
-    onChange={function() { props.fieldState.onChange(arguments[1]) }}
-    errorText={props.fieldState.error}
-  />
+  <FormControl fullWidth>
+    <InputLabel
+      error={props.fieldState.hasError}
+      htmlFor={props.id}>
+      {props.label}
+    </InputLabel>
+    <Input
+      fullWidth
+      error={props.fieldState.hasError}
+      id={props.id}
+      value={props.fieldState.value}
+      onChange={(e) => { props.fieldState.onChange(e.target.value) }}
+    />
+    <FormHelperText error={props.fieldState.hasError}>{props.fieldState.error}</FormHelperText>
+  </FormControl>
 ));

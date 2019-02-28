@@ -4,6 +4,7 @@
     "jsx": "react",
     "declaration": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "outDir": "./lib",
     "experimentalDecorators": true,
     "noImplicitAny": true,

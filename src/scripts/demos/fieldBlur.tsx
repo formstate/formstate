@@ -3,7 +3,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 
 /** Material UI */
-import TextField from 'material-ui/TextField';
+import { FormControl, InputLabel, Input, FormHelperText } from '@material-ui/core';
 
 /** FieldState */
 import { FieldState } from '../../index';
@@ -20,18 +20,28 @@ export type FieldProps = {
   fieldState: FieldState<string>
 }
 
+// SPLIT HERE
+
 /**
- * Field component. Must be an observer.
+ * OnBlur it will validate and enable auto validation
  */
 export const FieldBlur = observer((props: FieldProps) => (
-  <TextField
-    id={props.id}
-    floatingLabelText={props.label}
-    value={props.fieldState.value}
-    onChange={function() { props.fieldState.onChange(arguments[1]) }}
-    errorText={props.fieldState.error}
+  <FormControl fullWidth>
+    <InputLabel
+      error={props.fieldState.hasError}
+      htmlFor={props.id}>
+      {props.label}
+    </InputLabel>
+    <Input
+      fullWidth
+      error={props.fieldState.hasError}
+      id={props.id}
+      value={props.fieldState.value}
+      onChange={(e) => { props.fieldState.onChange(e.target.value) }}
 
-    /** Always validate on blur */
-    onBlur={props.fieldState.enableAutoValidationAndValidate}
-  />
+      /** Always validate on blur */
+      onBlur={props.fieldState.enableAutoValidationAndValidate}
+    />
+    <FormHelperText error={props.fieldState.hasError}>{props.fieldState.error}</FormHelperText>
+  </FormControl>
 ));

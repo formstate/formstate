@@ -1,7 +1,6 @@
 /** React + MUI + mobx*/
 import * as React from 'react';
 import { render } from './mui';
-import { observer } from 'mobx-react';
 
 /** Field */
 import { Field } from './field';

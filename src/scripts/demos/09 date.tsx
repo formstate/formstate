@@ -2,9 +2,8 @@
 import * as React from 'react';
 import { render, Button, ErrorText, labelClass, inputClass } from './mui';
 import { observer } from 'mobx-react';
-import { style } from 'typestyle';
 import { Vertical } from './gls';
-import * as moment from 'moment';
+import moment from 'moment';
 
 /** FieldState */
 import { FieldState } from '../../index';
