@@ -277,6 +277,17 @@ form.$.set('phone', new FieldState('').validators(somePhoneValidator));
 form.validate(); // Will only validate the fields that exist in the form at the time
 ```
 
+You can even go wild-wild-west 💥 and just use `string` as keys:
+
+```ts
+const form = new FormState(new Map<string>([
+  ['name', new FieldState('')],
+  ['email', new FieldState('').validators(someEmailValidator)],
+]));
+
+form.$.set('anythingThatStrikesYourFancy', new FieldState(''));
+```
+
 > TIP: Of course you can nest `object|array|map` to your hearts content (hopefully only to meet business requirement).
 
 ### FormState Validators
