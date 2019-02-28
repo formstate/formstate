@@ -261,6 +261,24 @@ const somethingToSendToServer = form.$.map(child =>
 
 > TIP: It works with *n* number of subfields as well. And as always you can nest objects and arrays as needed.
 
+### Map
+Sometimes you want to dynamically add and remove *named* fields. In that case you can use an es6 `Map` as the backing structuring in `FormState` e.g.
+
+```ts
+const form = new FormState(new Map<'name'|'email'|'phone'>([
+  ['name', new FieldState('')],
+  ['email', new FieldState('').validators(someEmailValidator)],
+]));
+
+// Later, optionally
+form.$.set('phone', new FieldState('').validators(somePhoneValidator));
+
+// Later
+form.validate(); // Will only validate the fields that exist in the form at the time
+```
+
+> TIP: Of course you can nest `object|array|map` to your hearts content (hopefully only to meet business requirement).
+
 ### FormState Validators
 For any cross field validation or validation that only impacts the *overall* state of the form (not tied to its individual fields) you can add validators to `FormState` e.g. passwords must match:
 
@@ -282,7 +300,7 @@ assert.equal(res.error, 'Passwords must match');
 ```
 
 ## FormStateLazy
-If you want to make lazy decisions about which fields to validate you can use `FormStateLazy`. This works by simply accepting a `getFields` function where you can return the fields you want to validate at that point in time.  e.g.
+If you want to make lazy decisions about which fields to validate you can use `FormStateLazy`. This works by simply accepting a `getFields` function where you can return the fields you want to validate at that point in time e.g.
 
 ```
 /** Some set of fields you want to maintain as a simple array */
@@ -399,7 +417,7 @@ validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
 ```
 
 ### TIP: Interacting on behalf of user
-You can invoke `onChange` if you want to imperitively act on behalf of the user. Doing so keeps the fieldState in a consistent state e.g. ensure that the validations run and you don't get inconsistencies between `value` and `$`. Here is an example: 
+You can invoke `onChange` if you want to imperitively act on behalf of the user. Doing so keeps the fieldState in a consistent state e.g. ensure that the validations run and you don't get inconsistencies between `value` and `$`. Here is an example:
 
 ```ts
 // Some fieldState

@@ -1,4 +1,4 @@
-import {isObservableMap} from "mobx"
+import { isObservableMap } from "mobx"
 
 /**
  * Debounce
@@ -9,7 +9,7 @@ export function debounce<T extends Function>(func: T, milliseconds: number, imme
 
   var wait = milliseconds;
 
-  var later = function() {
+  var later = function () {
     var last = now() - timestamp;
 
     if (last < wait && last > 0) {
@@ -23,7 +23,7 @@ export function debounce<T extends Function>(func: T, milliseconds: number, imme
     }
   };
 
-  return <any>function() {
+  return <any>function () {
     context = this;
     args = arguments;
     timestamp = now();
@@ -38,12 +38,7 @@ export function debounce<T extends Function>(func: T, milliseconds: number, imme
   };
 };
 
-export function isES6Map(thing: any) {
-  if (typeof Map !== 'undefined' && thing instanceof Map)
-    return true;
-  return false;
-}
-
 export function isMapLike(thing: any) {
-  return isES6Map(thing) || isObservableMap(thing)
+  return isObservableMap(thing)
+    || (typeof Map !== 'undefined' && thing instanceof Map);
 }
