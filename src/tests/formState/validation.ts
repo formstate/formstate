@@ -28,6 +28,16 @@ describe("FormState validation", () => {
     assert.equal(form.hasError, false);
   });
 
+  it("es6map: should validate a nested FieldState and pass if valid", async () => {
+    const name = new FieldState('');
+    const form = new FormState(
+      new Map([["hello", name]])
+    );
+    const res = await form.validate();
+    assert.equal(res.hasError, false);
+    assert.equal(form.hasError, false);
+  });
+
   it("should validate a nested FieldState and fail if invalid", async () => {
     const name = new FieldState('').validators(
       (val) => !val && 'value required'
@@ -54,6 +64,20 @@ describe("FormState validation", () => {
     assert.equal(form.hasError, true);
     assert.equal(form.error, 'value required');
     assert.equal(form.$[0].error, 'value required');
+  });
+
+  it("es6map: should validate a nested FieldState and fail if invalid", async () => {
+    const name = new FieldState('').validators(
+      (val) => !val && 'value required'
+    );
+    const form = new FormState(
+      new Map([["hello", name]])
+    );
+    const res = await form.validate();
+    assert.equal(res.hasError, true);
+    assert.equal(form.hasError, true);
+    assert.equal(form.error, 'value required');
+    assert.equal(form.$.get("hello")!.error, 'value required');
   });
 
   it("should validate a nested - nested FieldState and pass if valid", async () => {

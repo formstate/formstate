@@ -1,3 +1,5 @@
+import {isObservableMap} from "mobx"
+
 /**
  * Debounce
  */
@@ -35,3 +37,13 @@ export function debounce<T extends Function>(func: T, milliseconds: number, imme
     return result;
   };
 };
+
+export function isES6Map(thing: any) {
+  if (typeof Map !== 'undefined' && thing instanceof Map)
+    return true;
+  return false;
+}
+
+export function isMapLike(thing: any) {
+  return isES6Map(thing) || isObservableMap(thing)
+}

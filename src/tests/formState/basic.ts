@@ -59,6 +59,20 @@ describe("FormState basic", () => {
     assert.equal(form.$[0].$[0].$, name.$);
   });
 
+  it("should allow nesting a FieldState es6map", () => {
+    const name = new FieldState('hello');
+    const form = new FormState(new Map([["hello", name]]));
+    assert.equal(form.$.get("hello")!.$, name.$);
+  });
+
+  it("should allow nesting another FormState es6map", () => {
+    const name = new FieldState('hello');
+    const form = new FormState(
+      new Map([["helloForm", new FormState(new Map([["hello", name]]))]])
+    );
+    assert.equal(form.$.get("helloForm")!.$.get("hello")!.$, name.$);
+  });
+
   it("reset should cascade down to all fields", async () => {
     const name = new FieldState('');
     const pass = new FieldState('');
