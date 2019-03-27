@@ -1,10 +1,10 @@
 # Setup
 `npm install`
 
-# Run Demos
+# Run Demos / Tests
 * `npm start`
-* visit http://localhost:4000/demos/
-* Edit `src/scripts/demos.ts`
+  * Visit http://localhost:4000/demos/ Edit `src/scripts/demos.ts`
+  * Edit tests, see terminal for results
 
 # Write Docs
 * Edit `demo/README.md`

@@ -1,4 +1,4 @@
-import {isPromiseLike} from "../internal/utils"
+import { isPromiseLike } from "../internal/utils"
 
 /** A truthy string or falsy values */
 export type ValidationResponse =
@@ -7,16 +7,23 @@ export type ValidationResponse =
   | undefined
   | false
 
+/** The return value of a validator */
+export type ValidatorResponse = 
+  ValidationResponse
+  | Promise<ValidationResponse>
+
 /**
  * A validator simply takes a value and returns a string or Promise<string>
  * If a truthy string is returned it represents a validation error
  **/
 export interface Validator<TValue> {
-  (value: TValue): ValidationResponse | Promise<ValidationResponse>;
+  (value: TValue): ValidatorResponse;
 }
 
 /**
- * Runs the value through a list of validators. As soon as a validation error is detected, the error is returned
+ * Runs the value through a list of validators. 
+ * - As soon as a validation error is detected, the error is returned
+ * - As soon as a validator dies unexpectedly (throws an error), we throw the same error.
  */
 export function applyValidators<TValue>(value: TValue, validators: Validator<TValue>[]): Promise<string | null | undefined> {
   return new Promise<string | null | undefined>((resolve, reject) => {
@@ -33,7 +40,7 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
         return;
       }
       let validator = validators[currentIndex];
-      const res = validator(value);
+      let res = validator(value);
 
       // no error
       if (!res) {
@@ -47,9 +54,11 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
         return;
       }
 
-      // wait for error response
+      // wait for validator response
       res.then((msg: any) => {
+        // no error
         if (!msg) gotoNextValidator();
+        // some error
         else resolve(msg);
       }).catch(reject)
     }

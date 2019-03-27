@@ -43,7 +43,7 @@ describe("FieldState basic", () => {
 
   it("reset should prevent any automatic validation from running", async () => {
     const name = new FieldState('').validators(
-        (val) => !val && 'value required'
+      (val) => !val && 'value required'
     );
     name.onChange('world');
     name.reset('');
@@ -56,7 +56,7 @@ describe("FieldState basic", () => {
 
   it("reset followed by onChange should run validators", async () => {
     const name = new FieldState('').validators(
-        (val) => !val && 'value required'
+      (val) => !val && 'value required'
     );
     name.onChange('world');
     name.reset('');
@@ -69,7 +69,7 @@ describe("FieldState basic", () => {
 
   it("reset followed by validate should still validate", async () => {
     const name = new FieldState('').validators(
-        (val) => !val && 'value required'
+      (val) => !val && 'value required'
     );
     name.onChange('world');
     name.reset('');
@@ -77,6 +77,21 @@ describe("FieldState basic", () => {
     assert.equal(res.hasError, true);
     assert.equal(name.value, '');
     assert.equal(name.$, '');
+  });
+
+  it("should chain sync validator sync throw", async () => {
+    const name = new FieldState('').validators(
+      () => {
+        throw new Error("Sync validation error")
+      }
+    );
+    let error: Error
+    try {
+      await name.validate();
+    } catch (e) {
+      error = e
+    }
+    assert.equal(error!.message, "Sync validation error")
   });
 
   it("should chain async validator promise rejection", async () => {
