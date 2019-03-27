@@ -1,5 +1,4 @@
-import * as utils from '../internal/utils';
-
+import {isPromiseLike} from "../internal/utils"
 
 /** A truthy string or falsy values */
 export type ValidationResponse =
@@ -34,7 +33,7 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
         return;
       }
       let validator = validators[currentIndex];
-      let res: any = validator(value);
+      const res = validator(value);
 
       // no error
       if (!res) {
@@ -43,7 +42,7 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
       }
 
       // some error
-      if (!res.then) {
+      if (!isPromiseLike(res)) {
         resolve(res);
         return;
       }

@@ -36,9 +36,13 @@ export function debounce<T extends Function>(func: T, milliseconds: number, imme
 
     return result;
   };
-};
+}
 
 export function isMapLike(thing: any) {
   return isObservableMap(thing)
     || (typeof Map !== 'undefined' && thing instanceof Map);
+}
+
+export function isPromiseLike(arg: any): arg is Promise<any> {
+  return arg != null && typeof arg === "object" && typeof arg.then === "function";
 }
