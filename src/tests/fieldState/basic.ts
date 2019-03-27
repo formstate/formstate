@@ -78,4 +78,19 @@ describe("FieldState basic", () => {
     assert.equal(name.value, '');
     assert.equal(name.$, '');
   });
+
+  it("should chain async validator promise rejection", async () => {
+    const name = new FieldState('').validators(
+      async () => {
+        throw new Error("Async validation error")
+      }
+    );
+    let error: Error
+    try {
+      await name.validate();
+    } catch (e) {
+      error = e
+    }
+    assert.equal(error!.message, "Async validation error")
+  });
 });

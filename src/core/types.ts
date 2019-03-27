@@ -20,7 +20,7 @@ export interface Validator<TValue> {
  * Runs the value through a list of validators. As soon as a validation error is detected, the error is returned
  */
 export function applyValidators<TValue>(value: TValue, validators: Validator<TValue>[]): Promise<string | null | undefined> {
-  return new Promise<string | null | undefined>(resolve => {
+  return new Promise<string | null | undefined>((resolve, reject) => {
     let currentIndex = 0;
 
     let gotoNextValidator = () => {
@@ -52,7 +52,7 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
       res.then((msg: any) => {
         if (!msg) gotoNextValidator();
         else resolve(msg);
-      })
+      }).catch(reject)
     }
 
     // kickoff
