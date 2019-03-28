@@ -1,3 +1,6 @@
+# 1.1.1
+* If a validator dies unexpectedly (throws an error/exception) the `validate` call does the same instead of silently ignoring it. Should not cause any change if your validators worked previously. 
+
 # 1.1.0
 * Added support for `Map` in `FormState` class.
 
