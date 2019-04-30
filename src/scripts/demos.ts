@@ -102,7 +102,7 @@ export function buildDemos() {
       })
       .md(`
     # Cross field validation
-    Call \`FormState().compose()\` whenever you want to compose the FieldState -> auto validate FormState behaviour.
+    Call \`FormState().compose()\` whenever you want to compose the FieldState -> auto validate FormState behaviour. Form validators only run automatically once all the sub Fields (or Forms) are valid, so you don't need to worry about invalid sub fields when doing form validation.
     `)
       .app({
         entryPointPath: __dirname + '/demos/07 cross.tsx',
