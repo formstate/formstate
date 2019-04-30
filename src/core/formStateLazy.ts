@@ -58,6 +58,9 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
   @action enableAutoValidation = () => {
     this.getFields().forEach(x => x.enableAutoValidation());
   }
+  @action disableAutoValidation = () => {
+    this.getFields().forEach(x => x.disableAutoValidation());
+  }
 
 
   @observable protected _error: string | null | undefined = '';

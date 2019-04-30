@@ -77,6 +77,7 @@ export interface Validatable<TValue> {
   error?: string | null | undefined;
   $: TValue;
   enableAutoValidation: () => void;
+  disableAutoValidation: () => void;
 }
 
 /**

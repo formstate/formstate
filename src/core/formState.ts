@@ -161,11 +161,12 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     this.getValues().forEach(x => x.enableAutoValidation());
   }
   @action public enableAutoValidationAndValidate = () => {
-    this.autoValidationEnabled = true;
+    this.enableAutoValidation();
     return this.validate();
   }
   @action public disableAutoValidation = () => {
     this.autoValidationEnabled = false;
+    this.getValues().forEach(x => x.disableAutoValidation());
   }
 
   /**

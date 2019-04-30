@@ -1,3 +1,6 @@
+# 1.2.0
+* `enableAutoValidation` `enableAutoValidationAndValidate` `disableAutoValidation` functions on `FormState` should consistently always toggle the `autoValidation` state for *both* itself and its children. [ref](https://github.com/formstate/formstate/issues/67)
+
 # 1.1.1
 * If a validator dies unexpectedly (throws an error/exception) the `validate` call does the same instead of silently ignoring it. Should not cause any change if your validators worked previously. 
 
