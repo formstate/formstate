@@ -79,7 +79,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
         return { hasError: true as true };
       }
 
-      this.on$ChangeAfterValidation();
+      this._on$ValidationPass();
       return { hasError: false as false, value: this.$ };
     });
 
@@ -179,12 +179,12 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
    */
   @action compose() {
     const values = this.getValues();
-    values.forEach(value => value.setCompositionParent(
+    values.forEach(value => value._setCompositionParent(
       {
         on$Reinit: action(() => {
           this.validatedSubFields = this.validatedSubFields.filter(v => v !== value);
         }),
-        on$ChangeAfterValidation: action(() => {
+        on$ValidationPass: action(() => {
           /** Always clear the form error as its no longer relevant */
           if (this.hasFormError) {
             this.clearFormError();
@@ -214,13 +214,13 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     return this;
   }
 
-  on$ChangeAfterValidation = () => { }
-  on$Reinit = () => { }
-  @action setCompositionParent = (config: {
-    on$ChangeAfterValidation: () => void;
+  _on$ValidationPass = () => { }
+  _on$Reinit = () => { }
+  @action _setCompositionParent = (config: {
+    on$ValidationPass: () => void;
     on$Reinit: () => void;
   }) => {
-    this.on$ChangeAfterValidation = () => runInAction(config.on$ChangeAfterValidation);
-    this.on$Reinit = () => runInAction(config.on$Reinit);
+    this._on$ValidationPass = () => runInAction(config.on$ValidationPass);
+    this._on$Reinit = () => runInAction(config.on$Reinit);
   }
 }

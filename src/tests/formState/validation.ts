@@ -154,23 +154,4 @@ describe("FormState validation", () => {
     assert.equal(res.hasError, true);
     assert.equal(pass2.error, 'Passwords must match');
   });
-
-  it("Should not loop infinitely when validating nested composeed FormStates", () => {
-    const validator = <T>(t: T) => {
-      return null;
-    };
-    const form = new FormState({
-      f1: new FieldState("").validators(validator),
-      f2: new FieldState("").validators(validator),
-      nested: new FormState({
-        a: new FieldState("na").validators(validator),
-        b: new FieldState("nb").validators(validator),
-      })
-    }).compose();
-
-    form.$.f1.onChange("f1");
-    form.$.f2.onChange("f2");
-
-    form.validate();
-  });
 });

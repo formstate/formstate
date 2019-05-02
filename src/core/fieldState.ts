@@ -154,7 +154,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this.dirty = false;
     this.hasBeenValidated = false;
     this.$ = value;
-    this.on$Reinit();
+    this._on$Reinit();
     this.executeOnUpdate();
   }
 
@@ -202,12 +202,14 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
         /** Check for error */
         const hasError = this.hasError;
 
-        /** If no error, copy over the value to validated value */
+        /** If no error */
         if (!hasError) {
+          /** Copy over the value to validated value */
           if (this.$ !== value) {
             this.$ = value;
-            this.on$ChangeAfterValidation()
           }
+          /** Trigger any form level validations if required */
+          this._on$ValidationPass();
         }
 
         /** before returning update */
@@ -244,13 +246,13 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * Composible fields (fields that work in conjuction with FormState)
    */
-  on$ChangeAfterValidation = () => { }
-  on$Reinit = () => { }
-  @action setCompositionParent = (config: {
-    on$ChangeAfterValidation: () => void;
+  _on$ValidationPass = () => { }
+  _on$Reinit = () => { }
+  @action _setCompositionParent = (config: {
+    on$ValidationPass: () => void;
     on$Reinit: () => void;
   }) => {
-    this.on$ChangeAfterValidation = () => runInAction(config.on$ChangeAfterValidation);
-    this.on$Reinit = () => runInAction(config.on$Reinit);
+    this._on$ValidationPass = () => runInAction(config.on$ValidationPass);
+    this._on$Reinit = () => runInAction(config.on$Reinit);
   }
 }

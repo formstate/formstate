@@ -1,3 +1,6 @@
+# 1.3.0
+* `.compose`d `FormState` should run its `validators` as soon as all sub fields have been *validated*. Previously it only ran when sub fields where *validated* and *changed*. This shouldn't cause any need for a refactor as normally `.validate` is only called after a user interaction with fields. [ref](https://github.com/formstate/formstate/issues/66)
+
 # 1.2.0
 * `enableAutoValidation` `enableAutoValidationAndValidate` `disableAutoValidation` functions on `FormState` should consistently always toggle the `autoValidation` state for *both* itself and its children. [ref](https://github.com/formstate/formstate/issues/67)
 

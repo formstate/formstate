@@ -88,12 +88,12 @@ export interface ComposibleValidatable<TValue> extends Validatable<TValue> {
   reset: () => void;
 
   /** Used to tell the parent about validation */
-  on$ChangeAfterValidation: () => void;
-  on$Reinit: () => void;
+  _on$ValidationPass: () => void;
+  _on$Reinit: () => void;
 
   /** Used by the parent to register listeners */
-  setCompositionParent: (config: {
-    on$ChangeAfterValidation: () => void;
+  _setCompositionParent: (config: {
+    on$ValidationPass: () => void;
     on$Reinit: () => void;
   }) => void;
 }
