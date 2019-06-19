@@ -391,7 +391,7 @@ export const required: Validator<string | null | undefined> = (value) => {
 }
 export const email: Validator<string | null | undefined> = (value) => {
   // Empty values are not invalid emails
-  if (required(email)) return null;
+  if (required(value)) return null;
   value = value.trim();
   // Src : http://emailregex.com/
   if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g.exec(value)) {
