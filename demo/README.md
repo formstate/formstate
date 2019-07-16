@@ -8,7 +8,7 @@ Note that the API is quite simple and consists of `Validator`, `FieldState` and 
 
 ![](https://raw.githubusercontent.com/formstate/formstate/master/demo/images/autocomplete.gif)
 
-> If you are looking for comparisons, they are a covered in [why #formstate](/#/?id=why).
+> If you are looking for comparisons, they are a covered in [why #formstate](/#why).
 
 ## Demos
 
