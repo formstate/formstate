@@ -1,4 +1,4 @@
-import { FieldState, FormState } from '../../index';
+import { FieldState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
 import { configure } from 'mobx';
