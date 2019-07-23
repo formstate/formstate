@@ -27,7 +27,7 @@ describe("FormState validation", () => {
     form.validate();
   });
 
-  it.only("Should start running form validators as soon as all fields have been validated", async () => {
+  it("Should start running form validators as soon as all fields have been validated", async () => {
     const required = (val: string) => !val && "Required";
     const form = new FormState({
       pass1: new FieldState("").validators(required),
