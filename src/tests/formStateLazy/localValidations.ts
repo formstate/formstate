@@ -3,7 +3,7 @@ import * as assert from 'assert';
 import { configure } from 'mobx';
 
 configure({
-  enforceActions: true
+  enforceActions: "observed"
 });
 
 describe("FormStateLazy local validations", () => {

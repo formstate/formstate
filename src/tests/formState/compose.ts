@@ -4,7 +4,7 @@ import { delay } from '../utils';
 import { configure } from 'mobx';
 
 configure({
-  enforceActions: true
+  enforceActions: "observed"
 });
 
 describe("FormState validation", () => {
