@@ -1,10 +1,10 @@
-import { FieldState, FormState } from '../../index';
+import { FieldState } from '../../index';
 import * as assert from 'assert';
 import { delay } from '../utils';
-import { configure , action } from 'mobx';
+import { configure } from 'mobx';
 
 configure({
-  enforceActions: true
+  enforceActions: "observed"
 });
 
 describe('FieldState automatic validation', () => {
