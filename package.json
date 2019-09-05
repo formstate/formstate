@@ -44,7 +44,7 @@
     "concurrently": "4.1.2",
     "csstips": "1.1.0",
     "docute-cli": "0.6.0",
-    "eze": "0.11.3",
+    "eze": "0.12.0",
     "fs-extra": "8.1.0",
     "gh-pages": "2.1.1",
     "mobx": "5.13.0",
