@@ -110,7 +110,13 @@ export function buildDemos() {
       })
       .md(`
     # Custom type TValue
-    A fieldstate can work with any type. The complexity of converting TValue to *display* and calling *onChange* with TValue can all be handled in the field component. E.g. here is a number component.
+    A fieldstate can work with any type. 
+    
+    The complexity of converting between TValue-value can be handled by your field component:
+    * TValue to *display* can be done in the \`value\` of the component.
+    * value to TValue can be one in the \`onChange\` of the component. 
+    
+    Here is a number component that works on \`value:string\` and \`TValue:number\`:
     `)
       .app({
         entryPointPath: __dirname + '/demos/08 number.tsx',
