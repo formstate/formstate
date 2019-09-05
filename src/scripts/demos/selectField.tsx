@@ -2,11 +2,9 @@ import { DisplayValue } from './displayValue';
 import { FieldState } from '../../index';
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { Vertical, VerticalMargined } from './gls';
 
 // SPLIT HERE
-
-/** Material UI */
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 
 
 export type SelectFieldProps = {
@@ -25,30 +23,26 @@ export type SelectFieldProps = {
 }
 
 export const SelectField = observer((props: SelectFieldProps) => (
-  <FormControl fullWidth>
-    <InputLabel
-      error={props.fieldState.hasError}
+  <Vertical margin={5}>
+    <label
       htmlFor={props.id}>
       {props.label}
-    </InputLabel>
+    </label>
     {/** 
      * Render a select, wiring its value and onChange to fieldState 
      */}
-    <Select
-      value={props.fieldState.value}
+    <select
+      value={props.fieldState.value.value}
       onChange={(e) => {
         props.fieldState.onChange(
           props.displayValues.find(option => option.value == e.target.value)!
         )
       }}
-      inputProps={{
-        id: props.id
-      }}
     >
       {/** Render the options */}
       {props.displayValues.map(displayValue => (
-        <MenuItem value={displayValue.value}>{displayValue.display}</MenuItem>
+        <option value={displayValue.value}>{displayValue.display}</option>
       ))}
-    </Select>
-  </FormControl>
+    </select>
+  </Vertical>
 ));
