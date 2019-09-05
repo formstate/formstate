@@ -11,7 +11,7 @@ Tests:
 * See terminal for results, Edit tests
 
 Docs: 
-* Visit http://localhost:5000/, Edit demo/README.md, and then reload the web page.
+* Visit http://localhost:8080, Edit demo/README.md, then refresh the browser.
 
 # Write Docs
 * Edit `demo/README.md`
