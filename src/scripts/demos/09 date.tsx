@@ -23,15 +23,20 @@ const parseDate = (value: string): ParseDateResult => {
   return { valid: true, date: date.toDate() };
 }
 
+/** Call if you are sure that string is a valid date */
+const stringToDate = (value: string): Date => {
+  return moment(value, ['DD/MM/YYYY'], true).toDate();
+}
+
 /** Example date FieldState */
-const fieldState = new FieldState<string | null>(null)
+const fieldState = new FieldState<string>('')
   .validators(
     (val) => {
-      if (val == null || !val.trim()) return null;
+      if (!val.trim()) return null;
       const { valid } = parseDate(val);
       if (!valid) return 'Date must be of format DD/MM/YYYY';
     },
-);
+  );
 
 /** Example DateInputField */
 type DateInputFieldProps = {
@@ -57,10 +62,16 @@ const DateInputField: React.SFC<DateInputFieldProps> = observer((props: DateInpu
   );
 });
 
+
+
 render(() => <Vertical margin={10}>
   <DateInputField
     label="Date of registry (DD/MM/YYYY)"
     fieldState={fieldState} />
   {fieldState.hasError && <ErrorText>Current Field Error = {fieldState.error}</ErrorText>}
-  <Button onClick={() => fieldState.validate()}>Validate</Button>
+  <Button onClick={fieldState.validate}>Validate</Button>
+  {
+    fieldState.$.trim()
+    && fieldState.hasBeenValidated
+    && !fieldState.hasError && `Date object: ${stringToDate(fieldState.$)}`}
 </Vertical>);

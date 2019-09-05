@@ -123,7 +123,8 @@ export function buildDemos() {
         height: '300px',
       })
       .md(`
-    The number field only allows *valid* numbers to be typed in. If your input allows invalid *strings* to be input then you should do the conversion as needed. E.g. if you use a keyboard driven date input:
+    
+    If your input allows invalid *strings* to be input then you should add a validator to the FileState<string>. You can then create a utility to read the DisplayValue as TValue only if its been validated. E.g. if you use a keyboard driven date input:
     `)
       .app({
         entryPointPath: __dirname + '/demos/09 date.tsx',
