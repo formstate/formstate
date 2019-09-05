@@ -164,7 +164,7 @@ export function buildDemos() {
           entryPointPath: __dirname + '/demos/10 select.tsx',
           height: '300px',
         })
-      .md(`Note in the above example, we drive the placeholder text for the select by simply providing it as display for the empty value option i.e. {display:placeholder, value: ''}.`)
+      .md(`Note in the above example, we drive the placeholder text for the select by simply providing it as display for the empty value option i.e. \`{display:placeholder, value: ''}\`.`)
   });
 }
 
