@@ -25,6 +25,7 @@ export type SelectFieldProps = {
 export const SelectField = observer((props: SelectFieldProps) => (
   <Vertical margin={5}>
     <label
+      style={props.fieldState.hasError ? { color: 'red' } : {}}
       htmlFor={props.id}>
       {props.label}
     </label>
