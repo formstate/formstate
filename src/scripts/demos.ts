@@ -152,7 +152,12 @@ export function buildDemos() {
       .md(`Next we cover the select, radio, checkbox fields seperately`)
       .md(`
     ## Select
+    Our \`SelectField\` will take a \`FieldState\` and \`displayValues\` and renders the select and option tags:
       `)
+      .code({
+        code: fse.readFileSync(__dirname + '/demos/selectField.tsx').toString().split('// SPLIT HERE')[1],
+        mode: 'ts',
+      })
   });
 }
 
