@@ -9,7 +9,7 @@
     "test:build": "mocha ./lib/tests/**/*.js",
     "demos:build": "eze ./src/scripts/demos",
     "docs:build": "echo 'docute needs no build'",
-    "tsc:start": "tsc -p . -w",
+    "tsc:start": "tsc -p . -w --preserveWatchOutput",
     "test:start": "mocha ./lib/tests/**/*.js --watch",
     "demos:start": "npm run demos:build -- --serve",
     "docs:start": "docute ./demo",
