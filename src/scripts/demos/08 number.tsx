@@ -33,6 +33,9 @@ const NumberInputField: React.SFC<NumberInputFieldProps> = observer((props: Numb
             ? ''
             : props.fieldState.value.toString()
         }
+        /** 
+         * Convert the input to the correct type in onChange 
+         */
         onChange={(e) => {
           const strValue = e.target.value;
           if (isNaN(+strValue)) {
