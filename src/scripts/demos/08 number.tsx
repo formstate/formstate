@@ -29,7 +29,7 @@ const NumberInputField: React.SFC<NumberInputFieldProps> = observer((props: Numb
         className={inputClass}
         type="number"
         /** 
-         * Convert the TValue to something that can be rendered 
+         * Convert the TValue to DisplayValue
          */
         value={
           props.fieldState.value == null
@@ -37,7 +37,7 @@ const NumberInputField: React.SFC<NumberInputFieldProps> = observer((props: Numb
             : props.fieldState.value.toString()
         }
         /** 
-         * Convert the input to the correct TValue in onChange 
+         * Convert DisplayValue to the correct TValue in onChange 
          */
         onChange={(e) => {
           const strValue = e.target.value;

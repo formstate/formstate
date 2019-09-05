@@ -112,9 +112,9 @@ export function buildDemos() {
     # Custom type TValue
     A fieldstate can work with any type. 
     
-    The complexity of converting between TValue-value can be handled by your field component:
-    * TValue to *display* can be done in the \`value\` of the component.
-    * value to TValue can be one in the \`onChange\` of the component. 
+    If your input only allows the user to input a DisplayValue that can be validly converted to TValue, then the complexity of converting between TValue-DisplayValue can be handled by your field component:
+    * TValue to DisplayValue can be done in the \`value\` of the component.
+    * DisplayValue to TValue can be one in the \`onChange\` of the component. 
     
     Here is a number component that works on \`value:string\` and \`TValue:number\`:
     `)
