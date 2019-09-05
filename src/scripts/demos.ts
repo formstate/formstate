@@ -112,9 +112,9 @@ export function buildDemos() {
     # Custom type TValue
     A fieldstate can work with any type. 
     
-    If your input only allows the user to input a DisplayValue that can be validly converted to TValue, then the complexity of converting between TValue-DisplayValue can be handled by your field component:
-    * TValue to DisplayValue can be done in the \`value\` of the component.
-    * DisplayValue to TValue can be one in the \`onChange\` of the component. 
+    If your input only allows the user to input a Display that can be validly converted to TValue, then the complexity of converting between TValue-Display can be handled by your field component:
+    * TValue to Display can be done in the \`value\` of the component.
+    * Display to TValue can be one in the \`onChange\` of the component. 
     
     Here is a number component that works on \`value:string\` and \`TValue:number\`:
     `)
@@ -124,13 +124,35 @@ export function buildDemos() {
       })
       .md(`
     
-    If your input allows invalid *strings* to be input then you should add a validator to the FileState<string>. You can then create a utility to read the DisplayValue as TValue only if its been validated. E.g. if you use a keyboard driven date input:
+    If your input allows invalid *strings* to be input then you should add a validator to the FileState<string>. You can then create a utility to read the Display as TValue only if its been validated. E.g. if you use a keyboard driven date input:
     `)
       .app({
         entryPointPath: __dirname + '/demos/09 date.tsx',
         height: '300px',
       })
-      .md(`Here you can use the value with a check \`if (!field.hasError) { /* safe to type convert */ }\``);
+      .md(`
+    # DisplayValue
+    A number of browser inputs (\`select\`, \`radio\`, \`checkbox\`) work on the concept of:
+    * Something displayed to the user
+    * A value mapped behind what is displayed to the user.
+    
+    You can create a \`DisplayValue\` object to consolidate these two items: 
+    `)
+      .code({
+        mode: 'ts',
+        code: fse.readFileSync(__dirname + '/demos/displayValue.ts', 'utf-8')
+      })
+      .md(`
+      Your validators would now validate the \`DisplayValue.value\` e.g. a displayValueRequired validator:
+      `)
+      .code({
+        mode: 'ts',
+        code: fse.readFileSync(__dirname + '/demos/displayValueRequired.ts', 'utf-8')
+      })
+      .md(`Next we cover the select, radio, checkbox fields seperately`)
+      .md(`
+    ## Select
+      `)
   });
 }
 

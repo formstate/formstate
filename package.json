@@ -7,7 +7,7 @@
   "scripts": {
     "tsc:build": "tsc -p .",
     "test:build": "mocha ./lib/tests/**/*.js",
-    "demos:build": "eze ./src/scripts/demos",
+    "demos:build": "eze ./src/scripts/demos.ts",
     "docs:build": "echo 'docute needs no build'",
     "tsc:start": "tsc -p . -w --preserveWatchOutput",
     "test:start": "mocha ./lib/tests/**/*.js --watch",
