@@ -41,6 +41,9 @@ export const SelectField = observer((props: SelectFieldProps) => (
           props.displayValues.find(option => option.value == e.target.value)!
         )
       }}
+      inputProps={{
+        id: props.id
+      }}
     >
       {/** Render the options */}
       {props.displayValues.map(displayValue => (

@@ -158,6 +158,12 @@ export function buildDemos() {
         code: fse.readFileSync(__dirname + '/demos/selectField.tsx').toString().split('// SPLIT HERE')[1],
         mode: 'ts',
       })
+      .md(`Once that is done you now get to use your new shiny \`SelectField\` with complete compile time safety.
+      `)
+        .app({
+          entryPointPath: __dirname + '/demos/10 select.tsx',
+          height: '300px',
+        })
   });
 }
 
