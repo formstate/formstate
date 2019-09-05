@@ -62,7 +62,7 @@ export const buttonClass = style(
     }
   });
 export const Button
-  = (props: React.HTMLProps<HTMLButtonElement>) =>
+  = (props: React.ButtonHTMLAttributes<HTMLButtonElement>) =>
     <button {...props}
       type={props.type || 'button'}
       className={classes(buttonClass, props.className)}
