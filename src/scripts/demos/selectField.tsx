@@ -35,6 +35,7 @@ export const SelectField = observer((props: SelectFieldProps) => (
     <select
       value={props.fieldState.value.value}
       onChange={(e) => {
+        /** Map the value back to a DisplayValue for the FieldState */
         props.fieldState.onChange(
           props.displayValues.find(option => option.value == e.target.value)!
         )
