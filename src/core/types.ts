@@ -86,6 +86,7 @@ export interface Validatable<TValue> {
 export interface ComposibleValidatable<TValue> extends Validatable<TValue> {
   /** Allows a convinient reset for all fields */
   reset: () => void;
+  getRawValues: () => unknown;
 
   /** Used to tell the parent about validation */
   _on$ValidationPass: () => void;

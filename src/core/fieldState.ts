@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx';
+import { observable, action, computed, runInAction, isObservableArray } from 'mobx';
 import { ComposibleValidatable, Validator, applyValidators } from './types';
 import { debounce } from '../internal/utils';
 
@@ -136,6 +136,14 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this.executeOnUpdate();
     if (this._autoValidationEnabled) {
       this.queueValidation();
+    }
+  }
+
+  getRawValues(): TValue {
+    if (isObservableArray(this.value)) {
+      return (this.value as any).map((v: ComposibleValidatable<any>) => v.getRawValues());
+    } else {
+      return this.value;
     }
   }
 

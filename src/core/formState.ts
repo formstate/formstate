@@ -1,6 +1,13 @@
-import { action, computed, isArrayLike, isObservable, observable, runInAction } from 'mobx';
+import { action, computed, isArrayLike, isObservable, observable, runInAction, toJS } from 'mobx';
 import { isMapLike } from "../internal/utils";
 import { applyValidators, ComposibleValidatable, Validator } from './types';
+import { FieldState } from './fieldState';
+
+export type RecursiveValues<X> = X extends FormState<infer InnerForm>
+  ? { [K in keyof InnerForm]: RecursiveValues<InnerForm[K]> }
+  : X extends FieldState<infer FieldType>
+  ? FieldType
+  : never;
 
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
@@ -39,6 +46,19 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     const keys = Object.keys(this.$);
     return keys.map((key) => this.$[key]);
   }
+
+  getRawValues(): RecursiveValues<this> {
+    const values = {};
+
+    Object.keys(this.$).forEach(fieldName => {
+      let field = this.$[fieldName];
+      if (field) {
+        values[fieldName] = field.getRawValue();
+      }
+    });
+
+    return toJS(values, { recurseEverything: true }) as any;
+  };
 
   @observable validating = false;
 
