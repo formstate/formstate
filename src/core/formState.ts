@@ -1,4 +1,4 @@
-import { action, computed, isArrayLike, isObservable, observable, runInAction, toJS } from 'mobx';
+import { action, computed, isArrayLike, isObservable, observable, runInAction, toJS, keys } from 'mobx';
 import { isMapLike } from "../internal/utils";
 import { applyValidators, ComposibleValidatable, Validator } from './types';
 import { FieldState } from './fieldState';
@@ -48,15 +48,25 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   }
 
   getRawValues(): RecursiveValues<this> {
-    const values = {};
+    let values = {} as any;
 
-    Object.keys(this.$).forEach(fieldName => {
-      let field = this.$[fieldName];
+    if (this.mode === 'map') {
+     keys(this.$).forEach(fieldName => {
+      let field = (this.$ as any).get(fieldName);
       if (field) {
-        values[fieldName] = field.getRawValue();
+        values[fieldName] = field.getRawValues();
       }
-    });
-
+     });
+    } else if (this.mode === 'array') {
+      values = (this.$ as any).map((v: ComposibleValidatable<any>) => v.getRawValues());
+    } else {
+      Object.keys(this.$).forEach(fieldName => {
+        let field = this.$[fieldName] as ComposibleValidatable<any>;
+        if (field) {
+          values[fieldName] = field.getRawValues();
+        }
+      });
+    }
     return toJS(values, { recurseEverything: true }) as any;
   };
 
