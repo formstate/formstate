@@ -72,7 +72,7 @@ export function applyValidators<TValue>(value: TValue, validators: Validator<TVa
 /** Anything that provides this interface can be plugged into the validation system */
 export interface Validatable<TValue> {
   validating: boolean;
-  validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }>;
+  validate(): Promise<{ hasError: true } | { hasError: false, value: unknown }>;
   hasError: boolean;
   error?: string | null | undefined;
   $: TValue;

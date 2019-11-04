@@ -194,7 +194,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
           else {
             return {
               hasError: false as false,
-              value: this.$,
+              value: this.getRawValues(),
             };
           }
         }

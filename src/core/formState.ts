@@ -9,6 +9,8 @@ export type RecursiveValues<X> = X extends FormState<infer InnerForm>
   ? FieldType
   : never;
 
+type ValidatedRecursiveValues<X> = { hasError: true} | {hasError: false, value: RecursiveValues<X>}
+
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
   /** Mode: object */
@@ -83,7 +85,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
    * - returns `hasError`
    * - if no error also return the validated values against each key.
    */
-  @action async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
+  @action async validate(): Promise<ValidatedRecursiveValues<this>> {
     this.validating = true;
     const values = this.getValues();
     let fieldsResult = await Promise.all(values.map((value) => value.validate()));
@@ -110,7 +112,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
       }
 
       this._on$ValidationPass();
-      return { hasError: false as false, value: this.$ };
+      return { hasError: false as false, value: this.getRawValues() };
     });
 
     return res;
