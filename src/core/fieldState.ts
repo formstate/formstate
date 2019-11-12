@@ -85,9 +85,8 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   protected _onUpdate: (state: FieldState<TValue>) => any;
   /**
    * onUpdate is called whenever we change something in our local state that is significant
-   * - value
-   * - $
-   * - error
+   * - any validation() call
+   * - any reset() call
    */
   @action public onUpdate = (handler: (state: FieldState<TValue>) => any) => {
     this._onUpdate = handler;
