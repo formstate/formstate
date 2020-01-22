@@ -430,7 +430,7 @@ validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
 ```
 
 ### TIP: Interacting on behalf of user
-You can invoke `onChange` if you want to imperitively act on behalf of the user. Doing so keeps the fieldState in a consistent state e.g. ensure that the validations run and you don't get inconsistencies between `value` and `$`. Here is an example:
+You can invoke `onChange` if you want to imperatively act on behalf of the user. Doing so keeps the fieldState in a consistent state e.g. ensure that the validations run and you don't get inconsistencies between `value` and `$`. Here is an example:
 
 ```ts
 // Some fieldState
