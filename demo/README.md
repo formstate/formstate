@@ -315,18 +315,18 @@ If you want to make lazy decisions about which fields to validate you can use `F
 
 ```
 /** Some set of fields you want to maintain as a simple array */
-const myFields:FieldState<string> = [];
+const myFields: FieldState<string> = [];
 
 /** Some set of fields that you optionally want to validate as a simple array */
-const myFieldsOptional:FieldState<string> = [];
+const myFieldsOptional: FieldState<string> = [];
 
 let someCondition: boolean = false;
 
 // Do some stuff with your fields e.g.
-myFields.push( new FieldState('').validators(required);
+myFields.push(new FieldState('').validators(required));
 
 /** A lazy form state */
-const form = new FormStateLazy(()=>myFields.concat(someCondition ? myFieldsOptional : []));
+const form = new FormStateLazy(() => myFields.concat(someCondition ? myFieldsOptional : []));
 
 /** Validate just the fields that FormStateLazy will return at that time */
 await form.validate();
