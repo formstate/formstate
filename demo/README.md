@@ -389,6 +389,7 @@ export const required: Validator<string | null | undefined> = (value) => {
   }
   return null;
 }
+
 export const email: Validator<string | null | undefined> = (value) => {
   // Empty values are not invalid emails
   if (required(value)) return null;
@@ -406,7 +407,7 @@ This way if you just use `validators(email)` you do not get an error for empty v
 You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
 
 ```ts
-function ifValue(validator:Validator<TValue>):Validator<TValue | null | undefined>{
+function ifValue(validator: Validator<TValue>): Validator<TValue | null | undefined>{
   return function(value: TValue) {
     if (!value || value == null) return null;
     return validator(value);
@@ -425,8 +426,8 @@ You can easily create functions that customise a particular validation by using 
 const minValue = (minValue, message) => (val) => val < minValue && message;
 
 // usage
-validators(minValue(1,"The minimum bid is set at $1"));
-validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
+validators(minValue(1, "The minimum bid is set at $1"));
+validators(minValue(13, "Sorry, you must be 13 or older to use this website"));
 ```
 
 ### TIP: Interacting on behalf of user
@@ -434,7 +435,7 @@ You can invoke `onChange` if you want to imperatively act on behalf of the user.
 
 ```ts
 // Some fieldState
-const name = new FieldState('').validators(x=>!x.trim() && 'Value required');
+const name = new FieldState('').validators(x => !x.trim() && 'Value required');
 
 // Due to some application logic you want to set a new value on behalf of the user
 name.onChange('Little Piggy');
