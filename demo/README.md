@@ -383,9 +383,8 @@ Example: Here is a *required* and *email* validator:
 
 ```ts
 export const required: Validator<string | null | undefined> = (value) => {
-  const error = "Value Required";
   if (value == null || !value.trim()) {
-    return error;
+    return "Value Required";
   }
   return null;
 }
