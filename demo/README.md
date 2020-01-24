@@ -315,18 +315,18 @@ If you want to make lazy decisions about which fields to validate you can use `F
 
 ```
 /** Some set of fields you want to maintain as a simple array */
-const myFields:FieldState<string> = [];
+const myFields: FieldState<string> = [];
 
 /** Some set of fields that you optionally want to validate as a simple array */
-const myFieldsOptional:FieldState<string> = [];
+const myFieldsOptional: FieldState<string> = [];
 
 let someCondition: boolean = false;
 
 // Do some stuff with your fields e.g.
-myFields.push( new FieldState('').validators(required);
+myFields.push(new FieldState('').validators(required));
 
 /** A lazy form state */
-const form = new FormStateLazy(()=>myFields.concat(someCondition ? myFieldsOptional : []));
+const form = new FormStateLazy(() => myFields.concat(someCondition ? myFieldsOptional : []));
 
 /** Validate just the fields that FormStateLazy will return at that time */
 await form.validate();
@@ -383,12 +383,12 @@ Example: Here is a *required* and *email* validator:
 
 ```ts
 export const required: Validator<string | null | undefined> = (value) => {
-  const error = "Value Required";
   if (value == null || !value.trim()) {
-    return error;
+    return "Value Required";
   }
   return null;
 }
+
 export const email: Validator<string | null | undefined> = (value) => {
   // Empty values are not invalid emails
   if (required(value)) return null;
@@ -406,7 +406,7 @@ This way if you just use `validators(email)` you do not get an error for empty v
 You can easily wrap your validator in a function that removes `TValue`s that you don't want to handle e.g
 
 ```ts
-function ifValue(validator:Validator<TValue>):Validator<TValue | null | undefined>{
+function ifValue(validator: Validator<TValue>): Validator<TValue | null | undefined>{
   return function(value: TValue) {
     if (!value || value == null) return null;
     return validator(value);
@@ -425,16 +425,16 @@ You can easily create functions that customise a particular validation by using 
 const minValue = (minValue, message) => (val) => val < minValue && message;
 
 // usage
-validators(minValue(1,"The minimum bid is set at $1"));
-validators(minValue(13,"Sorry, you must be 13 or older to use this website"));
+validators(minValue(1, "The minimum bid is set at $1"));
+validators(minValue(13, "Sorry, you must be 13 or older to use this website"));
 ```
 
 ### TIP: Interacting on behalf of user
-You can invoke `onChange` if you want to imperitively act on behalf of the user. Doing so keeps the fieldState in a consistent state e.g. ensure that the validations run and you don't get inconsistencies between `value` and `$`. Here is an example:
+You can invoke `onChange` if you want to imperatively act on behalf of the user. Doing so keeps the fieldState in a consistent state e.g. ensure that the validations run and you don't get inconsistencies between `value` and `$`. Here is an example:
 
 ```ts
 // Some fieldState
-const name = new FieldState('').validators(x=>!x.trim() && 'Value required');
+const name = new FieldState('').validators(x => !x.trim() && 'Value required');
 
 // Due to some application logic you want to set a new value on behalf of the user
 name.onChange('Little Piggy');
