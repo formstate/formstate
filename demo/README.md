@@ -464,3 +464,7 @@ We considered other options before creating our own. Here is our opinion:
 
 [mobx]:https://github.com/mobxjs/mobx
 [demos]:https://formstate.github.io/demos
+
+## Related Work
+
+We built FormState with our own opinions. It's totally fine if there are problems on which you hold different points with us. [formstate-x](https://github.com/qiniu/formstate-x) is another library which offers similar API, but with some different opinions, which you may want to have a try.
