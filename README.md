@@ -36,3 +36,7 @@ Jump here to see it used in action [*with code samples* ❤️️](https://forms
 [travis-url]:https://travis-ci.org/formstate/formstate
 [npm-image]:https://img.shields.io/npm/v/formstate.svg?style=flat
 [npm-url]:https://npmjs.org/package/formstate
+
+# Related Work
+
+We built FormState with our own opinions. It's totally fine if there are problems on which you hold different points with us. [formstate-x](https://github.com/qiniu/formstate-x) is another library which offers similar API, but with some different opinions, which you may want to have a try.
