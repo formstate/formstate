@@ -2,7 +2,7 @@ import { DisplayValue } from './displayValue';
 import { FieldState } from '../../index';
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Vertical, VerticalMargined } from './gls';
+import { Vertical } from './gls';
 
 // SPLIT HERE
 
@@ -37,7 +37,7 @@ export const SelectField = observer((props: SelectFieldProps) => (
       onChange={(e) => {
         /** Map the value back to a DisplayValue for the FieldState */
         props.fieldState.onChange(
-          props.displayValues.find(option => option.value == e.target.value)!
+          props.displayValues.find(displayValue => displayValue.value == e.target.value)!
         )
       }}
     >
