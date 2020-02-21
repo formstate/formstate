@@ -12,8 +12,14 @@ describe("FormState validation", () => {
     const form = new FormState({
       name,
     });
+
+    form.$.name.onChange('hello');
+
     const res = await form.validate();
     assert.equal(res.hasError, false);
+    if (!res.hasError) { // always true because the its checked by the previous assert
+      assert.equal(res.value.name, 'hello');
+    }
     assert.equal(form.hasError, false);
   });
 
@@ -22,8 +28,14 @@ describe("FormState validation", () => {
     const form = new FormState([
       name,
     ]);
-    const res = await form.validate();
+
+    form.$[0].onChange('hello')
+
+    const res = await form.validate(); 
     assert.equal(res.hasError, false);
+    if (!res.hasError) { // always true because the its checked by the previous assert
+      assert.deepEqual(res.value, ['hello']);
+    }
     assert.equal(form.hasError, false);
   });
 
@@ -33,6 +45,9 @@ describe("FormState validation", () => {
       new Map([["hello", name]])
     );
     const res = await form.validate();
+    if (!res.hasError) { // always true because the its checked by the previous assert
+      assert.strictEqual(res.value['hello'], '');
+    }
     assert.equal(res.hasError, false);
     assert.equal(form.hasError, false);
   });

@@ -1,6 +1,15 @@
-import { action, computed, isArrayLike, isObservable, observable, runInAction } from 'mobx';
+import { action, computed, isArrayLike, isObservable, observable, runInAction, toJS, keys } from 'mobx';
 import { isMapLike } from "../internal/utils";
 import { applyValidators, ComposibleValidatable, Validator } from './types';
+import { FieldState } from './fieldState';
+
+export type RecursiveValues<X> = X extends FormState<infer InnerForm>
+  ? { [K in keyof InnerForm]: RecursiveValues<InnerForm[K]> }
+  : X extends FieldState<infer FieldType>
+  ? FieldType
+  : never;
+
+type ValidatedRecursiveValues<X> = { hasError: true} | {hasError: false, value: RecursiveValues<X>}
 
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
@@ -40,6 +49,29 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     return keys.map((key) => this.$[key]);
   }
 
+  getRawValues(): RecursiveValues<this> {
+    let values = {} as any;
+
+    if (this.mode === 'map') {
+     keys(this.$).forEach(fieldName => {
+      let field = (this.$ as any).get(fieldName);
+      if (field) {
+        values[fieldName] = field.getRawValues();
+      }
+     });
+    } else if (this.mode === 'array') {
+      values = (this.$ as any).map((v: ComposibleValidatable<any>) => v.getRawValues());
+    } else {
+      Object.keys(this.$).forEach(fieldName => {
+        let field = this.$[fieldName] as ComposibleValidatable<any>;
+        if (field) {
+          values[fieldName] = field.getRawValues();
+        }
+      });
+    }
+    return toJS(values, { recurseEverything: true }) as any;
+  };
+
   @observable validating = false;
 
   protected _validators: Validator<TValue>[] = [];
@@ -53,7 +85,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
    * - returns `hasError`
    * - if no error also return the validated values against each key.
    */
-  @action async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
+  @action async validate(): Promise<ValidatedRecursiveValues<this>> {
     this.validating = true;
     const values = this.getValues();
     let fieldsResult = await Promise.all(values.map((value) => value.validate()));
@@ -80,7 +112,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
       }
 
       this._on$ValidationPass();
-      return { hasError: false as false, value: this.$ };
+      return { hasError: false as false, value: this.getRawValues() };
     });
 
     return res;

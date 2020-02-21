@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx';
+import { observable, action, computed, runInAction, isObservableArray } from 'mobx';
 import { ComposibleValidatable, Validator, applyValidators } from './types';
 import { debounce } from '../internal/utils';
 
@@ -138,6 +138,14 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     }
   }
 
+  getRawValues(): TValue {
+    if (isObservableArray(this.value)) {
+      return (this.value as any).map((v: ComposibleValidatable<any>) => v.getRawValues());
+    } else {
+      return this.value;
+    }
+  }
+
   /**
    * If the page wants to reinitialize the field,
    * it should call this function
@@ -185,7 +193,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
           else {
             return {
               hasError: false as false,
-              value: this.$,
+              value: this.getRawValues(),
             };
           }
         }
