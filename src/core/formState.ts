@@ -1,6 +1,10 @@
-import { action, computed, isArrayLike, isObservable, observable, runInAction } from 'mobx';
+import { action, computed,  isObservable, isObservableArray, IObservableArray, observable, runInAction } from 'mobx';
 import { isMapLike } from "../internal/utils";
 import { applyValidators, ComposibleValidatable, Validator } from './types';
+
+function isArrayLike(x: any): x is any[] | IObservableArray {
+  return Array.isArray(x) || isObservableArray(x);
+}
 
 /** Each key of the object is a validatable */
 export type ValidatableMapOrArray =
