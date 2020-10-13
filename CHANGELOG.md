@@ -1,3 +1,6 @@
+# 1.4.0 
+* Update for how `isArrayLike` needs to be done for latest version of mobx. [ref](https://github.com/formstate/formstate/pull/79)
+
 # 1.3.0
 * `.compose`d `FormState` should run its `validators` as soon as all sub fields have been *validated*. Previously it only ran when sub fields where *validated* and *changed*. This shouldn't cause any need for a refactor as normally `.validate` is only called after a user interaction with fields. [ref](https://github.com/formstate/formstate/issues/66)
 
