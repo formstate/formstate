@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx';
+import { observable, action, computed, runInAction, makeObservable } from 'mobx';
 import { Validatable, Validator, applyValidators } from './types';
 
 /** Each item in the array is a validatable */
@@ -8,23 +8,41 @@ export type ValidatableArray = Validatable<any>[];
  * Makes it easier to work with dynamically maintained array
  */
 export class FormStateLazy<TValue extends ValidatableArray> implements Validatable<TValue> {
-  @computed get $() {
+  get $() {
     return this.getFields();
   }
   constructor(
     /** It is a function as fields can change over time */
     protected getFields: () => TValue
-  ) { }
+  ) {
+    makeObservable<FormStateLazy<TValue>, "_error">(this, {
+      $: computed,
+      validating: observable,
+      validators: action,
+      validate: action,
+      enableAutoValidation: action,
+      disableAutoValidation: action,
+      _error: observable,
+      hasError: computed,
+      hasFieldError: computed,
+      hasFormError: computed,
+      clearFormError: action,
+      fieldError: computed,
+      formError: computed,
+      error: computed,
+      showFormError: computed
+    });
+  }
 
-  @observable validating = false;
+  validating = false;
 
   protected _validators: Validator<TValue>[] = [];
-  @action validators = (...validators: Validator<TValue>[]) => {
+  validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
   }
 
-  @action async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
+  async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
     const values = this.getFields();
     let fieldsResult = await Promise.all(values.map((value) => value.validate()));
@@ -55,48 +73,48 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
     return res;
   }
 
-  @action enableAutoValidation = () => {
+  enableAutoValidation = () => {
     this.getFields().forEach(x => x.enableAutoValidation());
   }
-  @action disableAutoValidation = () => {
+  disableAutoValidation = () => {
     this.getFields().forEach(x => x.disableAutoValidation());
   }
 
 
-  @observable protected _error: string | null | undefined = '';
+  protected _error: string | null | undefined = '';
 
   /**
    * Does any field or form have an error
    */
-  @computed get hasError() {
+  get hasError() {
     return this.hasFieldError || this.hasFormError;
   }
 
   /**
    * Does any field have an error
    */
-  @computed get hasFieldError() {
+  get hasFieldError() {
     return this.getFields().some(f => f.hasError);
   }
 
   /**
    * Does form level validation have an error
    */
-  @computed get hasFormError() {
+  get hasFormError() {
     return !!this._error;
   }
 
   /**
    * Call it when you are `reinit`ing child fields
    */
-  @action clearFormError() {
+  clearFormError() {
     this._error = '';
   }
 
   /**
    * Error from some sub field if any
    */
-  @computed get fieldError() {
+  get fieldError() {
     const subItemWithError = this.getFields().find(f => !!f.hasError);
     return subItemWithError ? subItemWithError.error : null;
   }
@@ -104,21 +122,21 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
   /**
    * Error from form if any
    */
-  @computed get formError() {
+  get formError() {
     return this._error;
   }
 
   /**
    * The first error from any sub (if any) or form error
    */
-  @computed get error() {
+  get error() {
     return this.fieldError || this.formError;
   }
 
   /**
    * You should only show the form error if there are no field errors
    */
-  @computed get showFormError() {
+  get showFormError() {
     return !this.hasFieldError && this.hasFormError;
   }
 }
