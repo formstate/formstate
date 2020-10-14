@@ -1,3 +1,8 @@
+# 2.0.0 
+* BREAKING: Minimum Requirement for MobX is now version 6. This is enforced by `peerDependencies`.
+* We no longer use decorators internally as it is not recommended by MobX. [ref](https://mobx.js.org/enabling-decorators.html)
+* The compiled JS we ship is now compiled with TypeScript `useDefineForClassFields`. [More info on this option](https://devblogs.microsoft.com/typescript/announcing-typescript-3-7/#the-usedefineforclassfields-flag-and-the-declare-property-modifier)
+
 # 1.4.0 
 * Update for how `isArrayLike` needs to be done for latest version of mobx. [ref](https://github.com/formstate/formstate/pull/79)
 
