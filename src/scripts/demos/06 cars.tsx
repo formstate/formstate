@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { render, Button, ErrorText, vertical } from './mui';
 import { observer } from 'mobx-react';
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 import { resize } from 'eze/lib/client';
 import { Vertical, Horizontal } from './gls';
 
@@ -32,9 +32,9 @@ type Car = FormState<{ name: Name, features: Features }>;
 type Cars = FormState<Car[]>;
 
 class AppState {
-  @observable cars: Cars = new FormState([]).validators(atLeastOneWithMessage("At least on car is needed"));
+  cars: Cars = new FormState([]).validators(atLeastOneWithMessage("At least on car is needed"));
 
-  @action addACar = () => {
+  addACar = () => {
     const car: Car = new FormState({
       name: new FieldState('').validators(requiredWithMessage("Car needs a name")),
       features: new FormState([]).validators(atLeastOneWithMessage("Car must have at least one feature")),
@@ -42,13 +42,21 @@ class AppState {
     this.cars.$.push(car);
   }
 
-  @action addAFeatureToACar = (car: Car) => {
+  addAFeatureToACar = (car: Car) => {
     const feature: Feature
       = new FormState({
         name: new FieldState('')
           .validators(requiredWithMessage("Feature needs a name"))
       });
     car.$.features.$.push(feature);
+  }
+
+  constructor() {
+    makeObservable(this, {
+      cars: observable,
+      addACar: action,
+      addAFeatureToACar: action
+    });
   }
 }
 const state = new AppState();

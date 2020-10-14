@@ -1,4 +1,4 @@
-import { observable, action, computed, runInAction } from 'mobx';
+import { observable, action, runInAction, makeObservable } from 'mobx';
 import { ComposibleValidatable, Validator, applyValidators } from './types';
 import { debounce } from '../internal/utils';
 
@@ -11,10 +11,10 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * The value you should bind to the input in your field.
    */
-  @observable value: TValue;
+  value: TValue;
 
   /** If there is any error on the field on last validation attempt */
-  @observable error?: string;
+  error?: string;
 
   /**
    * Allows you to set an error on a field lazily
@@ -23,49 +23,79 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    *  You then validate the field on the backend with an explict action (e.g. continue button)
    *  You now want to highlight an error from the backend for this field
    **/
-  @action setError(error: string) {
+  setError(error: string) {
     this.error = error;
   }
 
   /** If the field has been touched */
-  @observable dirty?: boolean = false;
+  dirty?: boolean = false;
 
   /** The value set from code or a `value` that's been validated */
-  @observable $: TValue;
+  $: TValue;
 
   /**
    * Set to true if a validation run has been completed since init
    * Use case:
    * - to show a green color in the field : `hasError == false && hasBeenValidated == true`
    **/
-  @observable hasBeenValidated: boolean = false;
+  hasBeenValidated: boolean = false;
 
   /**
    * Allows you to preserve the `_autoValidationEnabled` value across `reinit`s
    */
-  @observable protected _autoValidationDefault = true;
-  @action public setAutoValidationDefault = (autoValidationDefault: boolean) => {
+  protected _autoValidationDefault = true;
+  public setAutoValidationDefault = (autoValidationDefault: boolean) => {
     this._autoValidationDefault = autoValidationDefault;
     this._autoValidationEnabled = autoValidationDefault;
     return this;
   }
-  @action public getAutoValidationDefault = () => this._autoValidationDefault;
+  public getAutoValidationDefault = () => this._autoValidationDefault;
 
-  @observable protected _autoValidationEnabled = this._autoValidationDefault;
-  @action public enableAutoValidation = () => {
+  protected _autoValidationEnabled = this._autoValidationDefault;
+  public enableAutoValidation = () => {
     this._autoValidationEnabled = true;
     return this;
   }
-  @action public enableAutoValidationAndValidate = () => {
+  public enableAutoValidationAndValidate = () => {
     this._autoValidationEnabled = true;
     return this.validate();
   }
-  @action public disableAutoValidation = () => {
+  public disableAutoValidation = () => {
     this._autoValidationEnabled = false;
     return this;
   }
 
   constructor(private _initValue: TValue) {
+    makeObservable<FieldState<TValue>, "_autoValidationDefault" | "_autoValidationEnabled" | "executeOnUpdate" | "executeOnDidChange" | "lastValidationRequest" | "preventNextQueuedValidation">(this, {
+      value: observable,
+      error: observable,
+      setError: action,
+      dirty: observable,
+      $: observable,
+      hasBeenValidated: observable,
+      _autoValidationDefault: observable,
+      setAutoValidationDefault: action,
+      getAutoValidationDefault: action,
+      _autoValidationEnabled: observable,
+      enableAutoValidation: action,
+      enableAutoValidationAndValidate: action,
+      disableAutoValidation: action,
+      validators: action,
+      onUpdate: action,
+      executeOnUpdate: action,
+      onDidChange: action,
+      executeOnDidChange: action,
+      setAutoValidationDebouncedMs: action,
+      lastValidationRequest: observable,
+      preventNextQueuedValidation: observable,
+      onChange: action,
+      reset: action,
+      validating: observable,
+      validate: action,
+      queuedValidationWakeup: action,
+      _setCompositionParent: action
+    });
+
     runInAction(() => {
       this.value = _initValue;
       this.$ = _initValue;
@@ -78,7 +108,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   }
 
   protected _validators: Validator<TValue>[] = [];
-  @action validators = (...validators: Validator<TValue>[]) => {
+  validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
   }
@@ -88,11 +118,11 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    * - any validation() call
    * - any reset() call
    */
-  @action public onUpdate = (handler: (state: FieldState<TValue>) => any) => {
+  public onUpdate = (handler: (state: FieldState<TValue>) => any) => {
     this._onUpdate = handler;
     return this;
   }
-  @action protected executeOnUpdate = () => {
+  protected executeOnUpdate = () => {
     this._onUpdate && this._onUpdate(this);
   }
 
@@ -100,25 +130,24 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    * Allows you to take actions in your code based on `value` changes caused by user interactions
    */
   protected _onDidChange: (config: { newValue: TValue, oldValue: TValue }) => any;
-  @action public onDidChange = (handler: (config: { newValue: TValue, oldValue: TValue }) => any) => {
+  public onDidChange = (handler: (config: { newValue: TValue, oldValue: TValue }) => any) => {
     this._onDidChange = handler;
     return this;
   }
-  @action protected executeOnDidChange = (config: { newValue: TValue, oldValue: TValue }) => {
+  protected executeOnDidChange = (config: { newValue: TValue, oldValue: TValue }) => {
     this._onDidChange && this._onDidChange(config);
   }
 
-  @action public setAutoValidationDebouncedMs = (milliseconds: number) => {
+  public setAutoValidationDebouncedMs = (milliseconds: number) => {
     this.queueValidation = action(debounce(this.queuedValidationWakeup, milliseconds));
     return this;
   }
 
   /** Trackers for validation */
-  @observable protected lastValidationRequest: number = 0;
-  @observable protected preventNextQueuedValidation = false;
+  protected lastValidationRequest: number = 0;
+  protected preventNextQueuedValidation = false;
 
   /** On change on the component side */
-  @action
   onChange = (value: TValue) => {
     // no long prevent any debounced validation request
     this.preventNextQueuedValidation = false;
@@ -142,7 +171,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    * If the page wants to reinitialize the field,
    * it should call this function
    */
-  @action reset = (value: TValue = this._initValue) => {
+  reset = (value: TValue = this._initValue) => {
     // If a previous validation comes back ignore it
     this.preventNextQueuedValidation = true;
 
@@ -161,12 +190,12 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     return !!this.error;
   }
 
-  @observable validating: boolean = false;
+  validating: boolean = false;
 
   /**
    * Runs validation on the current value immediately
    */
-  @action validate = (): Promise<{ hasError: true } | { hasError: false, value: TValue }> => {
+  validate = (): Promise<{ hasError: true } | { hasError: false, value: TValue }> => {
     this.lastValidationRequest++;
     const lastValidationRequest = this.lastValidationRequest;
     this.validating = true;
@@ -227,7 +256,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
       }));
   }
 
-  @action queuedValidationWakeup = () => {
+  queuedValidationWakeup = () => {
     if (this.preventNextQueuedValidation) {
       this.preventNextQueuedValidation = false;
       return;
@@ -247,7 +276,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    */
   _on$ValidationPass = () => { }
   _on$Reinit = () => { }
-  @action _setCompositionParent = (config: {
+  _setCompositionParent = (config: {
     on$ValidationPass: () => void;
     on$Reinit: () => void;
   }) => {

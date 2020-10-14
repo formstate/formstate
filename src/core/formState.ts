@@ -1,4 +1,4 @@
-import { action, computed,  isObservable, isObservableArray, IObservableArray, observable, runInAction } from 'mobx';
+import { action, computed, isObservable, isObservableArray, IObservableArray, observable, runInAction, makeObservable } from 'mobx';
 import { isMapLike } from "../internal/utils";
 import { applyValidators, ComposibleValidatable, Validator } from './types';
 
@@ -26,6 +26,29 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
      */
     public $: TValue
   ) {
+    makeObservable<FormState<TValue>, "_error" | "autoValidationEnabled">(this, {
+      validating: observable,
+      validators: action,
+      validate: action,
+      _error: observable,
+      hasError: computed,
+      hasFieldError: computed,
+      hasFormError: computed,
+      clearFormError: action,
+      fieldError: computed,
+      formError: computed,
+      error: computed,
+      showFormError: computed,
+      reset: action,
+      autoValidationEnabled: observable,
+      enableAutoValidation: action,
+      enableAutoValidationAndValidate: action,
+      disableAutoValidation: action,
+      validatedSubFields: observable,
+      compose: action,
+      _setCompositionParent: action
+    });
+
     this.mode = isArrayLike($) ? 'array' : isMapLike($) ? 'map' : 'object';
 
     /** If they didn't send in something observable make the local $ observable */
@@ -44,10 +67,10 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     return keys.map((key) => this.$[key]);
   }
 
-  @observable validating = false;
+  validating = false;
 
   protected _validators: Validator<TValue>[] = [];
-  @action validators = (...validators: Validator<TValue>[]) => {
+  validators = (...validators: Validator<TValue>[]) => {
     this._validators = validators;
     return this;
   }
@@ -57,7 +80,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
    * - returns `hasError`
    * - if no error also return the validated values against each key.
    */
-  @action async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
+  async validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.validating = true;
     const values = this.getValues();
     let fieldsResult = await Promise.all(values.map((value) => value.validate()));
@@ -90,40 +113,40 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
     return res;
   }
 
-  @observable protected _error: string | null | undefined = '';
+  protected _error: string | null | undefined = '';
 
   /**
    * Does any field or form have an error
    */
-  @computed get hasError() {
+  get hasError() {
     return this.hasFieldError || this.hasFormError;
   }
 
   /**
    * Does any field have an error
    */
-  @computed get hasFieldError() {
+  get hasFieldError() {
     return this.getValues().some(f => f.hasError);
   }
 
   /**
    * Does form level validation have an error
    */
-  @computed get hasFormError() {
+  get hasFormError() {
     return !!this._error;
   }
 
   /**
    * Call it when you are `reinit`ing child fields
    */
-  @action clearFormError() {
+  clearFormError() {
     this._error = '';
   }
 
   /**
    * Error from some sub field if any
    */
-  @computed get fieldError() {
+  get fieldError() {
     const subItemWithError = this.getValues().find(f => !!f.hasError);
     return subItemWithError ? subItemWithError.error : null;
   }
@@ -131,44 +154,44 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   /**
    * Error from form if any
    */
-  @computed get formError() {
+  get formError() {
     return this._error;
   }
 
   /**
    * The first error from any sub (if any) or form error
    */
-  @computed get error() {
+  get error() {
     return this.fieldError || this.formError;
   }
 
   /**
    * You should only show the form error if there are no field errors
    */
-  @computed get showFormError() {
+  get showFormError() {
     return !this.hasFieldError && this.hasFormError;
   }
 
   /**
    * Resets all the fields in the form
    */
-  @action reset = () => {
+  reset = () => {
     this.getValues().map(v => v.reset());
   }
 
   /**
    * Auto validation
    */
-  @observable protected autoValidationEnabled = false;
-  @action public enableAutoValidation = () => {
+  protected autoValidationEnabled = false;
+  public enableAutoValidation = () => {
     this.autoValidationEnabled = true;
     this.getValues().forEach(x => x.enableAutoValidation());
   }
-  @action public enableAutoValidationAndValidate = () => {
+  public enableAutoValidationAndValidate = () => {
     this.enableAutoValidation();
     return this.validate();
   }
-  @action public disableAutoValidation = () => {
+  public disableAutoValidation = () => {
     this.autoValidationEnabled = false;
     this.getValues().forEach(x => x.disableAutoValidation());
   }
@@ -176,12 +199,12 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   /**
    * Composible field validation tracking
    */
-  @observable validatedSubFields: ComposibleValidatable<any>[] = [];
+  validatedSubFields: ComposibleValidatable<any>[] = [];
 
   /**
    * Composible fields (fields that work in conjuction with FormState)
    */
-  @action compose() {
+  compose() {
     const values = this.getValues();
     values.forEach(value => value._setCompositionParent(
       {
@@ -220,7 +243,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
 
   _on$ValidationPass = () => { }
   _on$Reinit = () => { }
-  @action _setCompositionParent = (config: {
+  _setCompositionParent = (config: {
     on$ValidationPass: () => void;
     on$Reinit: () => void;
   }) => {
