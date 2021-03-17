@@ -49,18 +49,20 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
     this._autoValidationEnabled = autoValidationDefault;
     return this;
   }
-  public getAutoValidationDefault = () => this._autoValidationDefault;
+  public getAutoValidationDefault() {
+    return this._autoValidationDefault;
+  }
 
   protected _autoValidationEnabled = this._autoValidationDefault;
-  public enableAutoValidation = () => {
+  public enableAutoValidation() {
     this._autoValidationEnabled = true;
     return this;
   }
-  public enableAutoValidationAndValidate = () => {
+  public enableAutoValidationAndValidate() {
     this._autoValidationEnabled = true;
     return this.validate();
   }
-  public disableAutoValidation = () => {
+  public disableAutoValidation() {
     this._autoValidationEnabled = false;
     return this;
   }
@@ -75,24 +77,24 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
       hasBeenValidated: observable,
       _autoValidationDefault: observable,
       setAutoValidationDefault: action,
-      getAutoValidationDefault: action,
+      getAutoValidationDefault: action.bound,
       _autoValidationEnabled: observable,
-      enableAutoValidation: action,
-      enableAutoValidationAndValidate: action,
-      disableAutoValidation: action,
+      enableAutoValidation: action.bound,
+      enableAutoValidationAndValidate: action.bound,
+      disableAutoValidation: action.bound,
       validators: action,
-      onUpdate: action,
-      executeOnUpdate: action,
-      onDidChange: action,
-      executeOnDidChange: action,
-      setAutoValidationDebouncedMs: action,
+      onUpdate: action.bound,
+      executeOnUpdate: action.bound,
+      onDidChange: action.bound,
+      executeOnDidChange: action.bound,
+      setAutoValidationDebouncedMs: action.bound,
       lastValidationRequest: observable,
       preventNextQueuedValidation: observable,
-      onChange: action,
-      reset: action,
+      onChange: action.bound,
+      reset: action.bound,
       validating: observable,
-      validate: action,
-      queuedValidationWakeup: action,
+      validate: action.bound,
+      queuedValidationWakeup: action.bound,
       _setCompositionParent: action
     });
 
@@ -118,11 +120,11 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    * - any validation() call
    * - any reset() call
    */
-  public onUpdate = (handler: (state: FieldState<TValue>) => any) => {
+  public onUpdate(handler: (state: FieldState<TValue>) => any) {
     this._onUpdate = handler;
     return this;
   }
-  protected executeOnUpdate = () => {
+  protected executeOnUpdate() {
     this._onUpdate && this._onUpdate(this);
   }
 
@@ -130,15 +132,15 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    * Allows you to take actions in your code based on `value` changes caused by user interactions
    */
   protected _onDidChange: (config: { newValue: TValue, oldValue: TValue }) => any;
-  public onDidChange = (handler: (config: { newValue: TValue, oldValue: TValue }) => any) => {
+  public onDidChange(handler: (config: { newValue: TValue, oldValue: TValue }) => any) {
     this._onDidChange = handler;
     return this;
   }
-  protected executeOnDidChange = (config: { newValue: TValue, oldValue: TValue }) => {
+  protected executeOnDidChange(config: { newValue: TValue, oldValue: TValue }) {
     this._onDidChange && this._onDidChange(config);
   }
 
-  public setAutoValidationDebouncedMs = (milliseconds: number) => {
+  public setAutoValidationDebouncedMs(milliseconds: number) {
     this.queueValidation = action(debounce(this.queuedValidationWakeup, milliseconds));
     return this;
   }
@@ -148,7 +150,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   protected preventNextQueuedValidation = false;
 
   /** On change on the component side */
-  onChange = (value: TValue) => {
+  onChange(value: TValue) {
     // no long prevent any debounced validation request
     this.preventNextQueuedValidation = false;
 
@@ -171,7 +173,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
    * If the page wants to reinitialize the field,
    * it should call this function
    */
-  reset = (value: TValue = this._initValue) => {
+  reset(value: TValue = this._initValue) {
     // If a previous validation comes back ignore it
     this.preventNextQueuedValidation = true;
 
@@ -195,7 +197,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
   /**
    * Runs validation on the current value immediately
    */
-  validate = (): Promise<{ hasError: true } | { hasError: false, value: TValue }> => {
+  validate(): Promise<{ hasError: true } | { hasError: false, value: TValue }> {
     this.lastValidationRequest++;
     const lastValidationRequest = this.lastValidationRequest;
     this.validating = true;
@@ -256,7 +258,7 @@ export class FieldState<TValue> implements ComposibleValidatable<TValue> {
       }));
   }
 
-  queuedValidationWakeup = () => {
+  queuedValidationWakeup() {
     if (this.preventNextQueuedValidation) {
       this.preventNextQueuedValidation = false;
       return;

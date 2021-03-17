@@ -18,10 +18,10 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
     makeObservable<FormStateLazy<TValue>, "_error">(this, {
       $: computed,
       validating: observable,
-      validators: action,
+      validators: action.bound,
       validate: action,
-      enableAutoValidation: action,
-      disableAutoValidation: action,
+      enableAutoValidation: action.bound,
+      disableAutoValidation: action.bound,
       _error: observable,
       hasError: computed,
       hasFieldError: computed,
@@ -37,7 +37,7 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
   validating = false;
 
   protected _validators: Validator<TValue>[] = [];
-  validators = (...validators: Validator<TValue>[]) => {
+  validators (...validators: Validator<TValue>[]) {
     this._validators = validators;
     return this;
   }
@@ -73,10 +73,10 @@ export class FormStateLazy<TValue extends ValidatableArray> implements Validatab
     return res;
   }
 
-  enableAutoValidation = () => {
+  enableAutoValidation() {
     this.getFields().forEach(x => x.enableAutoValidation());
   }
-  disableAutoValidation = () => {
+  disableAutoValidation() {
     this.getFields().forEach(x => x.disableAutoValidation());
   }
 
