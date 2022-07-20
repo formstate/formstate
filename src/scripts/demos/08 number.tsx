@@ -21,7 +21,7 @@ type NumberInputFieldProps = {
   fieldState: FieldState<number | null>,
   label: string
 };
-const NumberInputField: React.SFC<NumberInputFieldProps> = observer((props: NumberInputFieldProps) => {
+const NumberInputField: React.FC<NumberInputFieldProps> = observer((props: NumberInputFieldProps) => {
   return (
     <label>
       <span className={labelClass}>{props.label}</span>

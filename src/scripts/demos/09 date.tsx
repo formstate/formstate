@@ -43,7 +43,7 @@ type DateInputFieldProps = {
   fieldState: FieldState<string | null>,
   label: string
 };
-const DateInputField: React.SFC<DateInputFieldProps> = observer((props: DateInputFieldProps) => {
+const DateInputField: React.FC<DateInputFieldProps> = observer((props: DateInputFieldProps) => {
   return (
     <label>
       <span className={labelClass}>{props.label}</span>
