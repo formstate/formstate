@@ -1,3 +1,6 @@
+# 2.1.0
+* Refactor arrow functions to be on the prototype as requested by MobX. [ref](https://github.com/formstate/formstate/pull/82)
+
 # 2.0.0 
 * BREAKING: Minimum Requirement for MobX is now version 6. This is enforced by `peerDependencies`.
 * We no longer use decorators internally as it is not recommended by MobX. [ref](https://mobx.js.org/enabling-decorators.html)
