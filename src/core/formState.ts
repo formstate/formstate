@@ -28,7 +28,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   ) {
     makeObservable<FormState<TValue>, "_error" | "autoValidationEnabled">(this, {
       validating: observable,
-      validators: action,
+      validators: action.bound,
       validate: action,
       _error: observable,
       hasError: computed,
@@ -39,11 +39,11 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
       formError: computed,
       error: computed,
       showFormError: computed,
-      reset: action,
+      reset: action.bound,
       autoValidationEnabled: observable,
-      enableAutoValidation: action,
-      enableAutoValidationAndValidate: action,
-      disableAutoValidation: action,
+      enableAutoValidation: action.bound,
+      enableAutoValidationAndValidate: action.bound,
+      disableAutoValidation: action.bound,
       validatedSubFields: observable,
       compose: action,
       _setCompositionParent: action
@@ -70,7 +70,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   validating = false;
 
   protected _validators: Validator<TValue>[] = [];
-  validators = (...validators: Validator<TValue>[]) => {
+  validators(...validators: Validator<TValue>[]) {
     this._validators = validators;
     return this;
   }
@@ -175,7 +175,7 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
   /**
    * Resets all the fields in the form
    */
-  reset = () => {
+  reset() {
     this.getValues().map(v => v.reset());
   }
 
@@ -183,15 +183,15 @@ export class FormState<TValue extends ValidatableMapOrArray> implements Composib
    * Auto validation
    */
   protected autoValidationEnabled = false;
-  public enableAutoValidation = () => {
+  public enableAutoValidation() {
     this.autoValidationEnabled = true;
     this.getValues().forEach(x => x.enableAutoValidation());
   }
-  public enableAutoValidationAndValidate = () => {
+  public enableAutoValidationAndValidate() {
     this.enableAutoValidation();
     return this.validate();
   }
-  public disableAutoValidation = () => {
+  public disableAutoValidation() {
     this.autoValidationEnabled = false;
     this.getValues().forEach(x => x.disableAutoValidation());
   }
