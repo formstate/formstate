@@ -315,10 +315,10 @@ If you want to make lazy decisions about which fields to validate you can use `F
 
 ```
 /** Some set of fields you want to maintain as a simple array */
-const myFields: FieldState<string> = [];
+const myFields: FieldState<string>[] = [];
 
 /** Some set of fields that you optionally want to validate as a simple array */
-const myFieldsOptional: FieldState<string> = [];
+const myFieldsOptional: FieldState<string>[] = [];
 
 let someCondition: boolean = false;
 
